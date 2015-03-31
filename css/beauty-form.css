@@ -63,7 +63,7 @@ select[disabled] + .ui-selectbox:hover {
   white-space: nowrap;
   text-overflow: ellipsis;
   *background: #fafafa;
-  /**filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#fafafa", endColorstr="#e5e5e5", GradientType=0);*/
+  /*filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#fafafa", endColorstr="#e5e5e5", GradientType=0);*/
 }
 .ui-selectbox .ui-selectbox-icon {
   position: absolute;
