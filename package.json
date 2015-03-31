@@ -1,0 +1,30 @@
+{
+  "name": "beauty-form",
+  "version": "0.0.1",
+  "description": "Beautify the web forms",
+  "author": {
+    "name": "Nuintun",
+    "email": "nuintun@qq.com"
+  },
+  "homepage": "https://github.com/Nuintun/beauty-form",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Nuintun/beauty-form.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Nuintun/beauty-form/issues"
+  },
+  "keywords": [
+    "beauty",
+    "form"
+  ],
+  "spm": {
+    "dependencies": {
+      "jquery": "1.7.2",
+      "import-style": "1.0.0"
+    },
+    "main": "index.js",
+    "devDependencies": {},
+    "buildArgs": "--ignore jquery"
+  }
+}
