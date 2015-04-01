@@ -32,3 +32,4 @@ node_modules
 
 # SPM dependency directory
 spm_modules
+_site
