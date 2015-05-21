@@ -3,17 +3,17 @@
   "version": "0.0.1",
   "description": "Beautify the web forms",
   "author": {
-    "name": "Nuintun",
+    "name": "nuintun",
     "email": "nuintun@qq.com"
   },
-  "homepage": "https://github.com/Nuintun/beauty-form",
+  "homepage": "https://github.com/nuintun/beauty-form",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Nuintun/beauty-form.git"
+    "url": "https://github.com/nuintun/beauty-form.git"
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Nuintun/beauty-form/issues"
+    "url": "https://github.com/nuintun/beauty-form/issues"
   },
   "keywords": [
     "beauty",
