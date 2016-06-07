@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>Toast by nuintun</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">Toast</h1>
+      <h2 class="project-tagline">A toast plugin</h2>
+      <a href="https://github.com/nuintun/toast" class="btn">View on GitHub</a>
+      <a href="https://github.com/nuintun/toast/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/nuintun/toast/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+      <h1>
+<a id="toast" class="anchor" href="#toast" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>toast</h1>
+
+<blockquote>
+<p>A toast plugin</p>
+</blockquote>
+
+<h3>
+<a id="usage" class="anchor" href="#usage" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Usage</h3>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-k">new</span> <span class="pl-en">Toast</span>(<span class="pl-s"><span class="pl-pds">'</span>言宜慢，心宜善。<span class="pl-pds">'</span></span>);
+
+<span class="pl-k">new</span> <span class="pl-en">Toast</span>(<span class="pl-s"><span class="pl-pds">'</span>言宜慢，心宜善。<span class="pl-pds">'</span></span>, { type<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>smile<span class="pl-pds">'</span></span>, lock<span class="pl-k">:</span> <span class="pl-c1">true</span> });
+
+<span class="pl-k">function</span> <span class="pl-en">handler</span>(){
+  <span class="pl-en">console</span>.<span class="pl-c1">log</span>(
+    <span class="pl-s"><span class="pl-pds">'</span>提示类型：<span class="pl-pds">'</span></span>, <span class="pl-v">this</span>.<span class="pl-c1">type</span>,
+    <span class="pl-s"><span class="pl-pds">'</span>&gt;&gt;&gt;<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>触发事件：<span class="pl-pds">'</span></span>, <span class="pl-v">arguments</span>[<span class="pl-c1">0</span>],
+    <span class="pl-s"><span class="pl-pds">'</span>&gt;&gt;&gt;<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>回调参数：<span class="pl-pds">'</span></span>, <span class="pl-v">arguments</span>[<span class="pl-c1">1</span>]
+  );
+}
+
+<span class="pl-smi">Toast</span>.<span class="pl-en">loading</span>(<span class="pl-s"><span class="pl-pds">'</span>正在加载数据...<span class="pl-pds">'</span></span>, { lock<span class="pl-k">:</span> <span class="pl-c1">true</span> }).<span class="pl-en">on</span>(<span class="pl-s"><span class="pl-pds">'</span>hide<span class="pl-pds">'</span></span>, <span class="pl-k">function</span> (){
+  <span class="pl-smi">Toast</span>.<span class="pl-en">success</span>(<span class="pl-s"><span class="pl-pds">'</span>言宜慢，心宜善。<span class="pl-pds">'</span></span>)
+    .<span class="pl-en">on</span>(<span class="pl-s"><span class="pl-pds">'</span>show<span class="pl-pds">'</span></span>, handler)
+    .<span class="pl-en">on</span>(<span class="pl-s"><span class="pl-pds">'</span>hide<span class="pl-pds">'</span></span>, handler);
+}).<span class="pl-en">on</span>(<span class="pl-s"><span class="pl-pds">'</span>lock<span class="pl-pds">'</span></span>, handler).<span class="pl-en">on</span>(<span class="pl-s"><span class="pl-pds">'</span>unlock<span class="pl-pds">'</span></span>, handler);</pre></div>
+
+<h3>
+<a id="api" class="anchor" href="#api" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>API</h3>
+
+<h4>
+<a id="new-toastmessage-options-constructor" class="anchor" href="#new-toastmessage-options-constructor" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>new Toast(message, options) <code>constructor</code>
+</h4>
+
+<h5>
+<a id="message-string-消息文本" class="anchor" href="#message-string-%E6%B6%88%E6%81%AF%E6%96%87%E6%9C%AC" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a><em>message</em> <code>String</code> 消息文本</h5>
+
+<h5>
+<a id="options-object-配置提示框参数" class="anchor" href="#options-object-%E9%85%8D%E7%BD%AE%E6%8F%90%E7%A4%BA%E6%A1%86%E5%8F%82%E6%95%B0" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a><em>options</em> <code>Object</code> 配置提示框参数</h5>
+
+<ul>
+<li>
+<p>id <code>Number | String</code></p>
+
+<p>提示框身份标识，相同身份标识的提示框不能共存。</p>
+</li>
+<li>
+<p>lock <code>Boolean</code></p>
+
+<p>是否打开锁屏遮罩，默认 <code>false</code>。</p>
+</li>
+<li>
+<p>type <code>String</code></p>
+
+<p>提示框类型，用以展示不同图标和主题，内置有
+<code>info success warn error smile lock sad ask loading</code>。</p>
+</li>
+<li>
+<p>timeout <code>Object</code></p>
+
+<p>自动关闭提示框时间，默认 <code>3000</code> 毫秒，如果为 <code>0</code> 则不关闭提示框。</p>
+</li>
+</ul>
+
+<h4>
+<a id="attribute--method-attribute--method" class="anchor" href="#attribute--method-attribute--method" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>attribute &amp; method <code>attribute &amp; method</code>
+</h4>
+
+<h5>
+<a id="id-attribute-提示框身份标识-readonly" class="anchor" href="#id-attribute-%E6%8F%90%E7%A4%BA%E6%A1%86%E8%BA%AB%E4%BB%BD%E6%A0%87%E8%AF%86-readonly" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>id <code>attribute</code> 提示框身份标识 <code>readonly</code>
+</h5>
+
+<h5>
+<a id="locked-attribute-提示框锁定状态-readonly" class="anchor" href="#locked-attribute-%E6%8F%90%E7%A4%BA%E6%A1%86%E9%94%81%E5%AE%9A%E7%8A%B6%E6%80%81-readonly" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>locked <code>attribute</code> 提示框锁定状态 <code>readonly</code>
+</h5>
+
+<h5>
+<a id="visibility-attribute-提示框可见状态-readonly" class="anchor" href="#visibility-attribute-%E6%8F%90%E7%A4%BA%E6%A1%86%E5%8F%AF%E8%A7%81%E7%8A%B6%E6%80%81-readonly" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>visibility <code>attribute</code> 提示框可见状态 <code>readonly</code>
+</h5>
+
+<h5>
+<a id="type-attribute-提示框类型-readonly" class="anchor" href="#type-attribute-%E6%8F%90%E7%A4%BA%E6%A1%86%E7%B1%BB%E5%9E%8B-readonly" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>type <code>attribute</code> 提示框类型 <code>readonly</code>
+</h5>
+
+<h5>
+<a id="show-method-显示提示框并触发-show-事件参数可选" class="anchor" href="#show-method-%E6%98%BE%E7%A4%BA%E6%8F%90%E7%A4%BA%E6%A1%86%E5%B9%B6%E8%A7%A6%E5%8F%91-show-%E4%BA%8B%E4%BB%B6%E5%8F%82%E6%95%B0%E5%8F%AF%E9%80%89" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>show <code>method</code> 显示提示框并触发 <code>show</code> 事件，参数可选</h5>
+
+<h5>
+<a id="hidemethod-隐藏提示框并触发-hide-事件参数可选" class="anchor" href="#hidemethod-%E9%9A%90%E8%97%8F%E6%8F%90%E7%A4%BA%E6%A1%86%E5%B9%B6%E8%A7%A6%E5%8F%91-hide-%E4%BA%8B%E4%BB%B6%E5%8F%82%E6%95%B0%E5%8F%AF%E9%80%89" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>hide<code>method</code> 隐藏提示框并触发 <code>hide</code> 事件，参数可选</h5>
+
+<h5>
+<a id="lockmethod-显示遮罩层并触发-lock-事件参数可选" class="anchor" href="#lockmethod-%E6%98%BE%E7%A4%BA%E9%81%AE%E7%BD%A9%E5%B1%82%E5%B9%B6%E8%A7%A6%E5%8F%91-lock-%E4%BA%8B%E4%BB%B6%E5%8F%82%E6%95%B0%E5%8F%AF%E9%80%89" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>lock<code>method</code> 显示遮罩层并触发 <code>lock</code> 事件，参数可选</h5>
+
+<h5>
+<a id="unlock-method-隐藏遮罩层并触发-unlock-事件参数可选" class="anchor" href="#unlock-method-%E9%9A%90%E8%97%8F%E9%81%AE%E7%BD%A9%E5%B1%82%E5%B9%B6%E8%A7%A6%E5%8F%91-unlock-%E4%BA%8B%E4%BB%B6%E5%8F%82%E6%95%B0%E5%8F%AF%E9%80%89" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>unlock <code>method</code> 隐藏遮罩层并触发 <code>unlock</code> 事件，参数可选</h5>
+
+<h5>
+<a id="onmethod-绑定事件监听" class="anchor" href="#onmethod-%E7%BB%91%E5%AE%9A%E4%BA%8B%E4%BB%B6%E7%9B%91%E5%90%AC" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>on<code>method</code> 绑定事件监听</h5>
+
+<h5>
+<a id="off-method-移除事件监听" class="anchor" href="#off-method-%E7%A7%BB%E9%99%A4%E4%BA%8B%E4%BB%B6%E7%9B%91%E5%90%AC" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>off <code>method</code> 移除事件监听</h5>
+
+<h5>
+<a id="emit-method-触发事件回调" class="anchor" href="#emit-method-%E8%A7%A6%E5%8F%91%E4%BA%8B%E4%BB%B6%E5%9B%9E%E8%B0%83" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>emit <code>method</code> 触发事件回调</h5>
+
+<h4>
+<a id="static-method-method" class="anchor" href="#static-method-method" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>static method <code>method</code>
+</h4>
+
+<h5>
+<a id="toastquerymethod-根据身份标识获取提示框实例" class="anchor" href="#toastquerymethod-%E6%A0%B9%E6%8D%AE%E8%BA%AB%E4%BB%BD%E6%A0%87%E8%AF%86%E8%8E%B7%E5%8F%96%E6%8F%90%E7%A4%BA%E6%A1%86%E5%AE%9E%E4%BE%8B" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Toast.query<code>method</code> 根据身份标识获取提示框实例</h5>
+
+<h5>
+<a id="toastsuccess-method-成功提示框" class="anchor" href="#toastsuccess-method-%E6%88%90%E5%8A%9F%E6%8F%90%E7%A4%BA%E6%A1%86" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Toast.success <code>method</code> 成功提示框</h5>
+
+<h5>
+<a id="toasterror-method-错误提示框" class="anchor" href="#toasterror-method-%E9%94%99%E8%AF%AF%E6%8F%90%E7%A4%BA%E6%A1%86" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Toast.error <code>method</code> 错误提示框</h5>
+
+<h5>
+<a id="toastinfo-method-消息提示框" class="anchor" href="#toastinfo-method-%E6%B6%88%E6%81%AF%E6%8F%90%E7%A4%BA%E6%A1%86" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Toast.info <code>method</code> 消息提示框</h5>
+
+<h5>
+<a id="toastask-method-询问提示框" class="anchor" href="#toastask-method-%E8%AF%A2%E9%97%AE%E6%8F%90%E7%A4%BA%E6%A1%86" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Toast.ask <code>method</code> 询问提示框</h5>
+
+<h5>
+<a id="toastwarn-method-警告提示框" class="anchor" href="#toastwarn-method-%E8%AD%A6%E5%91%8A%E6%8F%90%E7%A4%BA%E6%A1%86" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Toast.warn <code>method</code> 警告提示框</h5>
+
+<h5>
+<a id="toastloading-method-加载提示框" class="anchor" href="#toastloading-method-%E5%8A%A0%E8%BD%BD%E6%8F%90%E7%A4%BA%E6%A1%86" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Toast.loading <code>method</code> 加载提示框</h5>
+
+<h3>
+<a id="demo" class="anchor" href="#demo" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Demo</h3>
+
+<h4>
+<a id="在线实例" class="anchor" href="#%E5%9C%A8%E7%BA%BF%E5%AE%9E%E4%BE%8B" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a><a href="http://nuintun.github.io/toast/toast.html">在线实例</a>
+</h4>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/nuintun/toast">Toast</a> is maintained by <a href="https://github.com/nuintun">nuintun</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+
+  </body>
+</html>
