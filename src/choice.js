@@ -68,19 +68,19 @@ Choice.prototype = {
     this.elements.each(function (){
       var element = $(this);
 
-      if (element.data('data-beauty-choice')) return;
+      if (!element.data('data-beauty-choice')) {
+        element.wrap('<i class="ui-beauty-choice ui-beauty-' + context.type + '"/>');
 
-      element.wrap('<i class="ui-beauty-choice ui-beauty-' + context.type + '"/>');
+        if (this.checked) {
+          context.check(this);
+        }
 
-      if (this.checked) {
-        context.check(this);
+        if (this.disabled) {
+          context.disable(this);
+        }
+
+        element.data('data-beauty-choice', true);
       }
-
-      if (this.disabled) {
-        context.disable(this);
-      }
-
-      element.data('data-beauty-choice', true);
     });
   },
   check: function (element){
