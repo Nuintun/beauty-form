@@ -17,6 +17,8 @@ function Choice(type, scope){
   }
 
   this.elements = $('input[type=' + type + ']', scope);
+
+  this.init();
 }
 
 Choice.prototype = {
@@ -30,6 +32,8 @@ Choice.prototype = {
     } else {
       reference[this.type] += this.elements.length;
     }
+
+    this.beauty();
   },
   beauty: function (){
     var context = this;
