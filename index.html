@@ -47,6 +47,11 @@
     <input type="checkbox" checked/>
     <input type="checkbox" disabled/>
     <input type="checkbox" disabled checked/>
+    <br/> <br/>
+    <input type="radio" name="radio"/>
+    <input type="radio" name="radio" checked/>
+    <input type="radio" name="radio" disabled/>
+    <input type="radio" name="radio" disabled checked/>
     <script type="text/javascript">
       if (!console) {
         console.log = function (){};
@@ -56,7 +61,7 @@
         base: './examples'
       });
 
-      seajs.use(['./examples/jquery', './examples/checkbox']);
+      seajs.use(['./examples/jquery', './examples/checkbox', './examples/radiobox']);
     </script>
   </body>
 </html>

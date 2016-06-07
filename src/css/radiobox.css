@@ -1,0 +1,16 @@
+.ui-beauty-radio {
+  background: url(../images/radio.png) no-repeat center;
+}
+.ui-beauty-radio-checked {
+  background: url(../images/radio-checked.png) no-repeat center;
+}
+.ui-beauty-radio-disabled {
+  cursor: not-allowed;
+  background: url(../images/radio-disabled.png) no-repeat center;
+}
+.ui-beauty-radio-checked.ui-beauty-radio-disabled {
+  background: url(../images/radio-disabled-checked.png) no-repeat center;
+}
+.ui-beauty-radio-disabled > input {
+  cursor: not-allowed;
+}

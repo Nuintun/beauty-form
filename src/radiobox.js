@@ -4,4 +4,8 @@
 
 'use strict';
 
+require('./css/radiobox.css');
+
 var Choice = require('./choice');
+
+new Choice('radio');

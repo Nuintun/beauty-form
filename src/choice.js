@@ -39,6 +39,22 @@ Choice.prototype = {
         } else {
           context.uncheck(this);
         }
+
+        if (this.type === 'radio') {
+          doc.find(':radio[name=' + this.name + ']').each(function (){
+            if (this.checked) {
+              context.check(this);
+            } else {
+              context.uncheck(this);
+            }
+
+            if (this.disabled) {
+              context.disable(this);
+            } else {
+              context.enable(this);
+            }
+          });
+        }
       });
 
       reference[this.type] = this.elements.length;
@@ -89,7 +105,7 @@ Choice.prototype = {
     element = arguments.length ? $(element) : this.elements;
 
     element.each(function (){
-      $(this.parentNode).addClass('ui-beauty-' + context.type + '-disabled');
+      $(this.parentNode).removeClass('ui-beauty-' + context.type + '-disabled');
     });
   },
   disable: function (element){
