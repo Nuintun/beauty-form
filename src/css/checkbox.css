@@ -5,8 +5,12 @@
   background: url(../images/checkbox-checked.png) no-repeat center;
 }
 .ui-beauty-checkbox-disabled {
+  cursor: not-allowed;
   background: url(../images/checkbox-disabled.png) no-repeat center;
 }
 .ui-beauty-checkbox-checked.ui-beauty-checkbox-disabled {
   background: url(../images/checkbox-disabled-checked.png) no-repeat center;
+}
+.ui-beauty-checkbox-disabled > input {
+  cursor: not-allowed;
 }
