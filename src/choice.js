@@ -23,6 +23,8 @@ function Choice(type, scope){
 
 Choice.prototype = {
   init: function (){
+    this.beauty();
+
     if (!reference[this.type]) {
       doc.on('change.beauty-' + this.type, 'input[type=' + type + ']', function (){
 
@@ -32,8 +34,6 @@ Choice.prototype = {
     } else {
       reference[this.type] += this.elements.length;
     }
-
-    this.beauty();
   },
   beauty: function (){
     var context = this;
