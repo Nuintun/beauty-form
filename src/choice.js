@@ -12,7 +12,10 @@ var reference = {};
 function Choice(type, scope){
   this.type = type;
 
-  if (!scope.nodeType || (scope.nodeType !== 1 && scope.nodeType !== 9 && scope.nodeType !== 11)) {
+  if (!scope || !scope.nodeType
+    || (scope.nodeType !== 1
+    && scope.nodeType !== 9
+    && scope.nodeType !== 11)) {
     scope = document;
   }
 
@@ -26,7 +29,7 @@ Choice.prototype = {
     this.beauty();
 
     if (!reference[this.type]) {
-      doc.on('change.beauty-' + this.type, 'input[type=' + type + ']', function (){
+      doc.on('change.beauty-' + this.type, 'input[type=' + this.type + ']', function (){
 
       });
 
