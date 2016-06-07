@@ -1,0 +1,14 @@
+.ui-beauty-choice {
+  display: inline-block;
+  *display: inline; *zoom: 1;
+  width: 16px; height: 16px;
+}
+.ui-beauty-choice > input {
+  opacity: 0; visibility: hidden;
+  -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
+}
+:root .ui-beauty-choice > input {
+  -ms-filter: none;
+  filter: none;
+}

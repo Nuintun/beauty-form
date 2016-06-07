@@ -4,6 +4,8 @@
 
 'use strict';
 
+require('./css/choice.css');
+
 var $ = require('jquery');
 
 var doc = $(document);
