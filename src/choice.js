@@ -30,9 +30,15 @@ Choice.prototype = {
   init: function (){
     this.beauty();
 
+    var context = this;
+
     if (!reference[this.type]) {
       doc.on('change.beauty-' + this.type, 'input[type=' + this.type + ']', function (){
-
+        if (this.checked) {
+          context.check(this);
+        } else {
+          context.uncheck(this);
+        }
       });
 
       reference[this.type] = this.elements.length;
@@ -47,7 +53,52 @@ Choice.prototype = {
       var element = $(this);
 
       element.wrap('<i class="ui-beauty-choice ui-beauty-' + context.type + '"/>');
+
+      if (this.checked) {
+        context.check(this);
+      }
+
+      if (this.disabled) {
+        context.disable(this);
+      }
+
       element.data('data-beauty-choice', true);
+    });
+  },
+  check: function (element){
+    var context = this;
+
+    element = arguments.length ? $(element) : this.elements;
+
+    element.each(function (){
+      $(this.parentNode).addClass('ui-beauty-' + context.type + '-checked');
+    });
+  },
+  uncheck: function (element){
+    var context = this;
+
+    element = arguments.length ? $(element) : this.elements;
+
+    element.each(function (){
+      $(this.parentNode).removeClass('ui-beauty-' + context.type + '-checked');
+    });
+  },
+  enable: function (element){
+    var context = this;
+
+    element = arguments.length ? $(element) : this.elements;
+
+    element.each(function (){
+      $(this.parentNode).addClass('ui-beauty-' + context.type + '-disabled');
+    });
+  },
+  disable: function (element){
+    var context = this;
+
+    element = arguments.length ? $(element) : this.elements;
+
+    element.each(function (){
+      $(this.parentNode).addClass('ui-beauty-' + context.type + '-disabled');
     });
   },
   destory: function (){
