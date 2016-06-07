@@ -68,6 +68,8 @@ Choice.prototype = {
     this.elements.each(function (){
       var element = $(this);
 
+      if (element.data('data-beauty-choice')) return;
+
       element.wrap('<i class="ui-beauty-choice ui-beauty-' + context.type + '"/>');
 
       if (this.checked) {
