@@ -13,12 +13,20 @@
       div {
         margin: 16px 0 0; padding: 0;
       }
+      input {
+        vertical-align: middle;
+        margin: 0; padding: 0;
+      }
+      input + label {
+        vertical-align: middle; margin-left: 6px;
+      }
       .ui-beauty-choice {
         vertical-align: middle;
       }
       .ui-beauty-choice + label {
         vertical-align: middle; margin-left: 3px;
       }
+      [disabled] + label,
       .ui-beauty-choice-disabled + label {
         color: #ccc; cursor: not-allowed;
       }
@@ -53,18 +61,18 @@
     </style>
   </head>
   <body>
-    <button id="button" class="ui-button ui-button-success">（启用 / 取消）美化表单</button>
+    <button id="button" class="ui-button ui-button-success">（启用 / 取消）表单美化</button>
     <div>
-      <input id="checkbox-1" type="checkbox"/><label for="checkbox-1">美化表单</label>
-      <input id="checkbox-2" type="checkbox" checked/><label for="checkbox-2">美化表单</label>
-      <input id="checkbox-3" type="checkbox" disabled/><label for="checkbox-3">美化表单</label>
-      <input id="checkbox-4" type="checkbox" disabled checked/><label for="checkbox-4">美化表单</label>
+      <input id="checkbox-1" type="checkbox"/><label for="checkbox-1">复选美化</label>
+      <input id="checkbox-2" type="checkbox" checked/><label for="checkbox-2">复选美化</label>
+      <input id="checkbox-3" type="checkbox" disabled/><label for="checkbox-3">复选美化</label>
+      <input id="checkbox-4" type="checkbox" disabled checked/><label for="checkbox-4">复选美化</label>
     </div>
     <div>
-      <input id="radio-1" type="radio" name="radio"/><label for="radio-1">美化表单</label>
-      <input id="radio-2" type="radio" name="radio" checked/><label for="radio-2">美化表单</label>
-      <input id="radio-3" type="radio" name="radio-disabled" disabled/><label for="radio-3">美化表单</label>
-      <input id="radio-4" type="radio" name="radio-disabled" disabled checked/><label for="radio-4">美化表单</label>
+      <input id="radio-1" type="radio" name="radio"/><label for="radio-1">单选美化</label>
+      <input id="radio-2" type="radio" name="radio" checked/><label for="radio-2">单选美化</label>
+      <input id="radio-3" type="radio" name="radio-disabled" disabled/><label for="radio-3">单选美化</label>
+      <input id="radio-4" type="radio" name="radio-disabled" disabled checked/><label for="radio-4">单选美化</label>
     </div>
     <script type="text/javascript">
       if (!console) {
