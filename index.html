@@ -53,7 +53,7 @@
     </style>
   </head>
   <body>
-    <button id="button" class="ui-button ui-button-success">美化表单切换</button>
+    <button id="button" class="ui-button ui-button-success">（启用 / 取消）美化表单</button>
     <div>
       <input id="checkbox-1" type="checkbox"/><label for="checkbox-1">美化表单</label>
       <input id="checkbox-2" type="checkbox" checked/><label for="checkbox-2">美化表单</label>
@@ -78,7 +78,7 @@
       seajs.use(['./examples/jquery', './examples/checkbox', './examples/radiobox'], function ($, Checkbox, Radiobox){
         var checkbox, radiobox;
 
-        function callback(){
+        function beauty(){
           if (checkbox) {
             checkbox.destory();
             checkbox = null;
@@ -94,7 +94,9 @@
           }
         }
 
-        $('#button').on('click', callback);
+        beauty();
+
+        $('#button').on('click', beauty);
       });
     </script>
   </body>
