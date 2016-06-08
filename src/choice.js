@@ -28,60 +28,39 @@ function Choice(type, scope){
 
 Choice.prototype = {
   init: function (){
-    this.beauty();
-
     var context = this;
 
     if (!reference[this.type]) {
       doc.on('change.beauty-' + this.type, 'input[type=' + this.type + ']', function (){
+        var element = this;
+
         if (this.checked) {
           context.check(this);
         } else {
           context.uncheck(this);
         }
 
-        if (this.type === 'radio') {
+        if (context.type === 'radio') {
           doc.find(':radio[name=' + this.name + ']').each(function (){
-            if (this.checked) {
-              context.check(this);
-            } else {
-              context.uncheck(this);
-            }
+            if (element !== this) {
+              if (this.checked) {
+                context.check(this);
+              } else {
+                context.uncheck(this);
+              }
 
-            if (this.disabled) {
-              context.disable(this);
-            } else {
-              context.enable(this);
+              if (this.disabled) {
+                context.disable(this);
+              } else {
+                context.enable(this);
+              }
             }
           });
         }
       });
-
-      reference[this.type] = this.elements.length;
-    } else {
-      reference[this.type] += this.elements.length;
     }
-  },
-  beauty: function (){
-    var context = this;
 
-    this.elements.each(function (){
-      var element = $(this);
-
-      if (!element.data('data-beauty-choice')) {
-        element.wrap('<i class="ui-beauty-choice ui-beauty-' + context.type + '"/>');
-
-        if (this.checked) {
-          context.check(this);
-        }
-
-        if (this.disabled) {
-          context.disable(this);
-        }
-
-        element.data('data-beauty-choice', true);
-      }
-    });
+    this.beauty();
   },
   check: function (element){
     var context = this;
@@ -117,6 +96,29 @@ Choice.prototype = {
 
     element.each(function (){
       $(this.parentNode).addClass('ui-beauty-' + context.type + '-disabled');
+    });
+  },
+  beauty: function (){
+    var context = this;
+
+    this.elements.each(function (){
+      var element = $(this);
+
+      if (!element.data('data-beauty-choice')) {
+        element.wrap('<i class="ui-beauty-choice ui-beauty-' + context.type + '"/>');
+
+        if (this.checked) {
+          context.check(this);
+        }
+
+        if (this.disabled) {
+          context.disable(this);
+        }
+
+        reference[context.type]++;
+
+        element.data('data-beauty-choice', true);
+      }
     });
   },
   destory: function (){

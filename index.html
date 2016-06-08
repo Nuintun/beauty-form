@@ -10,6 +10,9 @@
         text-align: center;
         width: 100%; height: 100%;
       }
+      div {
+        margin: 16px 0 0; padding: 0;
+      }
       .ui-beauty-choice {
         vertical-align: middle;
       }
@@ -48,16 +51,18 @@
   </head>
   <body>
     <button id="button" class="ui-button ui-button-success">美化元素</button>
-    <br/> <br/>
-    <input id="checkbox" type="checkbox"/><label for="checkbox">美化元素</label>
-    <input type="checkbox" checked/>
-    <input type="checkbox" disabled/>
-    <input type="checkbox" disabled checked/>
-    <br/> <br/>
-    <input id="radio" type="radio" name="radio"/><label for="radio">美化元素</label>
-    <input type="radio" name="radio" checked/>
-    <input type="radio" name="radio" disabled/>
-    <input type="radio" name="radio" disabled checked/>
+    <div>
+      <input id="checkbox" type="checkbox"/><label for="checkbox">美化元素</label>
+      <input type="checkbox" checked/>
+      <input type="checkbox" disabled/>
+      <input type="checkbox" disabled checked/>
+    </div>
+    <div>
+      <input id="radio" type="radio" name="radio"/><label for="radio">美化元素</label>
+      <input type="radio" name="radio" checked/>
+      <input type="radio" name="radio-disabled" disabled/>
+      <input type="radio" name="radio-disabled" disabled checked/>
+    </div>
     <script type="text/javascript">
       if (!console) {
         console.log = function (){};
