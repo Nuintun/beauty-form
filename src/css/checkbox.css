@@ -1,16 +1,13 @@
 .ui-beauty-checkbox {
   background: url(../images/checkbox.png) no-repeat center;
 }
-.ui-beauty-checkbox-checked {
+.ui-beauty-checkbox.ui-beauty-choice-checked {
   background: url(../images/checkbox-checked.png) no-repeat center;
 }
-.ui-beauty-checkbox-disabled {
+.ui-beauty-checkbox.ui-beauty-choice-disabled {
   cursor: not-allowed;
   background: url(../images/checkbox-disabled.png) no-repeat center;
 }
-.ui-beauty-checkbox-checked.ui-beauty-checkbox-disabled {
+.ui-beauty-checkbox.ui-beauty-choice-checked.ui-beauty-choice-disabled {
   background: url(../images/checkbox-disabled-checked.png) no-repeat center;
-}
-.ui-beauty-checkbox-disabled > input {
-  cursor: not-allowed;
 }

@@ -1,16 +1,13 @@
 .ui-beauty-radio {
   background: url(../images/radio.png) no-repeat center;
 }
-.ui-beauty-radio-checked {
+.ui-beauty-radio.ui-beauty-choice-checked {
   background: url(../images/radio-checked.png) no-repeat center;
 }
-.ui-beauty-radio-disabled {
+.ui-beauty-radio.ui-beauty-choice-disabled {
   cursor: not-allowed;
   background: url(../images/radio-disabled.png) no-repeat center;
 }
-.ui-beauty-radio-checked.ui-beauty-radio-disabled {
+.ui-beauty-radio.ui-beauty-choice-checked.ui-beauty-choice-disabled {
   background: url(../images/radio-disabled-checked.png) no-repeat center;
-}
-.ui-beauty-radio-disabled > input {
-  cursor: not-allowed;
 }

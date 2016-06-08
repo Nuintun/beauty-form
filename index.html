@@ -19,6 +19,9 @@
       .ui-beauty-choice + label {
         vertical-align: middle; margin-left: 6px;
       }
+      .ui-beauty-ch + label {
+        vertical-align: middle; margin-left: 6px;
+      }
       .ui-button {
         display: inline-block;
         *display: inline; *zoom: 1;
@@ -52,16 +55,16 @@
   <body>
     <button id="button" class="ui-button ui-button-success">美化表单</button>
     <div>
-      <input id="checkbox" type="checkbox"/><label for="checkbox">美化表单</label>
-      <input type="checkbox" checked/>
-      <input type="checkbox" disabled/>
-      <input type="checkbox" disabled checked/>
+      <input id="checkbox-1" type="checkbox"/><label for="checkbox-1">美化表单</label>
+      <input id="checkbox-2" type="checkbox" checked/><label for="checkbox-2">美化表单</label>
+      <input id="checkbox-3" type="checkbox" disabled/><label for="checkbox-3">美化表单</label>
+      <input id="checkbox-4" type="checkbox" disabled checked/><label for="checkbox-4">美化表单</label>
     </div>
     <div>
-      <input id="radio" type="radio" name="radio"/><label for="radio">美化表单</label>
-      <input type="radio" name="radio" checked/>
-      <input type="radio" name="radio-disabled" disabled/>
-      <input type="radio" name="radio-disabled" disabled checked/>
+      <input id="radio-1" type="radio" name="radio"/><label for="radio-1">美化表单</label>
+      <input id="radio-2" type="radio" name="radio" checked/><label for="radio-2">美化表单</label>
+      <input id="radio-3" type="radio" name="radio-disabled" disabled/><label for="radio-3">美化表单</label>
+      <input id="radio-4" type="radio" name="radio-disabled" disabled checked/><label for="radio-4">美化表单</label>
     </div>
     <script type="text/javascript">
       if (!console) {

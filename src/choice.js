@@ -51,39 +51,31 @@ Choice.prototype = {
     this.beauty();
   },
   check: function (element){
-    var context = this;
-
     element = arguments.length ? $(element) : this.elements;
 
     element.each(function (){
-      $(this.parentNode).addClass('ui-beauty-' + context.type + '-checked');
+      $(this.parentNode).addClass('ui-beauty-choice-checked');
     });
   },
   uncheck: function (element){
-    var context = this;
-
     element = arguments.length ? $(element) : this.elements;
 
     element.each(function (){
-      $(this.parentNode).removeClass('ui-beauty-' + context.type + '-checked');
+      $(this.parentNode).removeClass('ui-beauty-choice-checked');
     });
   },
   enable: function (element){
-    var context = this;
-
     element = arguments.length ? $(element) : this.elements;
 
     element.each(function (){
-      $(this.parentNode).removeClass('ui-beauty-' + context.type + '-disabled');
+      $(this.parentNode).removeClass('ui-beauty-choice-disabled');
     });
   },
   disable: function (element){
-    var context = this;
-
     element = arguments.length ? $(element) : this.elements;
 
     element.each(function (){
-      $(this.parentNode).addClass('ui-beauty-' + context.type + '-disabled');
+      $(this.parentNode).addClass('ui-beauty-choice-disabled');
     });
   },
   refresh: function (element){
