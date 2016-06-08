@@ -31,29 +31,17 @@ Choice.prototype = {
     var context = this;
 
     if (!reference[this.type]) {
+      reference[this.type] = 0;
+
       doc.on('change.beauty-' + this.type, 'input[type=' + this.type + ']', function (){
         var element = this;
 
-        if (this.checked) {
-          context.check(this);
-        } else {
-          context.uncheck(this);
-        }
+        context.refresh(this);
 
         if (context.type === 'radio') {
           doc.find(':radio[name=' + this.name + ']').each(function (){
             if (element !== this) {
-              if (this.checked) {
-                context.check(this);
-              } else {
-                context.uncheck(this);
-              }
-
-              if (this.disabled) {
-                context.disable(this);
-              } else {
-                context.enable(this);
-              }
+              context.refresh(this);
             }
           });
         }
@@ -98,6 +86,19 @@ Choice.prototype = {
       $(this.parentNode).addClass('ui-beauty-' + context.type + '-disabled');
     });
   },
+  refresh: function (element){
+    if (element.checked) {
+      this.check(element);
+    } else {
+      this.uncheck(element);
+    }
+
+    if (element.disabled) {
+      this.disable(element);
+    } else {
+      this.enable(element);
+    }
+  },
   beauty: function (){
     var context = this;
 
@@ -107,18 +108,12 @@ Choice.prototype = {
       if (!element.data('data-beauty-choice')) {
         element.wrap('<i class="ui-beauty-choice ui-beauty-' + context.type + '"/>');
 
-        if (this.checked) {
-          context.check(this);
-        }
-
-        if (this.disabled) {
-          context.disable(this);
-        }
-
         reference[context.type]++;
 
         element.data('data-beauty-choice', true);
       }
+
+      context.refresh(this);
     });
   },
   destory: function (){
