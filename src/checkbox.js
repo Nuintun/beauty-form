@@ -8,4 +8,6 @@ require('./css/checkbox.css');
 
 var Choice = require('./choice');
 
-new Choice('checkbox');
+module.exports = function (scope){
+  return new Choice('checkbox', scope);
+};

@@ -8,4 +8,6 @@ require('./css/radiobox.css');
 
 var Choice = require('./choice');
 
-new Choice('radio');
+module.exports = function (scope){
+  return new Choice('radio', scope);
+};
