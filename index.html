@@ -78,7 +78,7 @@
       seajs.use(['./examples/jquery', './examples/checkbox', './examples/radiobox'], function ($, Checkbox, Radiobox){
         var checkbox, radiobox;
 
-        $('#button').on('click', function (){
+        function callback(){
           if (checkbox) {
             checkbox.destory();
             checkbox = null;
@@ -92,7 +92,9 @@
           } else {
             radiobox = Radiobox();
           }
-        });
+        }
+
+        $('#button').on('click', callback);
       });
     </script>
   </body>
