@@ -9,5 +9,5 @@
   background: url(../images/radio-disabled.png) no-repeat center;
 }
 .ui-beauty-radio.ui-beauty-choice-checked.ui-beauty-choice-disabled {
-  background: url(../images/radio-disabled-checked.png) no-repeat center;
+  background: url(../images/radio-checked-disabled.png) no-repeat center;
 }
