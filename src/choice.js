@@ -8,8 +8,8 @@ require('./css/choice.css');
 
 var $ = require('jquery');
 
-var doc = $(document);
 var reference = {};
+var doc = $(document);
 
 function Choice(type, scope){
   this.type = type;
