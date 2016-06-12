@@ -1,5 +1,5 @@
 define("selectbox", ["./css/selectbox.css.js","jquery"], function(require, exports, module){
-/**
+/*!
  * selectbox
  * Date: 2015/6/12
  * https://github.com/nuintun/beauty-form

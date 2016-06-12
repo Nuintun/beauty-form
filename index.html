@@ -103,29 +103,44 @@
         base: './examples'
       });
 
-      seajs.use(['./examples/jquery', './examples/checkbox', './examples/radiobox'], function ($, Checkbox, Radiobox){
-        var checkbox, radiobox;
+      seajs.use(
+        [
+          './examples/jquery',
+          './examples/checkbox',
+          './examples/radiobox',
+          './examples/selectbox'
+        ],
+        function ($, CheckBox, RadioBox, SelectBox){
+          var checkbox, radiobox, selectbox;
 
-        function beauty(){
-          if (checkbox) {
-            checkbox.destory();
-            checkbox = null;
-          } else {
-            checkbox = Checkbox();
+          function beauty(){
+            if (checkbox) {
+              checkbox.destory();
+              checkbox = null;
+            } else {
+              checkbox = CheckBox();
+            }
+
+            if (radiobox) {
+              radiobox.destory();
+              radiobox = null;
+            } else {
+              radiobox = RadioBox();
+            }
+
+            if (selectbox) {
+              selectbox.destory();
+              selectbox = null;
+            } else {
+              selectbox = SelectBox();
+            }
           }
 
-          if (radiobox) {
-            radiobox.destory();
-            radiobox = null;
-          } else {
-            radiobox = Radiobox();
-          }
+          beauty();
+
+          $('#button').on('click', beauty);
         }
-
-        beauty();
-
-        $('#button').on('click', beauty);
-      });
+      );
     </script>
   </body>
 </html>
