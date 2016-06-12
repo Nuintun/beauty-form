@@ -25,6 +25,7 @@
       .ui-beauty-choice {
         vertical-align: middle;
       }
+      select + label,
       input + label,
       .ui-beauty-choice + label {
         user-select: none;
@@ -80,6 +81,18 @@
       <input id="radio-2" type="radio" name="radio" checked/><label for="radio-2">单选美化</label>
       <input id="radio-3" type="radio" name="radio-disabled" disabled/><label for="radio-3">单选美化</label>
       <input id="radio-4" type="radio" name="radio-disabled" disabled checked/><label for="radio-4">单选美化</label>
+    </div>
+    <div>
+      <select id="select-1">
+        <option>选项一</option>
+        <option>选项二</option>
+        <option>选项三</option>
+      </select><label for="select-1">下拉框美化</label>
+      <select id="select-2" disabled>
+        <option>选项一</option>
+        <option>选项二</option>
+        <option>选项三</option>
+      </select><label for="select-2">下拉框美化</label>
     </div>
     <script type="text/javascript">
       if (!console) {
