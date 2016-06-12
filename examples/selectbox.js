@@ -74,11 +74,19 @@ SelectBox.prototype = {
       });
 
       doc.on('focusin.beauty-' + this.type, '.ui-beauty-select', function (){
-        $(this).addClass('ui-beauty-focus');
+        var select = this.previousSibling;
+
+        if (select.nodeName.toUpperCase() === 'SELECT' && $.data(select, 'data-beauty-select')) {
+          select.focus();
+        }
       });
 
       doc.on('focusout.beauty-' + this.type, '.ui-beauty-select', function (){
-        $(this).removeClass('ui-beauty-focus');
+        var select = this.previousSibling;
+
+        if (select.nodeName.toUpperCase() === 'SELECT' && $.data(select, 'data-beauty-select')) {
+          select.blur();
+        }
       });
     }
 
