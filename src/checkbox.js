@@ -1,4 +1,4 @@
-/**
+/*!
  * checkbox
  * Date: 2015/6/7
  * https://github.com/nuintun/beauty-form
