@@ -103,23 +103,27 @@ Choice.prototype = {
     });
   },
   refresh: function (element){
-    if (element.checked) {
-      this.check(element);
-    } else {
-      this.uncheck(element);
-    }
+    element = arguments.length ? $(element) : this.elements;
 
-    if (element.disabled) {
-      this.disable(element);
-    } else {
-      this.enable(element);
-    }
+    element.each(function (){
+      if (element.checked) {
+        this.check(element);
+      } else {
+        this.uncheck(element);
+      }
 
-    if (document.activeElement === element) {
-      this.focus(element);
-    } else {
-      this.blur(element);
-    }
+      if (element.disabled) {
+        this.disable(element);
+      } else {
+        this.enable(element);
+      }
+
+      if (document.activeElement === element) {
+        this.focus(element);
+      } else {
+        this.blur(element);
+      }
+    });
   },
   beauty: function (){
     var context = this;
