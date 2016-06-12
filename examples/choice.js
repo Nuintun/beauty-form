@@ -34,7 +34,9 @@ Choice.prototype = {
     if (!reference[this.type]) {
       reference[this.type] = 0;
 
-      doc.on('change.beauty-' + this.type, 'input[type=' + this.type + ']', function (){
+      var selector = 'input[type=' + this.type + ']';
+
+      doc.on('change.beauty-' + this.type, selector, function (){
         var element = this;
 
         context.refresh(this);
@@ -47,9 +49,31 @@ Choice.prototype = {
           });
         }
       });
+
+      doc.on('focusin.beauty-' + this.type, selector, function (){
+        context.focus(this);
+      });
+
+      doc.on('focusout.beauty-' + this.type, selector, function (){
+        context.blur(this);
+      });
     }
 
     this.beauty();
+  },
+  focus: function (element){
+    element = arguments.length ? $(element) : this.elements;
+
+    element.each(function (){
+      $(this.parentNode).addClass('ui-beauty-choice-focus');
+    });
+  },
+  blur: function (element){
+    element = arguments.length ? $(element) : this.elements;
+
+    element.each(function (){
+      $(this.parentNode).removeClass('ui-beauty-choice-focus');
+    });
   },
   check: function (element){
     element = arguments.length ? $(element) : this.elements;
@@ -91,6 +115,12 @@ Choice.prototype = {
     } else {
       this.enable(element);
     }
+
+    if (document.activeElement === element) {
+      this.focus(element);
+    } else {
+      this.blur(element);
+    }
   },
   beauty: function (){
     var context = this;
@@ -125,6 +155,8 @@ Choice.prototype = {
 
     if (!reference[this.type]) {
       doc.off('change.beauty-' + this.type);
+      doc.off('focusin.beauty-' + this.type);
+      doc.off('focusout.beauty-' + this.type);
     }
   }
 };

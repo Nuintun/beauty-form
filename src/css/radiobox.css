@@ -1,4 +1,5 @@
 .ui-beauty-radio {
+  border-radius: 8px;
   background: url(../images/radio.png) no-repeat center;
 }
 .ui-beauty-radio.ui-beauty-choice-checked {

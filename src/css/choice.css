@@ -7,14 +7,13 @@
   overflow: hidden;
 }
 .ui-beauty-choice > input {
-  width: 100%; height: 100%;
+  width: 100%; height: 100%; outline: none;
   margin: 0; padding: 0; opacity: 0;
   -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
   filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
 }
 :root .ui-beauty-choice > input {
-  -ms-filter: none;
-  filter: none;
+  -ms-filter: none; filter: none;
 }
 .ui-beauty-choice-disabled > input {
   cursor: not-allowed;
