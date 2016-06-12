@@ -12,6 +12,31 @@ var $ = require('jquery');
 var reference = {};
 var doc = $(document);
 
+/**
+ * proxy
+ * @param callback
+ * @returns {Function}
+ */
+function proxy(callback){
+  return function (element){
+    var context = this;
+
+    element = arguments.length ? $(element) : this.elements;
+
+    element.each(function (){
+      if ($.data(this, 'data-beauty-choice')) {
+        callback.call(context, this);
+      }
+    });
+  };
+}
+
+/**
+ * Choice
+ * @param type
+ * @param scope
+ * @constructor
+ */
 function Choice(type, scope){
   this.type = type;
 
@@ -27,6 +52,21 @@ function Choice(type, scope){
   this.init();
 }
 
+/**
+ * Choice.prototype
+ * @type {{
+ *   init: Choice.init,
+ *   focus: Choice.focus,
+ *   blur: Choice.blur,
+ *   check: Choice.check,
+ *   uncheck: Choice.uncheck,
+ *   enable: Choice.enable,
+ *   disable: Choice.disable,
+ *   refresh: Choice.refresh,
+ *   beauty: Choice.beauty,
+ *   destory: Choice.destory
+ * }}
+ */
 Choice.prototype = {
   init: function (){
     var context = this;
@@ -61,73 +101,43 @@ Choice.prototype = {
 
     this.beauty();
   },
-  focus: function (element){
-    element = arguments.length ? $(element) : this.elements;
+  focus: proxy(function (element){
+    $(element.parentNode).addClass('ui-beauty-choice-focus');
+  }),
+  blur: proxy(function (element){
+    $(element.parentNode).removeClass('ui-beauty-choice-focus');
+  }),
+  check: proxy(function (element){
+    $(element.parentNode).addClass('ui-beauty-choice-checked');
+  }),
+  uncheck: proxy(function (element){
+    $(element.parentNode).removeClass('ui-beauty-choice-checked');
+  }),
+  enable: proxy(function (element){
+    $(element.parentNode).removeClass('ui-beauty-choice-disabled');
+  }),
+  disable: proxy(function (element){
+    $(element.parentNode).addClass('ui-beauty-choice-disabled');
+  }),
+  refresh: proxy(function (element){
+    if (element.checked) {
+      this.check(element);
+    } else {
+      this.uncheck(element);
+    }
 
-    element.each(function (){
-      $(this.parentNode).addClass('ui-beauty-choice-focus');
-    });
-  },
-  blur: function (element){
-    element = arguments.length ? $(element) : this.elements;
+    if (element.disabled) {
+      this.disable(element);
+    } else {
+      this.enable(element);
+    }
 
-    element.each(function (){
-      $(this.parentNode).removeClass('ui-beauty-choice-focus');
-    });
-  },
-  check: function (element){
-    element = arguments.length ? $(element) : this.elements;
-
-    element.each(function (){
-      $(this.parentNode).addClass('ui-beauty-choice-checked');
-    });
-  },
-  uncheck: function (element){
-    element = arguments.length ? $(element) : this.elements;
-
-    element.each(function (){
-      $(this.parentNode).removeClass('ui-beauty-choice-checked');
-    });
-  },
-  enable: function (element){
-    element = arguments.length ? $(element) : this.elements;
-
-    element.each(function (){
-      $(this.parentNode).removeClass('ui-beauty-choice-disabled');
-    });
-  },
-  disable: function (element){
-    element = arguments.length ? $(element) : this.elements;
-
-    element.each(function (){
-      $(this.parentNode).addClass('ui-beauty-choice-disabled');
-    });
-  },
-  refresh: function (element){
-    var context = this;
-
-    element = arguments.length ? $(element) : this.elements;
-
-    element.each(function (){
-      if (this.checked) {
-        context.check(this);
-      } else {
-        context.uncheck(this);
-      }
-
-      if (this.disabled) {
-        context.disable(this);
-      } else {
-        context.enable(this);
-      }
-
-      if (document.activeElement === this) {
-        context.focus(this);
-      } else {
-        context.blur(this);
-      }
-    });
-  },
+    if (document.activeElement === element) {
+      this.focus(element);
+    } else {
+      this.blur(element);
+    }
+  }),
   beauty: function (){
     var context = this;
 
