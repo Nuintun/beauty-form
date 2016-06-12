@@ -71,6 +71,14 @@ SelectBox.prototype = {
       doc.on('focusout.beauty-' + this.type, selector, function (){
         context.blur(this);
       });
+
+      doc.on('focusin.beauty-' + this.type, '.ui-beauty-select', function (){
+        $(this).addClass('ui-beauty-focus');
+      });
+
+      doc.on('focusout.beauty-' + this.type, '.ui-beauty-select', function (){
+        $(this).removeClass('ui-beauty-focus');
+      });
     }
 
     this.beauty();
