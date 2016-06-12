@@ -57,6 +57,23 @@ function SelectBox(scope, options){
 
 SelectBox.prototype = {
   init: function (){
+    var context = this;
+
+    if (!reference) {
+      var selector = 'select';
+
+      doc.on('change.beauty-' + this.type, selector, function (){
+      });
+
+      doc.on('focusin.beauty-' + this.type, selector, function (){
+        context.focus(this);
+      });
+
+      doc.on('focusout.beauty-' + this.type, selector, function (){
+        context.blur(this);
+      });
+    }
+
     this.beauty();
   },
   focus: proxy(function (element){
@@ -119,7 +136,22 @@ SelectBox.prototype = {
     });
   },
   destory: function (){
+    this.elements.each(function (){
+      var element = $(this);
 
+      if (element.data('data-beauty-select')) {
+        element.next().remove();
+        element.removeData('data-beauty-select');
+
+        reference--;
+      }
+    });
+
+    if (!reference) {
+      doc.off('change.beauty-' + this.type);
+      doc.off('focusin.beauty-' + this.type);
+      doc.off('focusout.beauty-' + this.type);
+    }
   }
 };
 
