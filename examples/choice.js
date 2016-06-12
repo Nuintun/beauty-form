@@ -145,7 +145,7 @@ Choice.prototype = {
       var element = $(this);
 
       if (!element.data('data-beauty-choice')) {
-        element.wrap('<i class="ui-beauty-choice ui-beauty-' + context.type + '"/>');
+        element.wrap('<i tabindex="-1" class="ui-beauty-choice ui-beauty-' + context.type + '"/>');
 
         reference[context.type]++;
 
