@@ -3,6 +3,11 @@
   *display: inline; *zoom: 1;
   position: relative;
   margin: 0; padding: 0;
+  outline: none;
   border: 1px solid #ccc;
   background: url(../images/select.png) no-repeat right center;
+}
+.ui-beauty-select-focus {
+  border: 1px solid #09e;
+  /*box-shadow: 0 0 0 1px #a6c8ff;*/
 }
