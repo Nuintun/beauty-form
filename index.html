@@ -13,6 +13,10 @@
       div {
         margin: 16px 0 0; padding: 0;
       }
+      select {
+        vertical-align: middle;
+        margin: 0; padding: 0;
+      }
       input {
         vertical-align: middle;
         margin: 0; padding: 0;
@@ -22,11 +26,13 @@
         font-size: 14px;
         line-height: 16px;
       }
+      .ui-beauty-select,
       .ui-beauty-choice {
         vertical-align: middle;
       }
       select + label,
       input + label,
+      .ui-beauty-select + label,
       .ui-beauty-choice + label {
         user-select: none;
         -ms-user-select: none;
@@ -35,6 +41,7 @@
         vertical-align: middle; margin-left: 3px;
       }
       [disabled] + label,
+      .ui-beauty-select-disabled + label,
       .ui-beauty-choice-disabled + label {
         color: #ccc; cursor: not-allowed;
       }
