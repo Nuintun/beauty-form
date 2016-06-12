@@ -4,5 +4,5 @@
   position: relative;
   margin: 0; padding: 0;
   border: 1px solid #ccc;
-  box-sizing: content-box;
+  background: url(../images/select.png) no-repeat right center;
 }
