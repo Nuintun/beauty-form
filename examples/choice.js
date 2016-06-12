@@ -104,23 +104,29 @@ Choice.prototype = {
     });
   },
   refresh: function (element){
-    if (element.checked) {
-      this.check(element);
-    } else {
-      this.uncheck(element);
-    }
+    var context = this;
 
-    if (element.disabled) {
-      this.disable(element);
-    } else {
-      this.enable(element);
-    }
+    element = arguments.length ? $(element) : this.elements;
 
-    if (document.activeElement === element) {
-      this.focus(element);
-    } else {
-      this.blur(element);
-    }
+    element.each(function (){
+      if (this.checked) {
+        context.check(this);
+      } else {
+        context.uncheck(this);
+      }
+
+      if (this.disabled) {
+        context.disable(this);
+      } else {
+        context.enable(this);
+      }
+
+      if (document.activeElement === this) {
+        context.focus(this);
+      } else {
+        context.blur(this);
+      }
+    });
   },
   beauty: function (){
     var context = this;

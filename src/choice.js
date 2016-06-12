@@ -103,25 +103,27 @@ Choice.prototype = {
     });
   },
   refresh: function (element){
+    var context = this;
+
     element = arguments.length ? $(element) : this.elements;
 
     element.each(function (){
-      if (element.checked) {
-        this.check(element);
+      if (this.checked) {
+        context.check(this);
       } else {
-        this.uncheck(element);
+        context.uncheck(this);
       }
 
-      if (element.disabled) {
-        this.disable(element);
+      if (this.disabled) {
+        context.disable(this);
       } else {
-        this.enable(element);
+        context.enable(this);
       }
 
-      if (document.activeElement === element) {
-        this.focus(element);
+      if (document.activeElement === this) {
+        context.focus(this);
       } else {
-        this.blur(element);
+        context.blur(this);
       }
     });
   },
