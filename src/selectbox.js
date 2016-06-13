@@ -78,9 +78,11 @@ SelectBox.prototype = {
 
       doc.on('click.beauty-' + type, '.ui-beauty-select', function (){
         var select = $(this).prev();
+        var selectbox = SelectBox.get(select);
 
-        if (select[0].nodeName.toUpperCase() === 'SELECT' && SelectBox.get(select)) {
+        if (selectbox && select[0].tagName.toLowerCase() === 'select') {
           select.trigger('focus');
+          selectbox.show();
         }
       });
     }
@@ -114,6 +116,36 @@ SelectBox.prototype = {
     selectbox.html(template(this.options.select, {
       text: $(element.options[element.selectedIndex]).text()
     }));
+  },
+  select: function (index){
+    this.element[0].selectedIndex = index;
+
+    this.refresh();
+  },
+  show: function (){
+    var index = 0;
+    var dropdown = '';
+    var context = this;
+
+    this.element.children().each(function (){
+      var element = $(this);
+
+      switch (this.tagName.toLowerCase()) {
+        case 'option':
+          dropdown += template(context.options.option, { index: index, text: element.text() });
+          index++;
+          break;
+        case 'optgroup':
+          dropdown += template(context.options.optgroup, { label: element.text() });
+          break;
+      }
+    });
+
+    this.dropdown.html(dropdown);
+    this.dropdown.appendTo(document.body);
+  },
+  hide: function (){
+    this.dropdown.remove();
   },
   beauty: function (){
     var element = this.element;
