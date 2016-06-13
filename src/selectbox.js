@@ -28,7 +28,7 @@ function proxy(callback){
     element = arguments.length ? $(element) : this.elements;
 
     element.each(function (){
-      if ($.data(this, 'data-beauty-select')) {
+      if ($.data(this, 'beauty-select')) {
         callback.call(context, this);
       }
     });
@@ -75,7 +75,7 @@ SelectBox.prototype = {
       doc.on('focusin.beauty-' + this.type, '.ui-beauty-select', function (){
         var select = this.previousSibling;
 
-        if (select.nodeName.toUpperCase() === 'SELECT' && $.data(select, 'data-beauty-select')) {
+        if (select.nodeName.toUpperCase() === 'SELECT' && $.data(select, 'beauty-select')) {
           select.focus();
         }
       });
@@ -83,7 +83,7 @@ SelectBox.prototype = {
       doc.on('focusout.beauty-' + this.type, '.ui-beauty-select', function (){
         var select = this.previousSibling;
 
-        if (select.nodeName.toUpperCase() === 'SELECT' && $.data(select, 'data-beauty-select')) {
+        if (select.nodeName.toUpperCase() === 'SELECT' && $.data(select, 'beauty-select')) {
           select.blur();
         }
       });
@@ -122,7 +122,7 @@ SelectBox.prototype = {
     this.elements.each(function (){
       var element = $(this);
 
-      if (!element.data('data-beauty-select')) {
+      if (!element.data('beauty-select')) {
         element.css({
           position: 'absolute',
           opacity: 0,
@@ -144,7 +144,7 @@ SelectBox.prototype = {
 
         reference++;
 
-        element.data('data-beauty-select', true);
+        element.data('beauty-select', true);
       }
 
       context.refresh(this);
@@ -154,9 +154,9 @@ SelectBox.prototype = {
     this.elements.each(function (){
       var element = $(this);
 
-      if (element.data('data-beauty-select')) {
+      if (element.data('beauty-select')) {
         element.next().remove();
-        element.removeData('data-beauty-select');
+        element.removeData('beauty-select');
 
         reference--;
       }
