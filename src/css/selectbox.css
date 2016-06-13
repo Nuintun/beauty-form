@@ -6,6 +6,9 @@
   outline: none;
   text-align: left;
   border: 1px solid #ccc;
+  overflow: hidden;
+  font-size: 0; letter-spacing: 0;
+  -webkit-text-size-adjust: none;
 }
 .ui-beauty-select-hidden {
   position: absolute;

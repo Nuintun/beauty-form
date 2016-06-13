@@ -77,19 +77,11 @@ SelectBox.prototype = {
         select && select.refresh();
       });
 
-      doc.on('focusin.beauty-' + type, '.ui-beauty-select', function (){
+      doc.on('click.beauty-' + type, '.ui-beauty-select', function (){
         var select = $(this).prev();
 
         if (select[0].nodeName.toUpperCase() === 'SELECT' && SelectBox.get(select)) {
           select.trigger('focus');
-        }
-      });
-
-      doc.on('focusout.beauty-' + this.type, '.ui-beauty-select', function (){
-        var select = $(this).prev();
-
-        if (select[0].nodeName.toUpperCase() === 'SELECT' && SelectBox.get(select)) {
-          select.trigger('blur');
         }
       });
     }
@@ -137,11 +129,9 @@ SelectBox.prototype = {
       var width = element.outerWidth() - selectbox.outerWidth() + selectbox.width();
       var height = element.outerHeight() - selectbox.outerHeight() + selectbox.height();
 
-      selectbox.css({
-        width: width,
-        height: height,
-        lineHeight: height + 'px'
-      });
+      selectbox.width(width);
+      selectbox.height(height);
+      selectbox.css('line-height', height + 'px');
 
       reference++;
       this.selectbox = selectbox;
