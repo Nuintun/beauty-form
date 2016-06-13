@@ -16,9 +16,27 @@ var $ = require('jquery');
 var reference = 0;
 var doc = $(document);
 
+/**
+ * template
+ * @param template
+ * @param data
+ * @returns {void|string|XML}
+ */
+function template(template, data){
+  return template.replace(/{{(.*?)}}/g, function ($1, $2){
+    return data[$2];
+  });
+}
+
 function SelectBox(element, options){
   this.type = 'select';
   this.element = $(element);
+  this.options = $.extend({
+    select: '<div class="ui-beauty-select-title">{{text}}</div><i class="ui-beauty-select-icon"></i>',
+    dropdown: '<dl class="ui-beauty-select-dropdown">{{options}}</dl>',
+    optgroup: '<dt class="ui-beauty-select-optgroup">{{label}}</dt>',
+    option: '<dd class="ui-beauty-select-option" data-option="{{index}}" tabindex="-1">{{text}}</dd>'
+  }, options);
 
   this.init();
 }
@@ -119,7 +137,7 @@ SelectBox.prototype = {
 
       reference++;
       this.selectbox = selectbox;
-      this.dropdown = $('<ul class="ui-beauty-select-dropdown"/>');
+      this.dropdown = $('<div class="ui-beauty-select-dropdown"/>');
 
       element.data('beauty-select', this);
     }
