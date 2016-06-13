@@ -52,6 +52,12 @@
   cursor: not-allowed;
   background: url(../images/select-disabled.png) no-repeat center;
 }
+.ui-beauty-select-opened .ui-beauty-select-icon {
+  background: url(../images/select-opened.png) no-repeat center;
+}
+.ui-beauty-select-disabled.ui-beauty-select-opened .ui-beauty-select-icon {
+  background: url(../images/select-opened-disabled.png) no-repeat center;
+}
 .ui-beauty-select-dropdown {
   position: absolute;
   margin: 0; padding: 0;

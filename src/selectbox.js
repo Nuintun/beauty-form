@@ -82,7 +82,7 @@ SelectBox.prototype = {
 
         if (selectbox && select[0].tagName.toLowerCase() === 'select') {
           select.trigger('focus');
-          selectbox.show();
+          selectbox.open();
         }
       });
     }
@@ -122,7 +122,7 @@ SelectBox.prototype = {
 
     this.refresh();
   },
-  show: function (){
+  open: function (){
     var index = 0;
     var dropdown = '';
     var context = this;
@@ -143,9 +143,11 @@ SelectBox.prototype = {
 
     this.dropdown.html(dropdown);
     this.dropdown.appendTo(document.body);
+    this.selectbox.addClass('ui-beauty-select-opened');
   },
-  hide: function (){
+  close: function (){
     this.dropdown.remove();
+    this.selectbox.removeClass('ui-beauty-select-opened');
   },
   beauty: function (){
     var element = this.element;
