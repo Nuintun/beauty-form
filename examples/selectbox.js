@@ -123,6 +123,7 @@ SelectBox.prototype = {
 
       reference++;
       this.selectbox = element.next();
+      this.dropdown = $('<ul class="ui-beauty-select-dropdown"/>')[0];
 
       element.data('beauty-select', this);
     }
