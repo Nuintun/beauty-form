@@ -25,3 +25,6 @@
   /*border: 1px solid #8bade4;*/
   /*box-shadow: 0 0 0 1px #a6c8ff;*/
 }
+.ui-beauty-select.ui-beauty-select-disabled {
+  background: url(../images/select-disabled.png) no-repeat right center;
+}
