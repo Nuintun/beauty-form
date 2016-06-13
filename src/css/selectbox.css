@@ -2,11 +2,10 @@
   display: inline-block;
   *display: inline; *zoom: 1;
   position: relative;
-  margin: 0; padding: 0;
+  margin: 0; padding: 0 20px 0 4px;
   outline: none;
   text-align: left;
   border: 1px solid #ccc;
-  background: url(../images/select.png) no-repeat right center;
 }
 .ui-beauty-select-hidden {
   position: absolute;
@@ -23,6 +22,30 @@
 .ui-beauty-select-focus {
   border: 1px solid #09e;
 }
-.ui-beauty-select.ui-beauty-select-disabled {
-  background: url(../images/select-disabled.png) no-repeat right center;
+.ui-beauty-select-title {
+  cursor: default;
+  margin: 0; padding: 0;
+  display: inline-block;
+  *display: inline; *zoom: 1;
+  font-size: 13px;
+  width: 100%; height: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ui-beauty-select-disabled .ui-beauty-select-title {
+  color: #e6e6e6; cursor: not-allowed;
+}
+.ui-beauty-select-icon {
+  position: absolute;
+  top: 50%; right: 2px;
+  display: inline-block;
+  *display: inline; *zoom: 1;
+  width: 16px; height: 16px;
+  margin-top: -8px;
+  background: url(../images/select.png) no-repeat center;
+}
+.ui-beauty-select-disabled .ui-beauty-select-icon {
+  cursor: not-allowed;
+  background: url(../images/select-disabled.png) no-repeat center;
 }

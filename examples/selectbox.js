@@ -33,7 +33,7 @@ function SelectBox(element, options){
   this.type = 'select';
   this.element = $(element);
   this.options = $.extend({
-    select: '<div class="ui-beauty-select-title">{{text}}</div><i class="ui-beauty-select-icon"></i>',
+    select: '<div class="ui-beauty-select-title" title="{{text}}">{{text}}</div><i class="ui-beauty-select-icon"></i>',
     dropdown: '<dl class="ui-beauty-select-dropdown">{{options}}</dl>',
     optgroup: '<dt class="ui-beauty-select-optgroup">{{label}}</dt>',
     option: '<dd class="ui-beauty-select-option" data-option="{{index}}" tabindex="-1">{{text}}</dd>'
@@ -119,6 +119,10 @@ SelectBox.prototype = {
     selectbox
       .toggleClass('ui-beauty-select-disabled', element.disabled)
       .toggleClass('ui-beauty-select-focus', document.activeElement === element);
+
+    selectbox.html(template(this.options.select, {
+      text: $(element.options[element.selectedIndex]).text()
+    }));
   },
   beauty: function (){
     var element = this.element;
@@ -133,8 +137,11 @@ SelectBox.prototype = {
       var width = element.outerWidth() - selectbox.outerWidth() + selectbox.width();
       var height = element.outerHeight() - selectbox.outerHeight() + selectbox.height();
 
-      selectbox.width(width);
-      selectbox.height(height);
+      selectbox.css({
+        width: width,
+        height: height,
+        lineHeight: height + 'px'
+      });
 
       reference++;
       this.selectbox = selectbox;
