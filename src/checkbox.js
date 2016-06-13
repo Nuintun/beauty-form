@@ -11,8 +11,18 @@
 
 require('./css/checkbox.css');
 
+var $ = require('jquery');
 var Choice = require('./choice');
 
 module.exports = function (scope){
-  return new Choice('checkbox', scope);
+  if (!scope || !scope.nodeType
+    || (scope.nodeType !== 1
+    && scope.nodeType !== 9
+    && scope.nodeType !== 11)) {
+    scope = document.body;
+  }
+
+  $('input[type=checkbox]', scope).each(function (){
+    new Choice(this);
+  });
 };

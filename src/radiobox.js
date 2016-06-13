@@ -11,8 +11,18 @@
 
 require('./css/radiobox.css');
 
+var $ = require('jquery');
 var Choice = require('./choice');
 
 module.exports = function (scope){
-  return new Choice('radio', scope);
+  if (!scope || !scope.nodeType
+    || (scope.nodeType !== 1
+    && scope.nodeType !== 9
+    && scope.nodeType !== 11)) {
+    scope = document.body;
+  }
+
+  $('input[type=radio]', scope).each(function (){
+    new Choice(this);
+  });
 };

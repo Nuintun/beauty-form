@@ -18,44 +18,37 @@ var reference = {};
 var doc = $(document);
 
 /**
- * proxy
- * @param callback
- * @returns {Function}
- */
-function proxy(callback){
-  return function (element){
-    var context = this;
-
-    element = arguments.length ? $(element) : this.elements;
-
-    element.each(function (){
-      if ($.data(this, 'data-beauty-choice')) {
-        callback.call(context, this);
-      }
-    });
-  };
-}
-
-/**
  * Choice
- * @param type
- * @param scope
+ * @param element
  * @constructor
  */
-function Choice(type, scope){
-  this.type = type;
+function Choice(element){
+  this.element = element;
+  this.type = element.type ? element.type.toLowerCase() : undefined;
 
-  if (!scope || !scope.nodeType
-    || (scope.nodeType !== 1
-    && scope.nodeType !== 9
-    && scope.nodeType !== 11)) {
-    scope = document;
+  var context = Choice.get(element);
+
+  if (context) {
+    return context;
   }
 
-  this.elements = $('input[type=' + type + ']', scope);
+  if (this.type !== 'checkbox' && this.type !== 'radio') {
+    throw new TypeError('The element must be a checkbox or radio.');
+  }
 
   this.init();
 }
+
+/**
+ * get
+ * @param element
+ * @returns {*}
+ */
+Choice.get = function (element){
+  element = $(element);
+
+  return element.data('data-beauty-choice');
+};
 
 /**
  * Choice.prototype
@@ -74,110 +67,116 @@ function Choice(type, scope){
  */
 Choice.prototype = {
   init: function (){
-    var context = this;
+    var type = this.type;
 
-    if (!reference[this.type]) {
-      reference[this.type] = 0;
+    if (!reference[type]) {
+      reference[type] = 0;
 
-      var selector = 'input[type=' + this.type + ']';
+      var selector = 'input[type=' + type + ']';
 
-      doc.on('change.beauty-' + this.type, selector, function (){
+      doc.on('change.beauty-' + type, selector, function (){
         var element = this;
+        var context = Choice.get(this);
 
-        context.refresh(this);
+        if (context) {
+          if (type === 'radio') {
+            doc.find(':radio[name=' + element.name + ']').each(function (){
+              var context = Choice.get(this);
 
-        if (context.type === 'radio') {
-          doc.find(':radio[name=' + this.name + ']').each(function (){
-            if (element !== this) {
-              context.refresh(this);
-            }
-          });
+              if (context && element !== this) {
+                context.refresh();
+              }
+            });
+          }
+
+          context.refresh();
         }
       });
 
-      doc.on('focusin.beauty-' + this.type, selector, function (){
-        context.focus(this);
+      doc.on('focusin.beauty-' + type, selector, function (){
+        var context = Choice.get(this);
+
+        context && context.focus();
       });
 
-      doc.on('focusout.beauty-' + this.type, selector, function (){
-        context.blur(this);
+      doc.on('focusout.beauty-' + type, selector, function (){
+        var context = Choice.get(this);
+
+        context && context.blur();
       });
     }
 
     this.beauty();
   },
-  focus: proxy(function (element){
-    $(element.parentNode).addClass('ui-beauty-choice-focus');
-  }),
-  blur: proxy(function (element){
-    $(element.parentNode).removeClass('ui-beauty-choice-focus');
-  }),
-  check: proxy(function (element){
-    $(element.parentNode).addClass('ui-beauty-choice-checked');
-  }),
-  uncheck: proxy(function (element){
-    $(element.parentNode).removeClass('ui-beauty-choice-checked');
-  }),
-  enable: proxy(function (element){
-    $(element.parentNode).removeClass('ui-beauty-choice-disabled');
-  }),
-  disable: proxy(function (element){
-    $(element.parentNode).addClass('ui-beauty-choice-disabled');
-  }),
-  refresh: proxy(function (element){
+  focus: function (){
+    $(this.element.parentNode).addClass('ui-beauty-choice-focus');
+  },
+  blur: function (){
+    $(this.element.parentNode).removeClass('ui-beauty-choice-focus');
+  },
+  check: function (){
+    $(this.element.parentNode).addClass('ui-beauty-choice-checked');
+  },
+  uncheck: function (){
+    $(this.element.parentNode).removeClass('ui-beauty-choice-checked');
+  },
+  enable: function (){
+    $(this.element.parentNode).removeClass('ui-beauty-choice-disabled');
+  },
+  disable: function (){
+    $(this.element.parentNode).addClass('ui-beauty-choice-disabled');
+  },
+  refresh: function (){
+    var element = this.element;
+
     if (element.checked) {
-      this.check(element);
+      this.check();
     } else {
-      this.uncheck(element);
+      this.uncheck();
     }
 
     if (element.disabled) {
-      this.disable(element);
+      this.disable();
     } else {
-      this.enable(element);
+      this.enable();
     }
 
     if (document.activeElement === element) {
-      this.focus(element);
+      this.focus();
     } else {
-      this.blur(element);
+      this.blur();
     }
-  }),
+  },
   beauty: function (){
-    var context = this;
+    if (!Choice.get(this.element)) {
+      var type = this.type;
+      var element = $(this.element);
 
-    this.elements.each(function (){
-      var element = $(this);
+      element.wrap('<i tabindex="-1" class="ui-beauty-choice ui-beauty-' + type + '"/>');
 
-      if (!element.data('data-beauty-choice')) {
-        element.wrap('<i tabindex="-1" class="ui-beauty-choice ui-beauty-' + context.type + '"/>');
+      reference[type]++;
 
-        reference[context.type]++;
+      element.data('data-beauty-choice', this);
+    }
 
-        element.data('data-beauty-choice', true);
-      }
-
-      context.refresh(this);
-    });
+    this.refresh();
   },
   destory: function (){
-    var context = this;
+    var type = this.type;
 
-    this.elements.each(function (){
-      var element = $(this);
+    if (Choice.get(this.element)) {
+      var element = $(this.element);
 
-      if (element.data('data-beauty-choice')) {
-        element.unwrap();
-        element.removeData('data-beauty-choice');
+      element.unwrap();
+      element.removeData('data-beauty-choice');
 
-        reference[context.type]--;
-      }
-    });
+      reference[type]--;
+    }
 
-    if (!reference[this.type]) {
-      doc.off('change.beauty-' + this.type);
-      doc.off('focusin.beauty-' + this.type);
-      doc.off('focusout.beauty-' + this.type);
+    if (!reference[type]) {
+      doc.off('change.beauty-' + type);
+      doc.off('focusin.beauty-' + type);
+      doc.off('focusout.beauty-' + type);
     }
   }
 };

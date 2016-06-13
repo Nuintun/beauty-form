@@ -1,4 +1,4 @@
-define("radiobox", ["./css/radiobox.css.js","./choice"], function(require, exports, module){
+define("radiobox", ["./css/radiobox.css.js","jquery","./choice"], function(require, exports, module){
 /**
  * radio
  * Date: 2015/6/7
@@ -12,10 +12,20 @@ define("radiobox", ["./css/radiobox.css.js","./choice"], function(require, expor
 
 require('./css/radiobox.css.js');
 
+var $ = require('jquery');
 var Choice = require('./choice');
 
 module.exports = function (scope){
-  return new Choice('radio', scope);
+  if (!scope || !scope.nodeType
+    || (scope.nodeType !== 1
+    && scope.nodeType !== 9
+    && scope.nodeType !== 11)) {
+    scope = document.body;
+  }
+
+  $('input[type=radio]', scope).each(function (){
+    new Choice(this);
+  });
 };
 
 });
