@@ -100,11 +100,17 @@ SelectBox.prototype = {
     this.refresh();
   },
   refresh: function (){
-    var element = this.element;
+    var element = $(this.element);
+    var selectbox = $(this.selectbox);
+    var width = element.outerWidth() - selectbox.outerWidth() + selectbox.width();
+    var height = element.outerHeight() - selectbox.outerHeight() + selectbox.height();
 
-    $(element.nextSibling)
-      .toggleClass('ui-beauty-select-disabled', element.disabled)
-      .toggleClass('ui-beauty-select-focus', document.activeElement === element);
+    selectbox.width(width);
+    selectbox.height(height);
+
+    selectbox
+      .toggleClass('ui-beauty-select-disabled', this.element.disabled)
+      .toggleClass('ui-beauty-select-focus', document.activeElement === this.element);
   },
   beauty: function (){
     var element = $(this.element);
@@ -112,13 +118,10 @@ SelectBox.prototype = {
     if (!SelectBox.get(element)) {
       element.addClass('ui-beauty-select-hidden');
 
-      var selectbox = $('<div tabindex="-1" class="ui-beauty-select"/>');
-
-      selectbox.insertAfter(element);
-      selectbox.width(element.outerWidth() - selectbox.outerWidth() + selectbox.width());
-      selectbox.height(element.outerHeight() - selectbox.outerHeight() + selectbox.height());
+      element.after('<div tabindex="-1" class="ui-beauty-select"/>');
 
       reference++;
+      this.selectbox = element.next();
 
       element.data('beauty-select', this);
     }

@@ -158,7 +158,7 @@ Choice.prototype = {
   refresh: function (){
     var element = this.element;
 
-    $(element.parentNode)
+    $(this.choice)
       .toggleClass('ui-beauty-choice-checked', element.checked)
       .toggleClass('ui-beauty-choice-disabled', element.disabled)
       .toggleClass('ui-beauty-choice-focus', document.activeElement === element);
@@ -171,6 +171,7 @@ Choice.prototype = {
       element.wrap('<i tabindex="-1" class="ui-beauty-choice ui-beauty-' + type + '"/>');
 
       reference[type]++;
+      this.choice = element.parent();
 
       element.data('beauty-choice', this);
     }
