@@ -132,7 +132,7 @@
             }
 
             if (radiobox) {
-              radiobox = null;
+              radiobox = false;
 
               $('input[type=radio]').checkbox('destory');
             } else {
@@ -142,10 +142,13 @@
             }
 
             if (selectbox) {
-              selectbox.destory();
-              selectbox = null;
+              selectbox = false;
+
+              $('select').selectbox('destory');
             } else {
-              selectbox = SelectBox();
+              selectbox = true;
+
+              $('select').selectbox();
             }
           }
 

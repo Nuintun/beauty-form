@@ -4,8 +4,21 @@
   position: relative;
   margin: 0; padding: 0;
   outline: none;
+  text-align: left;
   border: 1px solid #ccc;
   background: url(../images/select.png) no-repeat right center;
+}
+.ui-beauty-select-hidden {
+  position: absolute;
+  top: auto; right: auto;
+  bottom: auto; left: auto;
+  z-index: -1; opacity: 0;
+  -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
+}
+:root .ui-beauty-select-hidden {
+  -ms-filter: none;
+  filter: none;
 }
 .ui-beauty-select-focus {
   border: 1px solid #09e;

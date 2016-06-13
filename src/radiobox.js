@@ -16,6 +16,7 @@ var Choice = require('./choice');
 
 $.fn.radiobox = function (method){
   var elements = this;
+  var args = [].slice.call(arguments, 1);
 
   return elements.each(function (){
     var choice = Choice.get(this);
@@ -24,9 +25,7 @@ $.fn.radiobox = function (method){
       choice = new Choice(this);
     }
 
-    if (arguments.length) {
-      var args = [].slice.call(arguments, 1);
-
+    if (method) {
       choice[method] && choice[method].apply(choice, args);
     }
   });

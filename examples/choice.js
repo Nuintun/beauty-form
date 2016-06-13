@@ -61,7 +61,7 @@ function Choice(element){
 Choice.get = function (element){
   element = $(element);
 
-  return element.data('data-beauty-choice');
+  return element.data('beauty-choice');
 };
 
 /**
@@ -172,7 +172,7 @@ Choice.prototype = {
 
       reference[type]++;
 
-      element.data('data-beauty-choice', this);
+      element.data('beauty-choice', this);
     }
 
     this.refresh();
@@ -184,7 +184,7 @@ Choice.prototype = {
       var element = $(this.element);
 
       element.unwrap();
-      element.removeData('data-beauty-choice');
+      element.removeData('beauty-choice');
 
       reference[type]--;
     }
