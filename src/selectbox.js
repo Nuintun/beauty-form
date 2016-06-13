@@ -76,7 +76,11 @@ SelectBox.prototype = {
         select && select.refresh();
       });
 
-      doc.on('click.beauty-' + type, '.ui-beauty-select', function (){
+      doc.on('click.beauty-' + type, '.ui-beauty-select', function (e){
+        e.preventDefault();
+        
+        if (this.disabled) return;
+
         var select = $(this).prev();
         var selectbox = SelectBox.get(select);
 
