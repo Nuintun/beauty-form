@@ -43,25 +43,19 @@ SelectBox.prototype = {
       doc.on('change.beauty-' + type, selector, function (){
         var select = SelectBox.get(this);
 
-        if (select) {
-          select.refresh();
-        }
+        select && select.refresh();
       });
 
       doc.on('focusin.beauty-' + type, selector, function (){
         var select = SelectBox.get(this);
 
-        if (select) {
-          select.refresh();
-        }
+        select && select.refresh();
       });
 
       doc.on('focusout.beauty-' + type, selector, function (){
         var select = SelectBox.get(this);
 
-        if (select) {
-          select.refresh();
-        }
+        select && select.refresh();
       });
 
       doc.on('focusin.beauty-' + type, '.ui-beauty-select', function (){
