@@ -94,12 +94,12 @@ SelectBox.prototype = {
     this.refresh();
   },
   refresh: function (){
-    var element = this.element;
+    var element = this.element[0];
     var selectbox = this.selectbox;
 
     selectbox
-      .toggleClass('ui-beauty-select-disabled', element[0].disabled)
-      .toggleClass('ui-beauty-select-focus', document.activeElement === element[0]);
+      .toggleClass('ui-beauty-select-disabled', element.disabled)
+      .toggleClass('ui-beauty-select-focus', document.activeElement === element);
   },
   beauty: function (){
     var element = this.element;
