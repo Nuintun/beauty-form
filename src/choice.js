@@ -88,12 +88,11 @@ Choice.prototype = {
       var selector = 'input[type=' + type + ']';
 
       doc.on('change.beauty-' + type, selector, function (){
-        var element = this;
         var choice = Choice.get(this);
 
         if (choice) {
           if (type === 'radio') {
-            radio(element);
+            radio(this);
           }
 
           choice.refresh();
