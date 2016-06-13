@@ -15,17 +15,24 @@ require('./css/radiobox.css.js');
 var $ = require('jquery');
 var Choice = require('./choice');
 
-module.exports = function (scope){
-  if (!scope || !scope.nodeType
-    || (scope.nodeType !== 1
-    && scope.nodeType !== 9
-    && scope.nodeType !== 11)) {
-    scope = document.body;
-  }
+$.fn.radiobox = function (method){
+  var elements = this;
 
-  $('input[type=radio]', scope).each(function (){
-    new Choice(this);
+  return elements.each(function (){
+    var choice = Choice.get(this);
+
+    if (!choice) {
+      choice = new Choice(this);
+    }
+
+    if (arguments.length) {
+      var args = [].slice.call(arguments, 1);
+
+      choice[method] && choice[method].apply(choice, args);
+    }
   });
 };
+
+module.exports = $;
 
 });

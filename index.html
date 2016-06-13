@@ -122,17 +122,23 @@
 
           function beauty(){
             if (checkbox) {
-              checkbox.destory();
-              checkbox = null;
+              checkbox = false;
+
+              $('input[type=checkbox]').checkbox('destory');
             } else {
-              checkbox = CheckBox();
+              checkbox = true;
+
+              $('input[type=checkbox]').checkbox();
             }
 
             if (radiobox) {
-              radiobox.destory();
               radiobox = null;
+
+              $('input[type=radio]').checkbox('destory');
             } else {
-              radiobox = RadioBox();
+              radiobox = true;
+
+              $('input[type=radio]').checkbox();
             }
 
             if (selectbox) {

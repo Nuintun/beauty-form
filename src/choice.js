@@ -17,6 +17,20 @@ var reference = {};
 var doc = $(document);
 
 /**
+ * radio
+ * @param element
+ */
+function radio(element){
+  doc.find('input[type=radio][name=' + element.name + ']').each(function (){
+    var choice = Choice.get(this);
+
+    if (choice && element !== this) {
+      choice.refresh();
+    }
+  });
+}
+
+/**
  * Choice
  * @param element
  * @constructor
@@ -25,10 +39,10 @@ function Choice(element){
   this.element = element;
   this.type = element.type ? element.type.toLowerCase() : undefined;
 
-  var context = Choice.get(element);
+  var choice = Choice.get(element);
 
-  if (context) {
-    return context;
+  if (choice) {
+    return choice;
   }
 
   if (this.type !== 'checkbox' && this.type !== 'radio') {
@@ -75,76 +89,79 @@ Choice.prototype = {
 
       doc.on('change.beauty-' + type, selector, function (){
         var element = this;
-        var context = Choice.get(this);
+        var choice = Choice.get(this);
 
-        if (context) {
+        if (choice) {
           if (type === 'radio') {
-            doc.find(':radio[name=' + element.name + ']').each(function (){
-              var context = Choice.get(this);
-
-              if (context && element !== this) {
-                context.refresh();
-              }
-            });
+            radio(element);
           }
 
-          context.refresh();
+          choice.refresh();
         }
       });
 
       doc.on('focusin.beauty-' + type, selector, function (){
-        var context = Choice.get(this);
+        var choice = Choice.get(this);
 
-        context && context.focus();
+        choice && choice.refresh();
       });
 
       doc.on('focusout.beauty-' + type, selector, function (){
-        var context = Choice.get(this);
+        var choice = Choice.get(this);
 
-        context && context.blur();
+        choice && choice.refresh();
       });
     }
 
     this.beauty();
   },
   focus: function (){
-    $(this.element.parentNode).addClass('ui-beauty-choice-focus');
+    this.element.focus();
   },
   blur: function (){
-    $(this.element.parentNode).removeClass('ui-beauty-choice-focus');
+    this.element.blur();
   },
   check: function (){
-    $(this.element.parentNode).addClass('ui-beauty-choice-checked');
+    var type = this.type;
+    var element = this.element;
+
+    element.checked = true;
+
+    if (type === 'radio') {
+      radio(element);
+    }
+
+    this.refresh();
   },
   uncheck: function (){
-    $(this.element.parentNode).removeClass('ui-beauty-choice-checked');
+    var type = this.type;
+    var element = this.element;
+
+    element.checked = false;
+
+    if (type === 'radio') {
+      radio(element);
+    }
+
+    this.refresh();
   },
   enable: function (){
-    $(this.element.parentNode).removeClass('ui-beauty-choice-disabled');
+    this.element.disabled = false;
+
+    this.refresh();
   },
   disable: function (){
-    $(this.element.parentNode).addClass('ui-beauty-choice-disabled');
+    this.element.disabled = true;
+
+    this.refresh();
   },
   refresh: function (){
     var element = this.element;
 
-    if (element.checked) {
-      this.check();
-    } else {
-      this.uncheck();
-    }
-
-    if (element.disabled) {
-      this.disable();
-    } else {
-      this.enable();
-    }
-
-    if (document.activeElement === element) {
-      this.focus();
-    } else {
-      this.blur();
-    }
+    $(element.parentNode)
+      .toggleClass('ui-beauty-choice-checked', element.checked)
+      .toggleClass('ui-beauty-choice-disabled', element.disabled)
+      .toggleClass('ui-beauty-choice-focus', document.activeElement === element);
   },
   beauty: function (){
     if (!Choice.get(this.element)) {
