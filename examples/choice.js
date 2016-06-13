@@ -37,8 +37,9 @@ function radio(element){
  * @constructor
  */
 function Choice(element){
-  this.element = element;
-  this.type = element.type ? element.type.toLowerCase() : undefined;
+  this.element = $(element);
+  this.type = this.element.attr('type');
+  this.type = this.type ? this.type.toLowerCase() : undefined;
 
   var choice = Choice.get(element);
 
@@ -116,14 +117,14 @@ Choice.prototype = {
     this.beauty();
   },
   focus: function (){
-    this.element.focus();
+    this.element.trigger('focus');
   },
   blur: function (){
-    this.element.blur();
+    this.element.trigger('blur');
   },
   check: function (){
     var type = this.type;
-    var element = this.element;
+    var element = this.element[0];
 
     element.checked = true;
 
@@ -135,7 +136,7 @@ Choice.prototype = {
   },
   uncheck: function (){
     var type = this.type;
-    var element = this.element;
+    var element = this.element[0];
 
     element.checked = false;
 
@@ -146,27 +147,28 @@ Choice.prototype = {
     this.refresh();
   },
   enable: function (){
-    this.element.disabled = false;
+    this.element[0].disabled = false;
 
     this.refresh();
   },
   disable: function (){
-    this.element.disabled = true;
+    this.element[0].disabled = true;
 
     this.refresh();
   },
   refresh: function (){
-    var element = this.element;
+    var element = this.element[0];
 
-    $(this.choice)
+    this.choice
       .toggleClass('ui-beauty-choice-checked', element.checked)
       .toggleClass('ui-beauty-choice-disabled', element.disabled)
       .toggleClass('ui-beauty-choice-focus', document.activeElement === element);
   },
   beauty: function (){
-    if (!Choice.get(this.element)) {
+    var element = this.element;
+
+    if (!Choice.get(element)) {
       var type = this.type;
-      var element = $(this.element);
 
       element.wrap('<i tabindex="-1" class="ui-beauty-choice ui-beauty-' + type + '"/>');
 
@@ -180,10 +182,9 @@ Choice.prototype = {
   },
   destory: function (){
     var type = this.type;
+    var element = this.element;
 
-    if (Choice.get(this.element)) {
-      var element = $(this.element);
-
+    if (Choice.get(element)) {
       element.unwrap();
       element.removeData('beauty-choice');
 
