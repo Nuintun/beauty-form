@@ -78,10 +78,11 @@ SelectBox.prototype = {
 
       doc.on('click.beauty-' + type, '.ui-beauty-select', function (e){
         e.preventDefault();
-        
-        if (this.disabled) return;
 
         var select = $(this).prev();
+
+        if (select.length && select[0].disabled) return;
+
         var selectbox = SelectBox.get(select);
 
         if (selectbox && select[0].tagName.toLowerCase() === 'select') {

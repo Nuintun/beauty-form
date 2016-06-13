@@ -77,8 +77,13 @@ SelectBox.prototype = {
         select && select.refresh();
       });
 
-      doc.on('click.beauty-' + type, '.ui-beauty-select', function (){
+      doc.on('click.beauty-' + type, '.ui-beauty-select', function (e){
+        e.preventDefault();
+
         var select = $(this).prev();
+
+        if (select.length && select[0].disabled) return;
+
         var selectbox = SelectBox.get(select);
 
         if (selectbox && select[0].tagName.toLowerCase() === 'select') {
