@@ -37,9 +37,11 @@ function radio(element){
  * @constructor
  */
 function Choice(element){
-  this.element = $(element);
-  this.type = this.element.attr('type');
-  this.type = this.type ? this.type.toLowerCase() : undefined;
+  var context = this;
+
+  context.element = $(element);
+  context.type = context.element.attr('type');
+  context.type = context.type ? context.type.toLowerCase() : undefined;
 
   var choice = Choice.get(element);
 
@@ -47,7 +49,7 @@ function Choice(element){
     return choice;
   }
 
-  if (this.type !== 'checkbox' && this.type !== 'radio') {
+  if (context.type !== 'checkbox' && context.type !== 'radio') {
     throw new TypeError('The element must be a checkbox or radio.');
   }
 
@@ -117,20 +119,21 @@ Choice.prototype = {
     this.__beauty();
   },
   __beauty: function (){
-    var element = this.element;
+    var context = this;
+    var element = context.element;
 
     if (!Choice.get(element)) {
-      var type = this.type;
+      var type = context.type;
 
       element.wrap('<i tabindex="-1" class="ui-beauty-choice ui-beauty-' + type + '"/>');
 
       reference[type]++;
-      this.choice = element.parent();
+      context.choice = element.parent();
 
-      element.data('beauty-choice', this);
+      element.data('beauty-choice', context);
     }
 
-    this.refresh();
+    context.refresh();
   },
   focus: function (){
     if (util.activeElement() !== this.element[0]) {

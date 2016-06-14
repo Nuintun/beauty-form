@@ -161,7 +161,7 @@ SelectBox.prototype = {
       );
     }
 
-    this.element.children().each(function (){
+    context.element.children().each(function (){
       var element = $(this);
 
       switch (this.nodeName.toLowerCase()) {
@@ -177,7 +177,7 @@ SelectBox.prototype = {
       }
     });
 
-    this.dropdown.html(compile(
+    context.dropdown.html(compile(
       context,
       options.dropdown,
       context.dropdown,
@@ -188,20 +188,21 @@ SelectBox.prototype = {
     console.log(util.offset(this.selectbox[0]));
   },
   __beauty: function (){
-    var element = this.element;
+    var context = this;
+    var element = context.element;
 
     if (!SelectBox.get(element)) {
       element.addClass('ui-beauty-select-hidden');
 
-      this.selectbox = $('<div tabindex="-1" class="ui-beauty-select"/>').insertAfter(element);
-      this.dropdown = $('<div tabindex="-1" class="ui-beauty-select-dropdown"/>');
+      context.selectbox = $('<div tabindex="-1" class="ui-beauty-select"/>').insertAfter(element);
+      context.dropdown = $('<div tabindex="-1" class="ui-beauty-select-dropdown"/>');
 
       reference++;
 
-      element.data('beauty-select', this);
+      element.data('beauty-select', context);
     }
 
-    this.refresh();
+    context.refresh();
   },
   __refresh: function (){
     var context = this;
@@ -251,25 +252,30 @@ SelectBox.prototype = {
     this.refresh();
   },
   open: function (){
-    if (this.opened) return;
+    var context = this;
 
-    this.opened = true;
+    if (context.opened) return;
 
-    this.__opsition();
-    this.dropdown.appendTo(document.body);
-    this.selectbox.addClass('ui-beauty-select-opened');
+    context.opened = true;
+
+    context.__opsition();
+    context.dropdown.appendTo(document.body);
+    context.selectbox.addClass('ui-beauty-select-opened');
   },
   close: function (){
-    if (!this.opened) return;
+    var context = this;
 
-    this.opened = false;
+    if (!context.opened) return;
 
-    this.dropdown.remove();
-    this.selectbox.removeClass('ui-beauty-select-opened');
+    context.opened = false;
+
+    context.dropdown.remove();
+    context.selectbox.removeClass('ui-beauty-select-opened');
   },
   destory: function (){
-    var type = this.type;
-    var element = this.element;
+    var context = this;
+    var type = context.type;
+    var element = context.element;
 
     if (SelectBox.get(element)) {
       element.next().remove();
@@ -278,6 +284,9 @@ SelectBox.prototype = {
 
       reference--;
     }
+
+    context.selectbox.off();
+    context.dropdown.off();
 
     if (!reference) {
       doc.off('change.beauty-' + type);
