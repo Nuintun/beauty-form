@@ -116,13 +116,19 @@ SelectBox.prototype = {
       if (select[0].disabled) return;
 
       context.focus();
-      context.open();
+
+      if (context.opened) {
+        context.close();
+
+      } else {
+        context.open();
+      }
     });
 
     context.dropdown.on('click.beauty-' + type, '[' + options.optionIndexAttr + ']', function (e){
       var index = $(this).attr(options.optionIndexAttr);
 
-      console.log(index);
+      // console.log(index);
     });
   },
   __Size: function (){
@@ -212,6 +218,8 @@ SelectBox.prototype = {
     var focused = util.activeElement();
 
     focused = focused === element
+      || focused === context.selectbox[0]
+      || focused === context.dropdown[0]
       || $.contains(context.selectbox, focused)
       || $.contains(context.dropdown, focused);
 
