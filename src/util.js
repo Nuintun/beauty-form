@@ -26,9 +26,9 @@ module.exports = {
   },
   // 获取元素相对于页面的位置（包括iframe内的元素）
   // 暂时不支持两层以上的 iframe 套嵌
-  offset: function (anchor){
-    var offset = $(anchor).offset();
-    var ownerDocument = anchor.ownerDocument;
+  offset: function (element){
+    var offset = $(element).offset();
+    var ownerDocument = element.ownerDocument;
     var defaultView = ownerDocument.defaultView || ownerDocument.parentWindow;
 
     if (defaultView == window) {

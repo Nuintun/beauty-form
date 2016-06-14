@@ -165,7 +165,7 @@ function watch(glob, options, callabck){
   // bing event
   if (callabck) {
     watcher.on('all', function (event, path){
-      if (path && path.lastIndexOf('___jb_tmp___') !== path.length - 12) {
+      if (path && !/___jb_tmp___$/.test(path)) {
         callabck.apply(this, arguments);
       }
     });
