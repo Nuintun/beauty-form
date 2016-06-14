@@ -47,10 +47,10 @@ function SelectBox(element, options){
     optgroup: function (element, label){
       return '<dt class="ui-beauty-select-optgroup">' + label + '</dt>';
     },
-    option: function (element, selector, index, text){
-      return '<dd class="' + selector + '" data-option="' + index
-        + '" tabindex="-1">' + text + '</dd>';
-    }
+    option: function (element, attr, index, text){
+      return '<dd class="ui-beauty-select-option" ' + attr + '="' + index + '" tabindex="-1">' + text + '</dd>';
+    },
+    optionIndexAttr: 'data-option'
   }, options);
 
   $.each(['select', 'dropdown', 'optgroup', 'option'], function (index, prop){
@@ -80,6 +80,9 @@ SelectBox.get = function (element){
 
 SelectBox.prototype = {
   __init: function (){
+    var context = this;
+    var options = context.options;
+
     if (!reference) {
       var type = this.type;
       var selector = 'select';
@@ -88,21 +91,6 @@ SelectBox.prototype = {
         var select = SelectBox.get(this);
 
         select && select.__refresh();
-      });
-
-      doc.on('click.beauty-' + type, '.ui-beauty-select', function (e){
-        e.preventDefault();
-
-        var select = $(this).prev();
-
-        if (select.length && select[0].disabled) return;
-
-        var selectbox = SelectBox.get(select);
-
-        if (selectbox && select[0].tagName.toLowerCase() === 'select') {
-          selectbox.focus();
-          selectbox.open();
-        }
       });
 
       doc.on('focusin.beauty-' + type, selector, function (){
@@ -118,7 +106,24 @@ SelectBox.prototype = {
       });
     }
 
-    this.__beauty();
+    context.__beauty();
+
+    context.selectbox.on('click.beauty-' + type, function (e){
+      e.preventDefault();
+
+      var select = context.element;
+
+      if (select[0].disabled) return;
+
+      context.focus();
+      context.open();
+    });
+
+    context.dropdown.on('click.beauty-' + type, '[' + options.optionIndexAttr + ']', function (e){
+      var index = $(this).attr(options.optionIndexAttr);
+
+      console.log(index);
+    });
   },
   __Size: function (){
     var element = this.element;
@@ -134,14 +139,14 @@ SelectBox.prototype = {
     var index = 0;
     var dropdown = '';
     var context = this;
-    var options = this.options;
+    var options = context.options;
 
     function option(element){
       dropdown += compile(
         context,
         options.option,
         element,
-        'ui-beauty-select-option',
+        options.optionIndexAttr,
         index++,
         element.html()
       );
@@ -159,7 +164,7 @@ SelectBox.prototype = {
     this.element.children().each(function (){
       var element = $(this);
 
-      switch (this.tagName.toLowerCase()) {
+      switch (this.nodeName.toLowerCase()) {
         case 'option':
           option(element);
           break;
@@ -175,7 +180,7 @@ SelectBox.prototype = {
     this.dropdown.html(compile(
       context,
       options.dropdown,
-      this.dropdown,
+      context.dropdown,
       dropdown
     ));
   },
@@ -199,8 +204,9 @@ SelectBox.prototype = {
     this.refresh();
   },
   __refresh: function (){
-    var element = this.element[0];
-    var selectbox = this.selectbox;
+    var context = this;
+    var element = context.element[0];
+    var selectbox = context.selectbox;
     var selected = $(element.options[element.selectedIndex]);
 
     selectbox
@@ -208,9 +214,9 @@ SelectBox.prototype = {
       .toggleClass('ui-beauty-select-focus', util.activeElement() === element);
 
     selectbox.html(compile(
-      this,
-      this.options.select,
-      this.selectbox,
+      context,
+      context.options.select,
+      context.selectbox,
       selected.html()
     ));
   },
