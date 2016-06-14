@@ -19,27 +19,50 @@ var reference = 0;
 var doc = $(document);
 
 /**
- * template
+ * compile
+ * @param context
  * @param template
- * @param data
- * @returns {void|string|XML}
+ * @returns {string}
  */
-function template(template, data){
-  return template.replace(/{{(.*?)}}/g, function ($1, $2){
-    return data[$2];
-  });
+function compile(context, template){
+  var args = [].slice.call(arguments, 2);
+  var html = template.apply(context, args);
+
+  if ($.type(html) === 'string') {
+    return html;
+  } else {
+    throw new TypeError('Render function must return a string.');
+  }
 }
 
 function SelectBox(element, options){
+  options = $.extend({
+    select: function (element, text){
+      return '<div class="ui-beauty-select-title" title="' + text + '">'
+        + text + '</div><i class="ui-beauty-select-icon"></i>';
+    },
+    dropdown: function (element, options){
+      return '<dl class="ui-beauty-select-dropdown-items">' + options + '</dl>';
+    },
+    optgroup: function (element, label){
+      return '<dt class="ui-beauty-select-optgroup">' + label + '</dt>';
+    },
+    option: function (element, selector, index, text){
+      return '<dd class="' + selector + '" data-option="' + index
+        + '" tabindex="-1">' + text + '</dd>';
+    }
+  }, options);
+
+  $.each(['select', 'dropdown', 'optgroup', 'option'], function (index, prop){
+    if ($.type(options[prop]) !== 'function') {
+      throw new TypeError('Options.' + prop + ' must return a function.');
+    }
+  });
+
   this.type = 'select';
   this.opened = false;
   this.element = $(element);
-  this.options = $.extend({
-    select: '<div class="ui-beauty-select-title" title="{{text}}">{{text}}</div><i class="ui-beauty-select-icon"></i>',
-    dropdown: '<dl class="ui-beauty-select-dropdown-items">{{options}}</dl>',
-    optgroup: '<dt class="ui-beauty-select-optgroup">{{label}}</dt>',
-    option: '<dd class="{{class}}" data-option="{{index}}" tabindex="-1">{{text}}</dd>'
-  }, options);
+  this.options = options;
 
   this.__init();
 }
@@ -110,19 +133,27 @@ SelectBox.prototype = {
   __renderOptions: function (){
     var index = 0;
     var dropdown = '';
+    var context = this;
     var options = this.options;
-    var data = this.element.data();
 
     function option(element){
-      dropdown += template(options.option, $.extend({}, data, element.data(), {
-        index: index++,
-        text: element.html(),
-        class: 'ui-beauty-select-option'
-      }));
+      dropdown += compile(
+        context,
+        options.option,
+        element,
+        'ui-beauty-select-option',
+        index++,
+        element.html()
+      );
     }
 
     function optgroup(element){
-      dropdown += template(options.optgroup, { label: element.attr('label') });
+      dropdown += compile(
+        context,
+        options.optgroup,
+        element,
+        element.attr('label')
+      );
     }
 
     this.element.children().each(function (){
@@ -141,7 +172,12 @@ SelectBox.prototype = {
       }
     });
 
-    this.dropdown.html(template(options.dropdown, { options: dropdown }));
+    this.dropdown.html(compile(
+      context,
+      options.dropdown,
+      this.dropdown,
+      dropdown
+    ));
   },
   __opsition: function (){
     console.log(util.offset(this.selectbox[0]));
@@ -165,14 +201,18 @@ SelectBox.prototype = {
   __refresh: function (){
     var element = this.element[0];
     var selectbox = this.selectbox;
+    var selected = $(element.options[element.selectedIndex]);
 
     selectbox
       .toggleClass('ui-beauty-select-disabled', element.disabled)
       .toggleClass('ui-beauty-select-focus', util.activeElement() === element);
 
-    selectbox.html(template(this.options.select, {
-      text: $(element.options[element.selectedIndex]).text()
-    }));
+    selectbox.html(compile(
+      this,
+      this.options.select,
+      this.selectbox,
+      selected.html()
+    ));
   },
   focus: function (){
     if (util.activeElement() !== this.element[0]) {
