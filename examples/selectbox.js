@@ -209,10 +209,15 @@ SelectBox.prototype = {
     var element = context.element[0];
     var selectbox = context.selectbox;
     var selected = $(element.options[element.selectedIndex]);
+    var focused = util.activeElement();
+
+    focused = focused === element
+      || $.contains(context.selectbox, focused)
+      || $.contains(context.dropdown, focused);
 
     selectbox
       .toggleClass('ui-beauty-select-disabled', element.disabled)
-      .toggleClass('ui-beauty-select-focus', util.activeElement() === element);
+      .toggleClass('ui-beauty-select-focus', focused);
 
     selectbox.html(compile(
       context,
