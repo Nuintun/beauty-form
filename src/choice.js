@@ -133,10 +133,14 @@ Choice.prototype = {
     this.refresh();
   },
   focus: function (){
-    this.element.trigger('focus');
+    if (util.activeElement() !== this.element[0]) {
+      this.element.trigger('focus');
+    }
   },
   blur: function (){
-    this.element.trigger('blur');
+    if (util.activeElement() === this.element[0]) {
+      this.element.trigger('blur');
+    }
   },
   check: function (){
     var type = this.type;

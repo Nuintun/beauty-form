@@ -35,6 +35,9 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
 }
 .ui-beauty-select-disabled .ui-beauty-select-title {
   color: #e6e6e6; cursor: not-allowed;

@@ -117,11 +117,31 @@ Choice.prototype = {
 
     this.__beauty();
   },
+  __beauty: function (){
+    var element = this.element;
+
+    if (!Choice.get(element)) {
+      var type = this.type;
+
+      element.wrap('<i tabindex="-1" class="ui-beauty-choice ui-beauty-' + type + '"/>');
+
+      reference[type]++;
+      this.choice = element.parent();
+
+      element.data('beauty-choice', this);
+    }
+
+    this.refresh();
+  },
   focus: function (){
-    this.element.trigger('focus');
+    if (util.activeElement() !== this.element[0]) {
+      this.element.trigger('focus');
+    }
   },
   blur: function (){
-    this.element.trigger('blur');
+    if (util.activeElement() === this.element[0]) {
+      this.element.trigger('blur');
+    }
   },
   check: function (){
     var type = this.type;
@@ -164,22 +184,6 @@ Choice.prototype = {
       .toggleClass('ui-beauty-choice-checked', element.checked)
       .toggleClass('ui-beauty-choice-disabled', element.disabled)
       .toggleClass('ui-beauty-choice-focus', util.activeElement() === element);
-  },
-  __beauty: function (){
-    var element = this.element;
-
-    if (!Choice.get(element)) {
-      var type = this.type;
-
-      element.wrap('<i tabindex="-1" class="ui-beauty-choice ui-beauty-' + type + '"/>');
-
-      reference[type]++;
-      this.choice = element.parent();
-
-      element.data('beauty-choice', this);
-    }
-
-    this.refresh();
   },
   destory: function (){
     var type = this.type;

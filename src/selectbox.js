@@ -31,6 +31,7 @@ function template(template, data){
 
 function SelectBox(element, options){
   this.type = 'select';
+  this.opened = false;
   this.element = $(element);
   this.options = $.extend({
     select: '<div class="ui-beauty-select-title" title="{{text}}">{{text}}</div><i class="ui-beauty-select-icon"></i>',
@@ -62,19 +63,23 @@ SelectBox.prototype = {
       doc.on('change.beauty-' + type, selector, function (){
         var select = SelectBox.get(this);
 
-        select && select.refresh();
+        select && select.__refresh();
       });
 
       doc.on('focusin.beauty-' + type, selector, function (){
         var select = SelectBox.get(this);
 
-        select && select.refresh();
+        console.log('focusin', this);
+
+        select && select.__refresh();
       });
 
       doc.on('focusout.beauty-' + type, selector, function (){
         var select = SelectBox.get(this);
 
-        select && select.refresh();
+        console.log('focusout', this);
+
+        select && select.__refresh();
       });
 
       doc.on('click.beauty-' + type, '.ui-beauty-select', function (e){
@@ -87,8 +92,11 @@ SelectBox.prototype = {
         var selectbox = SelectBox.get(select);
 
         if (selectbox && select[0].tagName.toLowerCase() === 'select') {
-          select.trigger('focus');
-          selectbox.open();
+          console.log(util.activeElement());
+
+          selectbox.focus();
+          
+          console.log(util.activeElement());
         }
       });
     }
@@ -158,13 +166,29 @@ SelectBox.prototype = {
       element.data('beauty-select', this);
     }
 
-    this.refresh(true);
+    this.refresh();
+  },
+  __refresh: function (){
+    var element = this.element[0];
+    var selectbox = this.selectbox;
+
+    selectbox
+      .toggleClass('ui-beauty-select-disabled', element.disabled)
+      .toggleClass('ui-beauty-select-focus', util.activeElement() === element);
+
+    selectbox.html(template(this.options.select, {
+      text: $(element.options[element.selectedIndex]).text()
+    }));
   },
   focus: function (){
-    this.element.trigger('focus');
+    if (util.activeElement() !== this.element[0]) {
+      this.element.trigger('focus');
+    }
   },
   blur: function (){
-    this.element.trigger('blur');
+    if (util.activeElement() === this.element[0]) {
+      this.element.trigger('blur');
+    }
   },
   enable: function (){
     this.element[0].disabled = false;
@@ -176,22 +200,10 @@ SelectBox.prototype = {
 
     this.refresh();
   },
-  refresh: function (force){
-    var element = this.element[0];
-    var selectbox = this.selectbox;
-
-    selectbox
-      .toggleClass('ui-beauty-select-disabled', element.disabled)
-      .toggleClass('ui-beauty-select-focus', util.activeElement() === element);
-
-    selectbox.html(template(this.options.select, {
-      text: $(element.options[element.selectedIndex]).text()
-    }));
-
-    if (force) {
-      this.__Size();
-      this.__renderOptions();
-    }
+  refresh: function (){
+    this.__refresh();
+    this.__Size();
+    this.__renderOptions();
   },
   select: function (index){
     this.element[0].selectedIndex = index;
@@ -199,11 +211,19 @@ SelectBox.prototype = {
     this.refresh();
   },
   open: function (){
+    if (this.opened) return;
+
+    this.opened = true;
+
     this.__opsition();
     this.dropdown.appendTo(document.body);
     this.selectbox.addClass('ui-beauty-select-opened');
   },
   close: function (){
+    if (!this.opened) return;
+
+    this.opened = false;
+
     this.dropdown.remove();
     this.selectbox.removeClass('ui-beauty-select-opened');
   },
