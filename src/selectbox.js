@@ -124,10 +124,14 @@ SelectBox.prototype = {
       }
     });
 
-    context.dropdown.on('click.beauty-' + type, '[' + options.optionIndexAttr + ']', function (e){
+    context.dropdown.on('mousedown.beauty-' + type, '[' + options.optionIndexAttr + ']', function (e){
       var index = $(this).attr(options.optionIndexAttr);
 
-      // console.log(index);
+      console.log(index);
+    });
+
+    context.dropdown.on('focusin.beauty-' + type, function (){
+      context.focus();
     });
   },
   __Size: function (){
