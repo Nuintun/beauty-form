@@ -55,7 +55,7 @@ function SelectBox(element, options){
 
   $.each(['select', 'dropdown', 'optgroup', 'option'], function (index, prop){
     if ($.type(options[prop]) !== 'function') {
-      throw new TypeError('Options.' + prop + ' must return a function.');
+      throw new TypeError('Options.' + prop + ' must be a function.');
     }
   });
 
