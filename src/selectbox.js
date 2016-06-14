@@ -107,7 +107,7 @@ SelectBox.prototype = {
 
     context.__beauty();
 
-    context.selectbox.on('click.beauty-' + type, function (e){
+    context.selectbox.on('mousedown.beauty-' + type, function (e){
       e.preventDefault();
 
       var select = context.element;
