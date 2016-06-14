@@ -66,22 +66,6 @@ SelectBox.prototype = {
         select && select.__refresh();
       });
 
-      doc.on('focusin.beauty-' + type, selector, function (){
-        var select = SelectBox.get(this);
-
-        console.log('focusin', this);
-
-        select && select.__refresh();
-      });
-
-      doc.on('focusout.beauty-' + type, selector, function (){
-        var select = SelectBox.get(this);
-
-        console.log('focusout', this);
-
-        select && select.__refresh();
-      });
-
       doc.on('click.beauty-' + type, '.ui-beauty-select', function (e){
         e.preventDefault();
 
@@ -92,12 +76,21 @@ SelectBox.prototype = {
         var selectbox = SelectBox.get(select);
 
         if (selectbox && select[0].tagName.toLowerCase() === 'select') {
-          console.log(util.activeElement());
-
           selectbox.focus();
-          
-          console.log(util.activeElement());
+          selectbox.open();
         }
+      });
+
+      doc.on('focusin.beauty-' + type, selector, function (){
+        var select = SelectBox.get(this);
+
+        select && select.__refresh();
+      });
+
+      doc.on('focusout.beauty-' + type, selector, function (){
+        var select = SelectBox.get(this);
+
+        select && select.__refresh();
       });
     }
 
@@ -150,7 +143,7 @@ SelectBox.prototype = {
     this.dropdown.html(template(options.dropdown, { options: dropdown }));
   },
   __opsition: function (){
-
+    console.log(util.offset(this.selectbox[0]));
   },
   __beauty: function (){
     var element = this.element;
