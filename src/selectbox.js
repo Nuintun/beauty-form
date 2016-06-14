@@ -12,6 +12,7 @@
 require('./css/selectbox.css');
 
 var $ = require('jquery');
+var util = require('./util');
 
 var reference = 0;
 var doc = $(document);
@@ -116,7 +117,7 @@ SelectBox.prototype = {
 
     selectbox
       .toggleClass('ui-beauty-select-disabled', element.disabled)
-      .toggleClass('ui-beauty-select-focus', document.activeElement === element);
+      .toggleClass('ui-beauty-select-focus', util.activeElement() === element);
 
     selectbox.html(template(this.options.select, {
       text: $(element.options[element.selectedIndex]).text()

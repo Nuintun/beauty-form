@@ -1,4 +1,4 @@
-define("selectbox", ["./css/selectbox.css.js","jquery"], function(require, exports, module){
+define("selectbox", ["./css/selectbox.css.js","jquery","./util"], function(require, exports, module){
 /*!
  * selectbox
  * Date: 2015/6/12
@@ -13,6 +13,7 @@ define("selectbox", ["./css/selectbox.css.js","jquery"], function(require, expor
 require('./css/selectbox.css.js');
 
 var $ = require('jquery');
+var util = require('./util');
 
 var reference = 0;
 var doc = $(document);
@@ -117,7 +118,7 @@ SelectBox.prototype = {
 
     selectbox
       .toggleClass('ui-beauty-select-disabled', element.disabled)
-      .toggleClass('ui-beauty-select-focus', document.activeElement === element);
+      .toggleClass('ui-beauty-select-focus', util.activeElement() === element);
 
     selectbox.html(template(this.options.select, {
       text: $(element.options[element.selectedIndex]).text()

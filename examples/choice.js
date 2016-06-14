@@ -1,4 +1,4 @@
-define("choice", ["./css/choice.css.js","jquery"], function(require, exports, module){
+define("choice", ["./css/choice.css.js","jquery","./util"], function(require, exports, module){
 /*!
  * choice
  * Date: 2015/6/7
@@ -13,6 +13,7 @@ define("choice", ["./css/choice.css.js","jquery"], function(require, exports, mo
 require('./css/choice.css.js');
 
 var $ = require('jquery');
+var util = require('./util');
 
 var reference = {};
 var doc = $(document);
@@ -162,7 +163,7 @@ Choice.prototype = {
     this.choice
       .toggleClass('ui-beauty-choice-checked', element.checked)
       .toggleClass('ui-beauty-choice-disabled', element.disabled)
-      .toggleClass('ui-beauty-choice-focus', document.activeElement === element);
+      .toggleClass('ui-beauty-choice-focus', util.activeElement() === element);
   },
   beauty: function (){
     var element = this.element;
