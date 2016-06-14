@@ -95,44 +95,6 @@ SelectBox.prototype = {
 
     this.__beauty();
   },
-  focus: function (){
-    this.element.trigger('focus');
-  },
-  blur: function (){
-    this.element.trigger('blur');
-  },
-  enable: function (){
-    this.element[0].disabled = false;
-
-    this.refresh();
-  },
-  disable: function (){
-    this.element[0].disabled = true;
-
-    this.refresh();
-  },
-  refresh: function (force){
-    var element = this.element[0];
-    var selectbox = this.selectbox;
-
-    selectbox
-      .toggleClass('ui-beauty-select-disabled', element.disabled)
-      .toggleClass('ui-beauty-select-focus', util.activeElement() === element);
-
-    selectbox.html(template(this.options.select, {
-      text: $(element.options[element.selectedIndex]).text()
-    }));
-
-    if (force) {
-      this.__Size();
-      this.__renderOptions();
-    }
-  },
-  select: function (index){
-    this.element[0].selectedIndex = index;
-
-    this.refresh();
-  },
   __Size: function (){
     var element = this.element;
     var selectbox = this.selectbox;
@@ -179,13 +141,8 @@ SelectBox.prototype = {
 
     this.dropdown.html(template(options.dropdown, { options: dropdown }));
   },
-  open: function (){
-    this.dropdown.appendTo(document.body);
-    this.selectbox.addClass('ui-beauty-select-opened');
-  },
-  close: function (){
-    this.dropdown.remove();
-    this.selectbox.removeClass('ui-beauty-select-opened');
+  __opsition: function (){
+
   },
   __beauty: function (){
     var element = this.element;
@@ -195,13 +152,60 @@ SelectBox.prototype = {
 
       this.selectbox = $('<div tabindex="-1" class="ui-beauty-select"/>').insertAfter(element);
       this.dropdown = $('<div tabindex="-1" class="ui-beauty-select-dropdown"/>');
-      
+
       reference++;
 
       element.data('beauty-select', this);
     }
 
     this.refresh(true);
+  },
+  focus: function (){
+    this.element.trigger('focus');
+  },
+  blur: function (){
+    this.element.trigger('blur');
+  },
+  enable: function (){
+    this.element[0].disabled = false;
+
+    this.refresh();
+  },
+  disable: function (){
+    this.element[0].disabled = true;
+
+    this.refresh();
+  },
+  refresh: function (force){
+    var element = this.element[0];
+    var selectbox = this.selectbox;
+
+    selectbox
+      .toggleClass('ui-beauty-select-disabled', element.disabled)
+      .toggleClass('ui-beauty-select-focus', util.activeElement() === element);
+
+    selectbox.html(template(this.options.select, {
+      text: $(element.options[element.selectedIndex]).text()
+    }));
+
+    if (force) {
+      this.__Size();
+      this.__renderOptions();
+    }
+  },
+  select: function (index){
+    this.element[0].selectedIndex = index;
+
+    this.refresh();
+  },
+  open: function (){
+    this.__opsition();
+    this.dropdown.appendTo(document.body);
+    this.selectbox.addClass('ui-beauty-select-opened');
+  },
+  close: function (){
+    this.dropdown.remove();
+    this.selectbox.removeClass('ui-beauty-select-opened');
   },
   destory: function (){
     var type = this.type;
