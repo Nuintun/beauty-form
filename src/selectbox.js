@@ -34,12 +34,12 @@ function SelectBox(element, options){
   this.element = $(element);
   this.options = $.extend({
     select: '<div class="ui-beauty-select-title" title="{{text}}">{{text}}</div><i class="ui-beauty-select-icon"></i>',
-    dropdown: '<dl class="ui-beauty-select-dropdown">{{options}}</dl>',
+    dropdown: '<dl class="ui-beauty-select-dropdown-items">{{options}}</dl>',
     optgroup: '<dt class="ui-beauty-select-optgroup">{{label}}</dt>',
-    option: '<dd class="ui-beauty-select-option" data-option="{{index}}" tabindex="-1">{{text}}</dd>'
+    option: '<dd class="{{class}}" data-option="{{index}}" tabindex="-1">{{text}}</dd>'
   }, options);
 
-  this.init();
+  this.__init();
 }
 
 /**
@@ -54,7 +54,7 @@ SelectBox.get = function (element){
 };
 
 SelectBox.prototype = {
-  init: function (){
+  __init: function (){
     if (!reference) {
       var type = this.type;
       var selector = 'select';
@@ -93,7 +93,7 @@ SelectBox.prototype = {
       });
     }
 
-    this.beauty();
+    this.__beauty();
   },
   focus: function (){
     this.element.trigger('focus');
@@ -111,7 +111,7 @@ SelectBox.prototype = {
 
     this.refresh();
   },
-  refresh: function (){
+  refresh: function (force){
     var element = this.element[0];
     var selectbox = this.selectbox;
 
@@ -122,32 +122,64 @@ SelectBox.prototype = {
     selectbox.html(template(this.options.select, {
       text: $(element.options[element.selectedIndex]).text()
     }));
+
+    if (force) {
+      this.__Size();
+      this.__renderOptions();
+    }
   },
   select: function (index){
     this.element[0].selectedIndex = index;
 
     this.refresh();
   },
-  open: function (){
+  __Size: function (){
+    var element = this.element;
+    var selectbox = this.selectbox;
+    var width = element.outerWidth() - selectbox.outerWidth() + selectbox.width();
+    var height = element.outerHeight() - selectbox.outerHeight() + selectbox.height();
+
+    selectbox.width(width);
+    selectbox.height(height);
+    selectbox.css('line-height', height + 'px');
+  },
+  __renderOptions: function (){
     var index = 0;
     var dropdown = '';
-    var context = this;
+    var options = this.options;
+    var data = this.element.data();
+
+    function option(element){
+      dropdown += template(options.option, $.extend({}, data, element.data(), {
+        index: index++,
+        text: element.html(),
+        class: 'ui-beauty-select-option'
+      }));
+    }
+
+    function optgroup(element){
+      dropdown += template(options.optgroup, { label: element.attr('label') });
+    }
 
     this.element.children().each(function (){
       var element = $(this);
 
       switch (this.tagName.toLowerCase()) {
         case 'option':
-          dropdown += template(context.options.option, { index: index, text: element.text() });
-          index++;
+          option(element);
           break;
         case 'optgroup':
-          dropdown += template(context.options.optgroup, { label: element.text() });
+          optgroup(element);
+          element.children().each(function (){
+            option($(this));
+          });
           break;
       }
     });
 
-    this.dropdown.html(dropdown);
+    this.dropdown.html(template(options.dropdown, { options: dropdown }));
+  },
+  open: function (){
     this.dropdown.appendTo(document.body);
     this.selectbox.addClass('ui-beauty-select-opened');
   },
@@ -155,31 +187,21 @@ SelectBox.prototype = {
     this.dropdown.remove();
     this.selectbox.removeClass('ui-beauty-select-opened');
   },
-  beauty: function (){
+  __beauty: function (){
     var element = this.element;
 
     if (!SelectBox.get(element)) {
       element.addClass('ui-beauty-select-hidden');
 
-      var selectbox = $('<div tabindex="-1" class="ui-beauty-select"/>');
-
-      selectbox.insertAfter(element);
-
-      var width = element.outerWidth() - selectbox.outerWidth() + selectbox.width();
-      var height = element.outerHeight() - selectbox.outerHeight() + selectbox.height();
-
-      selectbox.width(width);
-      selectbox.height(height);
-      selectbox.css('line-height', height + 'px');
-
+      this.selectbox = $('<div tabindex="-1" class="ui-beauty-select"/>').insertAfter(element);
+      this.dropdown = $('<div tabindex="-1" class="ui-beauty-select-dropdown"/>');
+      
       reference++;
-      this.selectbox = selectbox;
-      this.dropdown = $('<div class="ui-beauty-select-dropdown"/>');
 
       element.data('beauty-select', this);
     }
 
-    this.refresh();
+    this.refresh(true);
   },
   destory: function (){
     var type = this.type;

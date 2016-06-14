@@ -51,7 +51,7 @@ function Choice(element){
     throw new TypeError('The element must be a checkbox or radio.');
   }
 
-  this.init();
+  this.__init();
 }
 
 /**
@@ -81,7 +81,7 @@ Choice.get = function (element){
  * }}
  */
 Choice.prototype = {
-  init: function (){
+  __init: function (){
     var type = this.type;
 
     if (!reference[type]) {
@@ -114,7 +114,7 @@ Choice.prototype = {
       });
     }
 
-    this.beauty();
+    this.__beauty();
   },
   focus: function (){
     this.element.trigger('focus');
@@ -164,7 +164,7 @@ Choice.prototype = {
       .toggleClass('ui-beauty-choice-disabled', element.disabled)
       .toggleClass('ui-beauty-choice-focus', util.activeElement() === element);
   },
-  beauty: function (){
+  __beauty: function (){
     var element = this.element;
 
     if (!Choice.get(element)) {
