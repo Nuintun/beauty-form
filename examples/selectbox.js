@@ -213,7 +213,7 @@ SelectBox.prototype = {
     dropdown.css({
       left: position.left,
       top: position.top + selectbox.outerHeight(),
-      minWidth: selectbox.outerWidth() - dropdown.outerWidth() + dropdown.width()
+      width: selectbox.outerWidth() - dropdown.outerWidth() + dropdown.width()
     });
 
     return this;
