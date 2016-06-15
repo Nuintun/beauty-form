@@ -120,7 +120,7 @@ SelectBox.prototype = {
       doc.on('click.beauty-' + type, function (e){
         if (actived) {
           var target = e.target;
-          var dropdown = actived.dropdown;
+          var dropdown = actived.dropdown[0];
 
           if (actived.selectbox[0] !== target
             && dropdown !== target
@@ -183,10 +183,6 @@ SelectBox.prototype = {
 
       context.select(option.attr(options.optionIndexAttr));
       context.close();
-    });
-
-    context.dropdown.on('focusin.beauty-' + type, function (){
-      context.focus();
     });
 
     return context;
