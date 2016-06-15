@@ -123,7 +123,7 @@ SelectBox.prototype = {
         }
       });
 
-      doc.on('focusout.beauty-' + type, selector, function (){
+      doc.on('focusout.beauty-' + type, selector, function (e){
         var select = SelectBox.get(this);
 
         if (select) {
@@ -132,20 +132,6 @@ SelectBox.prototype = {
           }
 
           select.__refreshSelectbox();
-        }
-      });
-
-      doc.on('mousedown.beauty-' + type, function (e){
-        var target = e.target;
-        var selectbox = actived.selectbox[0];
-        var dropdown = actived.dropdown[0];
-
-        if (
-          selectbox !== target
-          && !$.contains(selectbox, target)
-          && dropdown !== target
-          && !$.contains(dropdown, target)) {
-          actived.close();
         }
       });
 
@@ -173,12 +159,11 @@ SelectBox.prototype = {
     });
 
     context.selectbox.on('mousedown.beauty-' + type, function (e){
-      e.preventDefault();
-
       var select = context.element;
 
       if (select[0].disabled) return;
 
+      e.preventDefault();
       context.focus();
 
       if (context.opened) {
@@ -382,7 +367,7 @@ SelectBox.prototype = {
     if (!SelectBox.get(element)) {
       element.addClass('ui-beauty-select-hidden');
 
-      var selectbox = $('<div tabindex="-1" class="ui-beauty-select"/>');
+      var selectbox = $('<div tabindex="-1" unselectable="on" class="ui-beauty-select"/>');
 
       context.titlebox = $('<div class="ui-beauty-select-titlebox"/>');
       context.dropdown = $('<div class="ui-beauty-select-dropdown"/>');
@@ -481,7 +466,6 @@ SelectBox.prototype = {
       doc.off('change.beauty-' + type);
       doc.off('focusin.beauty-' + type);
       doc.off('focusout.beauty-' + type);
-      doc.off('mousedown.beauty-' + type);
       win.off('resize.beauty-' + type);
     }
 
