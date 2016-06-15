@@ -123,7 +123,7 @@ SelectBox.prototype = {
         }
       });
 
-      doc.on('focusout.beauty-' + type, selector, function (e){
+      doc.on('focusout.beauty-' + type, selector, function (){
         var select = SelectBox.get(this);
 
         if (select) {
