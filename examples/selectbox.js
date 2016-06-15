@@ -124,14 +124,11 @@ SelectBox.prototype = {
         }
       });
 
-      doc.on('focusout.beauty-' + type, selector, function (e){
+      doc.on('focusout.beauty-' + type, selector, function (){
         var select = SelectBox.get(this);
 
         if (select) {
-          if (actived.opened && actived === select) {
-            select.close();
-          }
-
+          select.close();
           select.__refreshSelectbox();
         }
       });
