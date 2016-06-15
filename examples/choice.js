@@ -137,14 +137,10 @@ Choice.prototype = {
     context.refresh();
   },
   focus: function (){
-    if (util.activeElement() !== this.element[0]) {
-      this.element.trigger('focus');
-    }
+    this.element.trigger('focus');
   },
   blur: function (){
-    if (util.activeElement() === this.element[0]) {
-      this.element.trigger('blur');
-    }
+    this.element.trigger('blur');
   },
   check: function (){
     var type = this.type;

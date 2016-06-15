@@ -119,19 +119,19 @@ SelectBox.prototype = {
 
       if (context.opened) {
         context.close();
-
       } else {
         context.open();
       }
     });
 
-    context.dropdown.on('mousedown.beauty-' + type, '[' + options.optionIndexAttr + ']', function (e){
-      var index = $(this).attr(options.optionIndexAttr);
+    context.dropdown.on('click.beauty-' + type, '[' + options.optionIndexAttr + ']', function (e){
+      e.preventDefault();
 
-      console.log(index);
+      context.select($(this).attr(options.optionIndexAttr));
+      context.close();
     });
 
-    context.dropdown.on('focusin.beauty-' + type, function (){
+    context.dropdown.on('focusin.beauty-' + type, function (e){
       context.focus();
     });
   },
@@ -195,7 +195,12 @@ SelectBox.prototype = {
     ));
   },
   __opsition: function (){
-    console.log(util.offset(this.selectbox[0]));
+    var position = this.selectbox.offset();
+
+    this.dropdown.css({
+      top: position.top + this.selectbox.outerHeight(),
+      left: position.left
+    });
   },
   __beauty: function (){
     var context = this;
@@ -239,14 +244,10 @@ SelectBox.prototype = {
     ));
   },
   focus: function (){
-    if (util.activeElement() !== this.element[0]) {
-      this.element.trigger('focus');
-    }
+    this.element.trigger('focus');
   },
   blur: function (){
-    if (util.activeElement() === this.element[0]) {
-      this.element.trigger('blur');
-    }
+    this.element.trigger('blur');
   },
   enable: function (){
     this.element[0].disabled = false;
@@ -286,7 +287,7 @@ SelectBox.prototype = {
 
     context.opened = false;
 
-    context.dropdown.remove();
+    context.dropdown.detach();
     context.selectbox.removeClass('ui-beauty-select-opened');
   },
   destory: function (){
@@ -295,7 +296,8 @@ SelectBox.prototype = {
     var element = context.element;
 
     if (SelectBox.get(element)) {
-      element.next().remove();
+      context.selectbox.remove();
+      context.dropdown.remove();
       element.removeData('beauty-select');
       element.removeClass('ui-beauty-select-hidden');
 

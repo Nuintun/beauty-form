@@ -64,4 +64,15 @@
 .ui-beauty-select-dropdown {
   position: absolute;
   margin: 0; padding: 0;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  border: 1px solid #09e;
+  max-height: 100px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  width: auto;
+}
+.ui-beauty-select-option {
+  white-space: nowrap;
 }

@@ -9,8 +9,6 @@
 
 'use strict';
 
-var $ = require('jquery');
-
 module.exports = {
   // 获取当前焦点的元素
   activeElement: function (){
@@ -23,32 +21,5 @@ module.exports = {
     } catch (e) {
       // do nothing
     }
-  },
-  // 获取元素相对于页面的位置（包括iframe内的元素）
-  // 暂时不支持两层以上的 iframe 套嵌
-  offset: function (element){
-    var offset = $(element).offset();
-    var ownerDocument = element.ownerDocument;
-    var defaultView = ownerDocument.defaultView || ownerDocument.parentWindow;
-
-    if (defaultView == window) {
-      // IE <= 8 只能使用两个等于号
-      return offset;
-    }
-
-    // {Element: Ifarme}
-    ownerDocument = $(ownerDocument);
-
-    var docLeft = ownerDocument.scrollLeft();
-    var docTop = ownerDocument.scrollTop();
-    var frameElement = defaultView.frameElement;
-    var frameOffset = $(frameElement).offset();
-    var frameLeft = frameOffset.left;
-    var frameTop = frameOffset.top;
-
-    return {
-      left: offset.left + frameLeft - docLeft,
-      top: offset.top + frameTop - docTop
-    };
   }
 };
