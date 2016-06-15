@@ -119,8 +119,11 @@ SelectBox.prototype = {
       doc.on('click.beauty-' + type, function (e){
         if (actived) {
           var target = e.target;
+          var dropdown = actived.dropdown[0];
 
-          if (actived.selectbox[0] !== target && actived.dropdown[0] !== target) {
+          if (actived.selectbox[0] !== target
+            && dropdown !== target
+            && !$.contains(dropdown, target)) {
             actived.close();
           }
         }
