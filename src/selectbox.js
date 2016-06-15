@@ -14,8 +14,11 @@ require('./css/selectbox.css');
 var $ = require('jquery');
 var util = require('./util');
 
+var timer;
 var reference = 0;
+var win = $(window);
 var doc = $(document);
+var actived = null;
 
 /**
  * compile
@@ -105,6 +108,14 @@ SelectBox.prototype = {
         var select = SelectBox.get(this);
 
         select && select.__refresh();
+      });
+
+      win.on('resize.beauty-' + type, function (){
+        clearTimeout(timer);
+
+        timer = setTimeout(function (){
+          actived && actived.__position();
+        }, 0);
       });
     }
 
@@ -202,17 +213,46 @@ SelectBox.prototype = {
 
     return context;
   },
-  __opsition: function (){
-    var selectbox = this.selectbox;
-    var dropdown = this.dropdown;
-    var position = selectbox.offset();
+  __position: function (){
+    var context = this;
 
-    dropdown.addClass('ui-beauty-select-dropdown-bottom');
+    if (!context.opened) return context;
+
+    var selectbox = context.selectbox;
+    var dropdown = context.dropdown;
+    var offset = selectbox.offset();
+    var scrollTop = doc.scrollTop();
+    var size = {
+      window: {
+        height: win.height()
+      },
+      selectbox: {
+        outerWidth: selectbox.outerWidth(),
+        outerHeight: selectbox.outerHeight()
+      },
+      dropdown: {
+        width: dropdown.width(),
+        outerWidth: dropdown.outerWidth(),
+        outerHeight: dropdown.outerHeight()
+      }
+    };
+    var position = offset.top - scrollTop;
+
+    position = position > size.window.height - position - size.selectbox.outerHeight
+      ? 'top'
+      : 'bottom';
+
+    dropdown.addClass('ui-beauty-select-dropdown-' + position);
 
     dropdown.css({
-      left: position.left,
-      top: position.top + selectbox.outerHeight(),
-      width: selectbox.outerWidth() - dropdown.outerWidth() + dropdown.width()
+      left: offset.left,
+      top: position === 'bottom'
+        ? offset.top + size.selectbox.outerHeight
+        : offset.top - size.dropdown.outerHeight,
+      width: Math.max(
+        size.selectbox.outerWidth - size.dropdown.outerWidth + size.dropdown.width,
+        size.dropdown.width
+      )
     });
 
     return this;
@@ -295,18 +335,22 @@ SelectBox.prototype = {
   open: function (){
     var context = this;
 
+    actived = this;
+
     if (context.opened) return context;
 
     context.opened = true;
 
     context.selectbox.addClass('ui-beauty-select-opened');
     context.dropdown.appendTo(document.body);
-    context.__opsition();
+    context.__position();
 
     return context;
   },
   close: function (){
     var context = this;
+
+    actived = null;
 
     if (!context.opened) return context;
 
@@ -338,6 +382,7 @@ SelectBox.prototype = {
       doc.off('change.beauty-' + type);
       doc.off('focusin.beauty-' + type);
       doc.off('focusout.beauty-' + type);
+      win.off('resize.beauty-' + type);
     }
 
     context.destroyed = true;
