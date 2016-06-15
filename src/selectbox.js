@@ -51,6 +51,7 @@ function SelectBox(element, options){
     },
     option: function (element, option){
       return '<dd class="ui-beauty-select-option'
+        + (option.group ? ' ui-beauty-select-group-option' : '')
         + (option.className ? ' ' + option.className : '') + '" '
         + option.indexAttr + '="' + option.index + '" title="'
         + option.text + '" tabindex="-1">' + option.text + '</dd>';
@@ -261,9 +262,10 @@ SelectBox.prototype = {
     var options = context.options;
     var selectedIndex = context.element[0].selectedIndex;
 
-    function option(element){
+    function option(element, group){
       var selected = index === selectedIndex;
       var option = {
+        group: group,
         index: index++,
         text: element.html(),
         indexAttr: options.optionIndexAttr,
@@ -301,7 +303,7 @@ SelectBox.prototype = {
         case 'optgroup':
           optgroup(element);
           element.children().each(function (){
-            option($(this));
+            option($(this), element);
           });
           break;
       }
