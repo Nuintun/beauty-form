@@ -59,12 +59,15 @@ function SelectBox(element, options){
     }
   });
 
-  this.type = 'select';
-  this.opened = false;
-  this.element = $(element);
-  this.options = options;
+  var context = this;
 
-  this.__init();
+  context.type = 'select';
+  context.opened = false;
+  context.destroyed = false;
+  context.element = $(element);
+  context.options = options;
+
+  context.__init();
 }
 
 /**
@@ -134,6 +137,8 @@ SelectBox.prototype = {
     context.dropdown.on('focusin.beauty-' + type, function (e){
       context.focus();
     });
+
+    return context;
   },
   __Size: function (){
     var element = this.element;
@@ -144,6 +149,8 @@ SelectBox.prototype = {
     selectbox.width(width);
     selectbox.height(height);
     selectbox.css('line-height', height + 'px');
+
+    return this;
   },
   __renderOptions: function (){
     var index = 0;
@@ -193,6 +200,8 @@ SelectBox.prototype = {
       context.dropdown,
       dropdown
     ));
+
+    return context;
   },
   __opsition: function (){
     var position = this.selectbox.offset();
@@ -201,6 +210,8 @@ SelectBox.prototype = {
       top: position.top + this.selectbox.outerHeight(),
       left: position.left
     });
+
+    return this;
   },
   __beauty: function (){
     var context = this;
@@ -217,7 +228,7 @@ SelectBox.prototype = {
       element.data('beauty-select', context);
     }
 
-    context.refresh();
+    return context.refresh();
   },
   __refresh: function (){
     var context = this;
@@ -226,7 +237,8 @@ SelectBox.prototype = {
     var selected = $(element.options[element.selectedIndex]);
     var focused = util.activeElement();
 
-    focused = focused === element
+    focused = context.opened
+      || focused === element
       || focused === context.selectbox[0]
       || focused === context.dropdown[0]
       || $.contains(context.selectbox, focused)
@@ -242,76 +254,89 @@ SelectBox.prototype = {
       context.selectbox,
       selected.html()
     ));
+
+    return context;
   },
   focus: function (){
     this.element.trigger('focus');
+
+    return this;
   },
   blur: function (){
     this.element.trigger('blur');
+
+    return this;
   },
   enable: function (){
     this.element[0].disabled = false;
 
-    this.refresh();
+    return this.refresh();
   },
   disable: function (){
     this.element[0].disabled = true;
 
-    this.refresh();
+    return this.refresh();
   },
   refresh: function (){
     this.__refresh();
     this.__Size();
-    this.__renderOptions();
+
+    return this.__renderOptions();
   },
   select: function (index){
     this.element[0].selectedIndex = index;
 
-    this.refresh();
+    return this.refresh();
   },
   open: function (){
     var context = this;
 
-    if (context.opened) return;
+    if (context.opened) return context;
 
     context.opened = true;
 
     context.__opsition();
     context.dropdown.appendTo(document.body);
     context.selectbox.addClass('ui-beauty-select-opened');
+
+    return context;
   },
   close: function (){
     var context = this;
 
-    if (!context.opened) return;
+    if (!context.opened) return context;
 
     context.opened = false;
 
     context.dropdown.detach();
     context.selectbox.removeClass('ui-beauty-select-opened');
+
+    return context;
   },
-  destory: function (){
+  destroy: function (){
     var context = this;
+
+    if (context.destroyed) return;
+
     var type = context.type;
     var element = context.element;
 
-    if (SelectBox.get(element)) {
-      context.selectbox.remove();
-      context.dropdown.remove();
-      element.removeData('beauty-select');
-      element.removeClass('ui-beauty-select-hidden');
-
-      reference--;
-    }
-
     context.selectbox.off();
     context.dropdown.off();
+    context.selectbox.remove();
+    context.dropdown.remove();
+    element.removeData('beauty-select');
+    element.removeClass('ui-beauty-select-hidden');
+
+    reference--;
 
     if (!reference) {
       doc.off('change.beauty-' + type);
       doc.off('focusin.beauty-' + type);
       doc.off('focusout.beauty-' + type);
     }
+
+    context.destroyed = true;
   }
 };
 

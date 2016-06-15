@@ -39,6 +39,7 @@ function radio(element){
 function Choice(element){
   var context = this;
 
+  context.destroyed = false;
   context.element = $(element);
   context.type = context.element.attr('type');
   context.type = context.type ? context.type.toLowerCase() : undefined;
@@ -53,7 +54,7 @@ function Choice(element){
     throw new TypeError('The element must be a checkbox or radio.');
   }
 
-  this.__init();
+  context.__init();
 }
 
 /**
@@ -116,7 +117,7 @@ Choice.prototype = {
       });
     }
 
-    this.__beauty();
+    return this.__beauty();
   },
   __beauty: function (){
     var context = this;
@@ -133,13 +134,17 @@ Choice.prototype = {
       element.data('beauty-choice', context);
     }
 
-    context.refresh();
+    return context.refresh();
   },
   focus: function (){
     this.element.trigger('focus');
+
+    return this;
   },
   blur: function (){
     this.element.trigger('blur');
+
+    return this;
   },
   check: function (){
     var type = this.type;
@@ -151,7 +156,7 @@ Choice.prototype = {
       radio(element);
     }
 
-    this.refresh();
+    return this.refresh();
   },
   uncheck: function (){
     var type = this.type;
@@ -163,17 +168,17 @@ Choice.prototype = {
       radio(element);
     }
 
-    this.refresh();
+    return this.refresh();
   },
   enable: function (){
     this.element[0].disabled = false;
 
-    this.refresh();
+    return this.refresh();
   },
   disable: function (){
     this.element[0].disabled = true;
 
-    this.refresh();
+    return this.refresh();
   },
   refresh: function (){
     var element = this.element[0];
@@ -182,23 +187,29 @@ Choice.prototype = {
       .toggleClass('ui-beauty-choice-checked', element.checked)
       .toggleClass('ui-beauty-choice-disabled', element.disabled)
       .toggleClass('ui-beauty-choice-focus', util.activeElement() === element);
+
+    return this;
   },
-  destory: function (){
-    var type = this.type;
-    var element = this.element;
+  destroy: function (){
+    var context = this;
 
-    if (Choice.get(element)) {
-      element.unwrap();
-      element.removeData('beauty-choice');
+    if (context.destroyed) return;
 
-      reference[type]--;
-    }
+    var type = context.type;
+    var element = context.element;
+
+    element.unwrap();
+    element.removeData('beauty-choice');
+
+    reference[type]--;
 
     if (!reference[type]) {
       doc.off('change.beauty-' + type);
       doc.off('focusin.beauty-' + type);
       doc.off('focusout.beauty-' + type);
     }
+
+    context.destroyed = true;
   }
 };
 
