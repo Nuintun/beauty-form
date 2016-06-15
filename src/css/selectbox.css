@@ -2,7 +2,8 @@
   display: inline-block;
   *display: inline; *zoom: 1;
   position: relative;
-  margin: 0; padding: 0 20px 0 4px;
+  margin: 0;
+  padding: 0 20px 0 4px;
   outline: 0 none;
   text-align: left;
   border: 1px solid #ccc;
@@ -68,7 +69,7 @@
   -moz-user-select: none;
   -ms-user-select: none;
   border: 1px solid #09e;
-  max-height: 100px;
+  max-height: 200px;
   overflow-x: hidden;
   overflow-y: auto;
   outline: 0 none;
@@ -112,4 +113,15 @@
 }
 .ui-beauty-select-option:focus {
   outline: 0 none;
+}
+.ui-beauty-select-option-selected,
+.ui-beauty-select-option-selected:hover {
+  background: #3870f3;
+  color: #fff;
+}
+.ui-beauty-select-option-disabled,
+.ui-beauty-select-option-disabled:hover {
+  color: #e6e6e6;
+  cursor: default;
+  background: #fff;
 }
