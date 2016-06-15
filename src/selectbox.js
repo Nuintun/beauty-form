@@ -39,7 +39,7 @@ function compile(context, template){
 
 function SelectBox(element, options){
   options = $.extend({
-    select: function (element, text){
+    title: function (element, text){
       return '<div class="ui-beauty-select-title" title="' + text + '">'
         + text + '</div><i class="ui-beauty-select-icon"></i>';
     },
@@ -58,7 +58,7 @@ function SelectBox(element, options){
     optionDisabledClass: 'ui-beauty-select-option-disabled'
   }, options);
 
-  $.each(['select', 'dropdown', 'optgroup', 'option'], function (index, prop){
+  $.each(['title', 'dropdown', 'optgroup', 'option'], function (index, prop){
     if ($.type(options[prop]) !== 'function') {
       throw new TypeError('Options.' + prop + ' must be a function.');
     }
@@ -253,13 +253,12 @@ SelectBox.prototype = {
   __renderTitlebox: function (){
     var context = this;
     var element = context.element[0];
-    var selectbox = context.selectbox;
     var selected = $(element.options[element.selectedIndex]);
 
     context.titlebox.html(compile(
       context,
-      context.options.select,
-      selectbox,
+      context.options.title,
+      selected,
       selected.html()
     ));
 
@@ -300,7 +299,9 @@ SelectBox.prototype = {
       );
     }
 
-    context.element.children().each(function (){
+    var items = context.element.children();
+
+    items.each(function (){
       var element = $(this);
 
       switch (this.nodeName.toLowerCase()) {
@@ -319,7 +320,7 @@ SelectBox.prototype = {
     context.dropdown.html(compile(
       context,
       options.dropdown,
-      context.dropdown,
+      items,
       dropdown
     ));
 
