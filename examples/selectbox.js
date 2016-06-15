@@ -204,11 +204,16 @@ SelectBox.prototype = {
     return context;
   },
   __opsition: function (){
-    var position = this.selectbox.offset();
+    var selectbox = this.selectbox;
+    var dropdown = this.dropdown;
+    var position = selectbox.offset();
 
-    this.dropdown.css({
-      top: position.top + this.selectbox.outerHeight(),
-      left: position.left
+    dropdown.addClass('ui-beauty-select-dropdown-bottom');
+
+    dropdown.css({
+      left: position.left,
+      top: position.top + selectbox.outerHeight(),
+      minWidth: selectbox.outerWidth() - dropdown.outerWidth() + dropdown.width()
     });
 
     return this;
@@ -295,9 +300,9 @@ SelectBox.prototype = {
 
     context.opened = true;
 
-    context.__opsition();
-    context.dropdown.appendTo(document.body);
     context.selectbox.addClass('ui-beauty-select-opened');
+    context.dropdown.appendTo(document.body);
+    context.__opsition();
 
     return context;
   },

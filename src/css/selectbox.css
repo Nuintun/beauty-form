@@ -3,7 +3,7 @@
   *display: inline; *zoom: 1;
   position: relative;
   margin: 0; padding: 0 20px 0 4px;
-  outline: none;
+  outline: 0 none;
   text-align: left;
   border: 1px solid #ccc;
   overflow: hidden;
@@ -71,8 +71,41 @@
   max-height: 100px;
   overflow-x: hidden;
   overflow-y: auto;
-  width: auto;
+  outline: 0 none;
+  font-size: 13px;
+  line-height: 100%;
+  list-style: none;
+  background: #fff;
 }
+.ui-beauty-select-dropdown-bottom {
+  margin-top: -1px;
+}
+.ui-beauty-select-dropdown-items {
+  margin: 0; padding: 0;
+}
+.ui-beauty-select-optgroup,
 .ui-beauty-select-option {
   white-space: nowrap;
+  outline: 0 none;
+  margin: 0;
+  padding: 6px;
+  cursor: pointer;
+  color: #333;
+  background: transparent;
+}
+.ui-beauty-select-option {
+  padding-left: 20px;
+}
+.ui-beauty-select-optgroup {
+  cursor: default;
+  color: #000;
+  font-weight: bold;
+  font-style: italic;
+  font-size: 14px;
+}
+.ui-beauty-select-option:hover {
+  background: #eee;
+}
+.ui-beauty-select-option:focus {
+  outline: 0 none;
 }
