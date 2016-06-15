@@ -127,10 +127,7 @@ SelectBox.prototype = {
         var select = SelectBox.get(this);
 
         if (select) {
-          if (actived.opened && actived === select) {
-            select.close();
-          }
-
+          select.close();
           select.__refreshSelectbox();
         }
       });
