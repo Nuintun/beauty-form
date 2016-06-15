@@ -273,6 +273,8 @@ SelectBox.prototype = {
       ? 'top'
       : 'bottom';
 
+    dropdown.addClass('ui-beauty-select-dropdown-' + position);
+
     dropdown.css({
       left: offset.left,
       top: position === 'bottom'
@@ -283,8 +285,6 @@ SelectBox.prototype = {
         size.dropdown.width
       )
     });
-
-    dropdown.addClass('ui-beauty-select-dropdown-' + position);
 
     return this;
   },
