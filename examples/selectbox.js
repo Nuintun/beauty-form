@@ -100,8 +100,8 @@ SelectBox.prototype = {
         var select = SelectBox.get(this);
 
         if (select) {
-          select.__refreshSelected();
           select.__refresh();
+          select.__refreshSelected();
         }
       });
 
@@ -115,6 +115,16 @@ SelectBox.prototype = {
         var select = SelectBox.get(this);
 
         select && select.__refresh();
+      });
+
+      doc.on('click.beauty-' + type, function (e){
+        if (actived) {
+          var target = e.target;
+
+          if (actived.selectbox[0] !== target && actived.dropdown[0] !== target) {
+            actived.close();
+          }
+        }
       });
 
       win.on('resize.beauty-' + type, function (){
@@ -274,6 +284,8 @@ SelectBox.prototype = {
       ? 'top'
       : 'bottom';
 
+    dropdown.addClass('ui-beauty-select-dropdown-' + position);
+
     dropdown.css({
       left: offset.left,
       top: position === 'bottom'
@@ -285,9 +297,7 @@ SelectBox.prototype = {
       )
     });
 
-    dropdown.addClass('ui-beauty-select-dropdown-' + position);
-
-    return this;
+    return context;
   },
   __refresh: function (){
     var context = this;
@@ -382,7 +392,7 @@ SelectBox.prototype = {
   select: function (index){
     this.element[0].selectedIndex = index;
 
-    return this.refresh();
+    return this.__refresh();
   },
   open: function (){
     var context = this;
@@ -425,6 +435,7 @@ SelectBox.prototype = {
 
     context.selectbox.off();
     context.dropdown.off();
+    context.element.off('keypress.beauty-' + type);
     context.selectbox.remove();
     context.dropdown.remove();
     element.removeData('beauty-select');
@@ -436,6 +447,7 @@ SelectBox.prototype = {
       doc.off('change.beauty-' + type);
       doc.off('focusin.beauty-' + type);
       doc.off('focusout.beauty-' + type);
+      doc.off('click.beauty-' + type);
       win.off('resize.beauty-' + type);
     }
 
