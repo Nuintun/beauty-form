@@ -286,7 +286,7 @@ SelectBox.prototype = {
       )
     });
 
-    return this;
+    return context;
   },
   __refresh: function (){
     var context = this;
