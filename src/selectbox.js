@@ -50,8 +50,8 @@ function SelectBox(element, options){
       return '<dt class="ui-beauty-select-optgroup">' + label + '</dt>';
     },
     option: function (element, option){
-      return '<dd class="ui-beauty-select-option' + (option.class ? ' ' + option.class : '') + '" '
-        + option.attr + '="' + option.index + '" tabindex="-1">' + option.text + '</dd>';
+      return '<dd class="ui-beauty-select-option' + (option.className ? ' ' + option.className : '') + '" '
+        + option.indexAttr + '="' + option.index + '" tabindex="-1">' + option.text + '</dd>';
     },
     optionIndexAttr: 'data-option',
     optionSelectedClass: 'ui-beauty-select-option-selected',
@@ -98,7 +98,10 @@ SelectBox.prototype = {
       doc.on('change.beauty-' + type, selector, function (){
         var select = SelectBox.get(this);
 
-        select && select.__refresh();
+        if (select) {
+          select.__refreshSelected();
+          select.__refresh();
+        }
       });
 
       doc.on('focusin.beauty-' + type, selector, function (){
@@ -151,7 +154,7 @@ SelectBox.prototype = {
       context.close();
     });
 
-    context.dropdown.on('focusin.beauty-' + type, function (e){
+    context.dropdown.on('focusin.beauty-' + type, function (){
       context.focus();
     });
 
@@ -181,8 +184,8 @@ SelectBox.prototype = {
       var option = {
         index: index++,
         text: element.html(),
-        attr: options.optionIndexAttr,
-        class: element[0].disabled
+        indexAttr: options.optionIndexAttr,
+        className: element[0].disabled
           ? options.optionDisabledClass
           : ( selected ? options.optionSelectedClass : '')
       };
@@ -254,10 +257,6 @@ SelectBox.prototype = {
     var offset = selectbox.offset();
     var position = offset.top - scrollTop;
 
-    console.log(size);
-    console.log(offset);
-    console.log(scrollTop);
-
     position = position > size.window.height - position - size.selectbox.outerHeight
       ? 'top'
       : 'bottom';
@@ -301,6 +300,25 @@ SelectBox.prototype = {
       context.selectbox,
       selected.html()
     ));
+
+    return context;
+  },
+  __refreshSelected: function (){
+    var context = this;
+    var options = context.options;
+    var dropdown = context.dropdown;
+    var selectedClass = options.optionSelectedClass;
+    var selectedIndex = context.element[0].selectedIndex;
+
+    dropdown
+      .find('.' + selectedClass)
+      .removeClass(selectedClass);
+
+    var selected = dropdown
+      .find('[' + options.optionIndexAttr + '=' + selectedIndex + ']');
+
+    selected.addClass(selectedClass);
+    selected[0].scrollIntoView();
 
     return context;
   },
@@ -362,17 +380,11 @@ SelectBox.prototype = {
 
     context.opened = true;
 
-    var options = context.options;
-    var selectedIndex = context.element[0].selectedIndex;
-
     context.selectbox.addClass('ui-beauty-select-opened');
     context.dropdown.appendTo(document.body);
     context.__position();
 
-    var selected = context.dropdown
-      .find('[' + options.optionIndexAttr + '=' + selectedIndex + ']');
-
-    selected.length && selected[0].scrollIntoView();
+    context.__refreshSelected();
 
     return context;
   },
