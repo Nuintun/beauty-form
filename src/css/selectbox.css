@@ -12,6 +12,7 @@
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
+  background: #fff;
 }
 .ui-beauty-select-titlebox {
   margin: 0; padding: 0;
@@ -35,6 +36,7 @@
   filter: none;
 }
 .ui-beauty-select-focus {
+  z-index: 2147483647;
   border: 1px solid #09e;
 }
 .ui-beauty-select-title {

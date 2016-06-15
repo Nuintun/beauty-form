@@ -48,11 +48,13 @@ function SelectBox(element, options){
       return '<dl class="ui-beauty-select-dropdown-items">' + options + '</dl>';
     },
     optgroup: function (element, label){
-      return '<dt class="ui-beauty-select-optgroup">' + label + '</dt>';
+      return '<dt class="ui-beauty-select-optgroup" title="' + label + '">' + label + '</dt>';
     },
     option: function (element, option){
-      return '<dd class="ui-beauty-select-option' + (option.className ? ' ' + option.className : '') + '" '
-        + option.indexAttr + '="' + option.index + '" tabindex="-1">' + option.text + '</dd>';
+      return '<dd class="ui-beauty-select-option'
+        + (option.className ? ' ' + option.className : '') + '" '
+        + option.indexAttr + '="' + option.index + '" title="'
+        + option.text + '" tabindex="-1">' + option.text + '</dd>';
     },
     optionIndexAttr: 'data-option',
     optionSelectedClass: 'ui-beauty-select-option-selected',
@@ -111,16 +113,27 @@ SelectBox.prototype = {
         var select = SelectBox.get(this);
 
         if (select) {
-          actived = select;
+          if (actived !== select && actived.opened) {
+            actived.close();
+            actived.__refreshSelectbox();
+          }
 
           select.__refreshSelectbox();
+
+          actived = select;
         }
       });
 
       doc.on('focusout.beauty-' + type, selector, function (){
         var select = SelectBox.get(this);
 
-        select && select.__refreshSelectbox();
+        if (select) {
+          if (actived.opened && actived === select) {
+            select.close();
+          }
+
+          select.__refreshSelectbox();
+        }
       });
 
       doc.on('mousedown.beauty-' + type, function (e){
