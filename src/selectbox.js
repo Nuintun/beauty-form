@@ -127,6 +127,18 @@ SelectBox.prototype = {
 
     context.__beauty();
 
+    context.element.on('keypress.beauty-' + type, function (e){
+      if (e.keyCode === 13) {
+        e.preventDefault();
+
+        if (context.opened) {
+          context.close();
+        } else {
+          context.open();
+        }
+      }
+    });
+
     context.selectbox.on('mousedown.beauty-' + type, function (e){
       e.preventDefault();
 

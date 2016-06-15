@@ -69,12 +69,11 @@
   -moz-user-select: none;
   -ms-user-select: none;
   border: 1px solid #09e;
-  max-height: 200px;
+  max-height: 252px;
   overflow-x: hidden;
   overflow-y: auto;
   outline: 0 none;
   font-size: 13px;
-  line-height: 100%;
   list-style: none;
   background: #fff;
 }
@@ -93,6 +92,8 @@
   outline: 0 none;
   margin: 0;
   padding: 6px;
+  height: 16px;
+  line-height: 16px;
   cursor: pointer;
   color: #333;
   background: transparent;
