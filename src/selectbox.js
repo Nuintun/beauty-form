@@ -112,11 +112,6 @@ SelectBox.prototype = {
         var select = SelectBox.get(this);
 
         if (select) {
-          if (actived !== select && actived.opened) {
-            actived.close();
-            actived.__refreshSelectbox();
-          }
-
           select.__refreshSelectbox();
 
           actived = select;
