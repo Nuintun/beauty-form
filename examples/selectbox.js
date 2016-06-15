@@ -431,7 +431,6 @@ SelectBox.prototype = {
     context.selectbox.addClass('ui-beauty-select-opened');
     context.dropdown.appendTo(context.selectbox);
     context.__position();
-
     context.__refreshSelected();
 
     return context;
