@@ -119,7 +119,7 @@ SelectBox.prototype = {
       doc.on('click.beauty-' + type, function (e){
         if (actived) {
           var target = e.target;
-          var dropdown = actived.dropdown[0];
+          var dropdown = actived.dropdown;
 
           if (actived.selectbox[0] !== target
             && dropdown !== target
@@ -162,7 +162,12 @@ SelectBox.prototype = {
       context.focus();
 
       if (context.opened) {
-        context.close();
+        var target = e.target;
+        var dropdown = context.dropdown[0];
+
+        if (dropdown !== target && !$.contains(dropdown, target)) {
+          context.close();
+        }
       } else {
         context.open();
       }
@@ -287,12 +292,13 @@ SelectBox.prototype = {
       : 'bottom';
 
     dropdown.addClass('ui-beauty-select-dropdown-' + position);
+    dropdown.removeClass('ui-beauty-select-dropdown-' + (position === 'top' ? 'bottom' : 'top'));
 
     dropdown.css({
-      left: offset.left,
+      left: 0,
       top: position === 'bottom'
-        ? offset.top + size.selectbox.outerHeight
-        : offset.top - size.dropdown.outerHeight,
+        ? size.selectbox.outerHeight
+        : -size.dropdown.outerHeight,
       width: Math.max(
         size.selectbox.outerWidth - size.dropdown.outerWidth + size.dropdown.width,
         size.dropdown.width
@@ -310,19 +316,17 @@ SelectBox.prototype = {
 
     focused = context.opened
       || focused === element
-      || focused === context.selectbox[0]
-      || focused === context.dropdown[0]
-      || $.contains(context.selectbox, focused)
-      || $.contains(context.dropdown, focused);
+      || focused === selectbox[0]
+      || $.contains(selectbox[0], focused);
 
     selectbox
       .toggleClass('ui-beauty-select-disabled', element.disabled)
       .toggleClass('ui-beauty-select-focus', focused);
 
-    selectbox.html(compile(
+    context.titlebox.html(compile(
       context,
       context.options.select,
-      context.selectbox,
+      selectbox,
       selected.html()
     ));
 
@@ -354,8 +358,16 @@ SelectBox.prototype = {
     if (!SelectBox.get(element)) {
       element.addClass('ui-beauty-select-hidden');
 
-      context.selectbox = $('<div tabindex="-1" class="ui-beauty-select"/>').insertAfter(element);
-      context.dropdown = $('<div tabindex="-1" class="ui-beauty-select-dropdown"/>');
+      var selectbox = $('<div tabindex="-1" class="ui-beauty-select"/>');
+
+      context.titlebox = $('<div class="ui-beauty-select-titlebox"/>');
+      context.dropdown = $('<div class="ui-beauty-select-dropdown"/>');
+
+      selectbox
+        .append(context.titlebox)
+        .insertAfter(context.element);
+
+      context.selectbox = selectbox;
 
       reference++;
 
@@ -406,7 +418,7 @@ SelectBox.prototype = {
     context.opened = true;
 
     context.selectbox.addClass('ui-beauty-select-opened');
-    context.dropdown.appendTo(document.body);
+    context.dropdown.appendTo(context.selectbox);
     context.__position();
 
     context.__refreshSelected();
