@@ -211,6 +211,7 @@ SelectBox.prototype = {
     var context = this;
 
     if (!context.opened) {
+      context.dropdown.css('visibility', 'hidden');
       context.dropdown.appendTo(context.selectbox);
     }
 
@@ -243,6 +244,7 @@ SelectBox.prototype = {
     ));
 
     if (!context.opened) {
+      context.dropdown.css('visibility', 'visible');
       context.dropdown.detach();
     }
 
