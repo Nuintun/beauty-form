@@ -163,9 +163,7 @@ SelectBox.prototype = {
 
       e.preventDefault();
 
-      setTimeout(function (){
-        context.focus();
-      }, 0);
+      context.focus();
 
       if (context.opened) {
         var target = e.target;
