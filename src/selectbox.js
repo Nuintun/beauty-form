@@ -474,6 +474,7 @@ SelectBox.prototype = {
       doc.off('change' + namespace);
       doc.off('focusin' + namespace);
       doc.off('focusout' + namespace);
+      doc.off('mousedown' + namespace);
       doc.off('keydown' + namespace);
       win.off('resize' + namespace);
     }
