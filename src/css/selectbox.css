@@ -74,7 +74,7 @@
 }
 .ui-beauty-select-dropdown {
   position: absolute;
-  padding: 0;
+  left: 0; padding: 0;
   border: 1px solid #09e;
   max-height: 252px;
   overflow-x: hidden;

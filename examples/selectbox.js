@@ -191,9 +191,13 @@ SelectBox.prototype = {
 
     return context;
   },
-  __Size: function (){
+  __sizeSelectbox: function (){
     var element = this.element;
     var selectbox = this.selectbox;
+
+    selectbox.width('auto');
+    selectbox.height('auto');
+
     var width = element.outerWidth() - selectbox.outerWidth() + selectbox.width();
     var height = element.outerHeight() - selectbox.outerHeight() + selectbox.height();
 
@@ -203,51 +207,74 @@ SelectBox.prototype = {
 
     return this;
   },
-  __position: function (){
+  __sizeDropdown: function (){
     var context = this;
 
-    if (!context.opened) return context;
+    if (!context.opened) {
+      context.dropdown.appendTo(context.selectbox);
+    }
 
+    var element = context.element;
     var selectbox = context.selectbox;
     var dropdown = context.dropdown;
 
+    var originWidth = element.outerWidth();
+
+    element.width('auto');
+
+    var adaptiveWidth = element.outerWidth();
+
+    element.outerWidth(originWidth);
     dropdown.width('auto');
 
     var size = {
-      window: {
-        height: win.height()
-      },
       selectbox: {
-        outerWidth: selectbox.outerWidth(),
-        outerHeight: selectbox.outerHeight()
+        outerWidth: selectbox.outerWidth()
       },
       dropdown: {
         width: dropdown.width(),
-        outerWidth: dropdown.outerWidth(),
-        outerHeight: dropdown.outerHeight()
+        outerWidth: dropdown.outerWidth()
       }
     };
-    var scrollTop = win.scrollTop();
-    var offset = selectbox.offset();
-    var position = offset.top - scrollTop;
 
-    position = position > size.window.height - position - size.selectbox.outerHeight
-      ? 'top'
-      : 'bottom';
+    dropdown.width(Math.max(
+      size.selectbox.outerWidth - size.dropdown.outerWidth + size.dropdown.width,
+      adaptiveWidth - size.dropdown.outerWidth + size.dropdown.width
+    ));
 
-    dropdown.addClass('ui-beauty-select-dropdown-' + position);
-    dropdown.removeClass('ui-beauty-select-dropdown-' + (position === 'top' ? 'bottom' : 'top'));
+    if (!context.opened) {
+      context.dropdown.detach();
+    }
 
-    dropdown.css({
-      left: 0,
-      top: position === 'bottom'
-        ? size.selectbox.outerHeight
-        : -size.dropdown.outerHeight,
-      width: Math.max(
-        size.selectbox.outerWidth - size.dropdown.outerWidth + size.dropdown.width,
-        size.dropdown.width
-      )
-    });
+    return context;
+  },
+  __position: function (){
+    var context = this;
+
+    if (context.opened) {
+      var selectbox = context.selectbox;
+      var dropdown = context.dropdown;
+      var scrollTop = win.scrollTop();
+      var offset = selectbox.offset();
+
+      var size = {
+        window: { height: win.height() },
+        selectbox: { outerHeight: selectbox.outerHeight() },
+        dropdown: { outerHeight: dropdown.outerHeight() }
+      };
+
+      var top = offset.top - scrollTop;
+      var bottom = size.window.height - top - size.selectbox.outerHeight;
+      var position = top > bottom ? 'top' : 'bottom';
+
+      dropdown
+        .removeClass('ui-beauty-select-dropdown-' + (position === 'top' ? 'bottom' : 'top'))
+        .addClass('ui-beauty-select-dropdown-' + position);
+
+      dropdown.css({
+        top: position === 'bottom' ? size.selectbox.outerHeight : -size.dropdown.outerHeight
+      });
+    }
 
     return context;
   },
@@ -412,9 +439,10 @@ SelectBox.prototype = {
   refresh: function (){
     var context = this;
 
-    context.__Size();
+    context.__sizeSelectbox();
     context.__renderTitlebox();
     context.__renderDropdown();
+    context.__sizeDropdown();
 
     return context.__refreshSelectbox();
   },
@@ -447,43 +475,43 @@ SelectBox.prototype = {
   close: function (){
     var context = this;
 
-    if (!context.opened) return context;
+    if (context.opened) {
+      context.opened = false;
 
-    context.opened = false;
-
-    context.dropdown.detach();
-    context.selectbox.removeClass('ui-beauty-select-opened');
+      context.dropdown.detach();
+      context.selectbox.removeClass('ui-beauty-select-opened');
+    }
 
     return context;
   },
   destroy: function (){
     var context = this;
 
-    if (context.destroyed) return;
+    if (!context.destroyed) {
+      var type = context.type;
+      var element = context.element;
+      var namespace = '.beauty-' + type;
 
-    var type = context.type;
-    var element = context.element;
-    var namespace = '.beauty-' + type;
+      context.selectbox.off();
+      context.element.off('keypress' + namespace);
+      context.selectbox.remove();
+      context.dropdown.remove();
+      element.removeData('beauty-select');
+      element.removeClass('ui-beauty-select-hidden');
 
-    context.selectbox.off();
-    context.element.off('keypress' + namespace);
-    context.selectbox.remove();
-    context.dropdown.remove();
-    element.removeData('beauty-select');
-    element.removeClass('ui-beauty-select-hidden');
+      reference--;
 
-    reference--;
+      if (!reference) {
+        doc.off('change' + namespace);
+        doc.off('focusin' + namespace);
+        doc.off('focusout' + namespace);
+        doc.off('mousedown' + namespace);
+        doc.off('keydown' + namespace);
+        win.off('resize' + namespace);
+      }
 
-    if (!reference) {
-      doc.off('change' + namespace);
-      doc.off('focusin' + namespace);
-      doc.off('focusout' + namespace);
-      doc.off('mousedown' + namespace);
-      doc.off('keydown' + namespace);
-      win.off('resize' + namespace);
+      context.destroyed = true;
     }
-
-    context.destroyed = true;
   }
 };
 
