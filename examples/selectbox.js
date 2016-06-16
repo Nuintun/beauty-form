@@ -128,7 +128,7 @@ SelectBox.prototype = {
       });
 
       doc.on('keydown' + namespace, function (e){
-        if (e.which === 9) {
+        if (e.which === 9 || e.which === 27) {
           actived.opened && actived.close();
           actived.__refreshSelectbox();
         }
