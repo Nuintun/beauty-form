@@ -462,8 +462,9 @@ SelectBox.prototype = {
 
     if (actived !== context && actived.opened) {
       actived.close();
-      actived.__refreshSelectbox()
     }
+
+    actived.__refreshSelectbox();
 
     actived = context;
 
