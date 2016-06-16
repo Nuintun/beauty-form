@@ -164,7 +164,9 @@ SelectBox.prototype = {
 
       e.preventDefault();
 
-      context.focus();
+      setTimeout(function (){
+        context.focus();
+      }, 0);
 
       if (context.opened) {
         var target = e.target;
@@ -475,6 +477,7 @@ SelectBox.prototype = {
       doc.off('change' + namespace);
       doc.off('focusin' + namespace);
       doc.off('focusout' + namespace);
+      doc.off('mousedown' + namespace);
       doc.off('keydown' + namespace);
       win.off('resize' + namespace);
     }
