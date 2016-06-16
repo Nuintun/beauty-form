@@ -1,9 +1,21 @@
+.ui-beauty-select-hidden {
+  position: absolute;
+  top: auto; right: auto;
+  bottom: auto; left: auto;
+  z-index: -1; opacity: 0;
+  -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
+}
+:root .ui-beauty-select-hidden {
+  -ms-filter: none;
+  filter: none;
+}
 .ui-beauty-select {
   display: inline-block;
   *display: inline; *zoom: 1;
   position: relative;
   margin: 0;
-  padding: 0 20px 0 4px;
+  padding: 0 24px 0 6px;
   outline: 0 none;
   text-align: left;
   border: 1px solid #ccc;
@@ -22,18 +34,6 @@
   -webkit-text-size-adjust: none;
   width: 100%; height: 100%;
   overflow: hidden;
-}
-.ui-beauty-select-hidden {
-  position: absolute;
-  top: auto; right: auto;
-  bottom: auto; left: auto;
-  z-index: -1; opacity: 0;
-  -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
-  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
-}
-:root .ui-beauty-select-hidden {
-  -ms-filter: none;
-  filter: none;
 }
 .ui-beauty-select-focus {
   z-index: 2147483647;
@@ -55,7 +55,7 @@
 }
 .ui-beauty-select-icon {
   position: absolute;
-  top: 50%; right: 2px;
+  top: 50%; right: 4px;
   display: inline-block;
   *display: inline; *zoom: 1;
   width: 16px; height: 16px;
