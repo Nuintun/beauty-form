@@ -91,9 +91,10 @@ Choice.prototype = {
     if (!reference[type]) {
       reference[type] = 0;
 
+      var namespace = '.beauty-' + type;
       var selector = 'input[type=' + type + ']';
 
-      doc.on('change.beauty-' + type, selector, function (){
+      doc.on('change' + namespace, selector, function (){
         var choice = Choice.get(this);
 
         if (choice) {
@@ -105,13 +106,13 @@ Choice.prototype = {
         }
       });
 
-      doc.on('focusin.beauty-' + type, selector, function (){
+      doc.on('focusin' + namespace, selector, function (){
         var choice = Choice.get(this);
 
         choice && choice.refresh();
       });
 
-      doc.on('focusout.beauty-' + type, selector, function (){
+      doc.on('focusout' + namespace, selector, function (){
         var choice = Choice.get(this);
 
         choice && choice.refresh();
@@ -205,9 +206,11 @@ Choice.prototype = {
     reference[type]--;
 
     if (!reference[type]) {
-      doc.off('change.beauty-' + type);
-      doc.off('focusin.beauty-' + type);
-      doc.off('focusout.beauty-' + type);
+      var namespace = '.beauty-' + type;
+
+      doc.off('change' + namespace);
+      doc.off('focusin' + namespace);
+      doc.off('focusout' + namespace);
     }
 
     context.destroyed = true;
