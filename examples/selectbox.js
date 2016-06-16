@@ -210,6 +210,9 @@ SelectBox.prototype = {
 
     var selectbox = context.selectbox;
     var dropdown = context.dropdown;
+
+    dropdown.width('auto');
+
     var size = {
       window: {
         height: win.height()
