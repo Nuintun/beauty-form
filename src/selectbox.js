@@ -51,7 +51,7 @@ function SelectBox(element, options){
     },
     option: function (element, option){
       return '<dd class="ui-beauty-select-option'
-        + (option.group ? ' ui-beauty-select-group-option' : '')
+        + (option.group ? ' ui-beauty-select-optgroup-option' : '')
         + (option.className ? ' ' + option.className : '') + '" '
         + option.indexAttr + '="' + option.index + '" title="'
         + option.text + '" tabindex="-1">' + option.text + '</dd>';
@@ -92,43 +92,48 @@ SelectBox.get = function (element){
 SelectBox.prototype = {
   __init: function (){
     var context = this;
+    var type = context.type;
     var options = context.options;
+    var namespace = '.beauty-' + type;
 
     actived = context;
 
     if (!reference) {
-      var type = this.type;
       var selector = 'select';
 
-      doc.on('change.beauty-' + type, selector, function (){
-        var select = SelectBox.get(this);
+      doc.on('change' + namespace, selector, function (){
+        var selectbox = SelectBox.get(this);
 
-        if (select) {
-          select.__renderTitlebox();
-          select.opened && select.__refreshSelected();
+        if (selectbox) {
+          selectbox.__renderTitlebox();
+          selectbox.opened && selectbox.__refreshSelected();
         }
       });
 
-      doc.on('focusin.beauty-' + type, selector, function (){
-        var select = SelectBox.get(this);
+      doc.on('focusin' + namespace + ' focusout' + namespace, selector, function (){
+        var selectbox = SelectBox.get(this);
 
-        if (select) {
-          select.__refreshSelectbox();
+        selectbox && selectbox.__refreshSelectbox();
+      });
 
-          actived = select;
+      doc.on('mousedown' + namespace, function (e){
+        var target = e.target;
+        var selectbox = actived.selectbox[0];
+
+        if (target !== selectbox && !$.contains(selectbox, target) && actived.opened) {
+          actived.close();
+          actived.__refreshSelectbox();
         }
       });
 
-      doc.on('focusout.beauty-' + type, selector, function (){
-        var select = SelectBox.get(this);
-
-        if (select) {
-          select.close();
-          select.__refreshSelectbox();
+      doc.on('keydown' + namespace, function (e){
+        if (e.which === 9) {
+          actived.opened && actived.close();
+          actived.__refreshSelectbox();
         }
       });
 
-      win.on('resize.beauty-' + type, function (){
+      win.on('resize' + namespace, function (){
         clearTimeout(timer);
 
         timer = setTimeout(function (){
@@ -139,8 +144,8 @@ SelectBox.prototype = {
 
     context.__beauty();
 
-    context.element.on('keypress.beauty-' + type, function (e){
-      if (e.keyCode === 13) {
+    context.element.on('keypress' + namespace, function (e){
+      if (e.which === 13) {
         e.preventDefault();
 
         if (context.opened) {
@@ -151,12 +156,13 @@ SelectBox.prototype = {
       }
     });
 
-    context.selectbox.on('mousedown.beauty-' + type, function (e){
+    context.selectbox.on('mousedown' + namespace, function (e){
       var select = context.element;
 
       if (select[0].disabled) return;
 
       e.preventDefault();
+
       context.focus();
 
       if (context.opened) {
@@ -171,7 +177,7 @@ SelectBox.prototype = {
       }
     });
 
-    context.selectbox.on('click.beauty-' + type, '[' + options.optionIndexAttr + ']', function (e){
+    context.selectbox.on('click' + namespace, '[' + options.optionIndexAttr + ']', function (e){
       e.preventDefault();
 
       var option = $(this);
@@ -361,7 +367,7 @@ SelectBox.prototype = {
     if (!SelectBox.get(element)) {
       element.addClass('ui-beauty-select-hidden');
 
-      var selectbox = $('<div tabindex="-1" unselectable="on" class="ui-beauty-select"/>');
+      var selectbox = $('<div tabindex="-1" class="ui-beauty-select"/>');
 
       context.titlebox = $('<div class="ui-beauty-select-titlebox"/>');
       context.dropdown = $('<div class="ui-beauty-select-dropdown"/>');
@@ -420,6 +426,13 @@ SelectBox.prototype = {
 
     context.opened = true;
 
+    if (actived !== context && actived.opened) {
+      actived.close();
+      actived.__refreshSelectbox()
+    }
+
+    actived = context;
+
     context.selectbox.addClass('ui-beauty-select-opened');
     context.dropdown.appendTo(context.selectbox);
     context.__position();
@@ -446,9 +459,10 @@ SelectBox.prototype = {
 
     var type = context.type;
     var element = context.element;
+    var namespace = '.beauty-' + type;
 
     context.selectbox.off();
-    context.element.off('keypress.beauty-' + type);
+    context.element.off('keypress' + namespace);
     context.selectbox.remove();
     context.dropdown.remove();
     element.removeData('beauty-select');
@@ -457,10 +471,11 @@ SelectBox.prototype = {
     reference--;
 
     if (!reference) {
-      doc.off('change.beauty-' + type);
-      doc.off('focusin.beauty-' + type);
-      doc.off('focusout.beauty-' + type);
-      win.off('resize.beauty-' + type);
+      doc.off('change' + namespace);
+      doc.off('focusin' + namespace);
+      doc.off('focusout' + namespace);
+      doc.off('keydown' + namespace);
+      win.off('resize' + namespace);
     }
 
     context.destroyed = true;
