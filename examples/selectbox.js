@@ -222,7 +222,7 @@ SelectBox.prototype = {
     var adaptiveWidth = element.outerWidth();
 
     element.outerWidth(originWidth);
-    dropdown.width('auto');
+    dropdown.css('min-width', 0);
 
     var size = {
       selectbox: {
@@ -234,7 +234,7 @@ SelectBox.prototype = {
       }
     };
 
-    dropdown.width(Math.max(
+    dropdown.css('min-width', Math.max(
       size.selectbox.outerWidth - size.dropdown.outerWidth + size.dropdown.width,
       adaptiveWidth - size.dropdown.outerWidth + size.dropdown.width
     ));
