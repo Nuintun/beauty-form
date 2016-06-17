@@ -28,8 +28,6 @@
 }
 .ui-beauty-select-titlebox {
   margin: 0; padding: 0;
-  display: inline-block;
-  *display: inline; *zoom: 1;
   font-size: 0; letter-spacing: 0;
   -webkit-text-size-adjust: none;
   width: 100%; height: 100%;
