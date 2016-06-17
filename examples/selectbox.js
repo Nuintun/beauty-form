@@ -214,15 +214,14 @@ SelectBox.prototype = {
     var element = context.element;
     var selectbox = context.selectbox;
     var dropdown = context.dropdown;
-
     var originWidth = element.outerWidth();
 
     element.width('auto');
+    dropdown.width('auto');
 
     var adaptiveWidth = element.outerWidth();
 
     element.outerWidth(originWidth);
-    dropdown.width('auto');
 
     var size = {
       selectbox: {
