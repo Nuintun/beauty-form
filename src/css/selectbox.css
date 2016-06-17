@@ -25,11 +25,11 @@
   background: #fff;
 }
 .ui-beauty-select-titlebox {
+  overflow: hidden;
   margin: 0; padding: 0;
   font-size: 0; letter-spacing: 0;
   -webkit-text-size-adjust: none;
   width: 100%; height: 100%;
-  overflow: hidden;
 }
 .ui-beauty-select-focus {
   z-index: 2147483647;
@@ -57,12 +57,12 @@
   color: #e6e6e6; cursor: not-allowed;
 }
 .ui-beauty-select-icon {
-  position: absolute;
-  top: 50%; right: 4px;
-  margin-top: -8px;
   display: inline-block;
   *display: inline; *zoom: 1;
   width: 16px; height: 16px;
+  position: absolute;
+  top: 50%; right: 4px;
+  margin-top: -8px;
   background: url(../images/select.png) no-repeat center;
 }
 .ui-beauty-select-disabled .ui-beauty-select-icon {
@@ -99,28 +99,25 @@
 }
 .ui-beauty-select-optgroup,
 .ui-beauty-select-option {
-  white-space: nowrap;
-  outline: 0 none;
-  margin: 0;
-  padding: 6px;
   height: 16px;
   line-height: 16px;
+  white-space: nowrap;
+  outline: 0 none;
+  margin: 0; padding: 6px;
   cursor: pointer;
   color: #333;
-  background: transparent;
+  background: #fff;
   text-align: left;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 .ui-beauty-select-optgroup-option {
   padding-left: 20px;
 }
 .ui-beauty-select-optgroup {
-  cursor: default;
   color: #000;
+  cursor: default;
+  font-size: 14px;
   font-weight: bold;
   font-style: italic;
-  font-size: 14px;
 }
 .ui-beauty-select-option:hover {
   background: #eee;
@@ -130,12 +127,11 @@
 }
 .ui-beauty-select-option-selected,
 .ui-beauty-select-option-selected:hover {
-  background: #3870f3;
   color: #fff;
+  background: #3870f3;
 }
 .ui-beauty-select-option-disabled,
 .ui-beauty-select-option-disabled:hover {
   color: #e6e6e6;
   cursor: default;
-  background: #fff;
 }
