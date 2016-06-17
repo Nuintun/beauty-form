@@ -40,7 +40,8 @@ function compile(context, template){
 function SelectBox(element, options){
   options = $.extend({
     title: function (element, text){
-      return '<div class="ui-beauty-select-title" title="' + text + '">'
+      return '<i class="ui-beauty-select-align-middle"></i>'
+        + '<div class="ui-beauty-select-title" title="' + text + '">'
         + text + '</div><i class="ui-beauty-select-icon"></i>';
     },
     dropdown: function (element, options){
@@ -198,7 +199,6 @@ SelectBox.prototype = {
 
     selectbox.width(width);
     selectbox.height(height);
-    selectbox.css('line-height', height + 'px');
 
     return this;
   },
