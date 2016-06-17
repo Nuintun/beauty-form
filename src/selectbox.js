@@ -193,10 +193,6 @@ SelectBox.prototype = {
   __sizeSelectbox: function (){
     var element = this.element;
     var selectbox = this.selectbox;
-
-    selectbox.width('auto');
-    selectbox.height('auto');
-
     var width = element.outerWidth() - selectbox.outerWidth() + selectbox.width();
     var height = element.outerHeight() - selectbox.outerHeight() + selectbox.height();
 
