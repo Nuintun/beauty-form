@@ -38,6 +38,17 @@ function compile(context, template){
 }
 
 function SelectBox(element, options){
+  var context = this;
+
+  context.type = 'select';
+  context.opened = false;
+  context.destroyed = false;
+  context.element = $(element);
+
+  if (context.element.attr('multiple') !== undefined || context.element.attr('size') > 1) {
+    return context;
+  }
+
   options = $.extend({
     title: function (element, text){
       return '<i class="ui-beauty-select-align-middle"></i>'
@@ -69,12 +80,6 @@ function SelectBox(element, options){
     }
   });
 
-  var context = this;
-
-  context.type = 'select';
-  context.opened = false;
-  context.destroyed = false;
-  context.element = $(element);
   context.options = options;
 
   context.__init();
