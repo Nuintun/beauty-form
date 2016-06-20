@@ -212,21 +212,16 @@ SelectBox.prototype = {
     }
 
     var element = context.element;
-    var selectbox = context.selectbox;
     var dropdown = context.dropdown;
-    var originWidth = element.outerWidth();
+    var realWidth = element.outerWidth();
 
     element.width('auto');
-    dropdown.width('auto');
 
     var adaptiveWidth = element.outerWidth();
 
-    element.outerWidth(originWidth);
+    element.outerWidth(realWidth);
 
     var size = {
-      selectbox: {
-        outerWidth: selectbox.outerWidth()
-      },
       dropdown: {
         width: dropdown.width(),
         outerWidth: dropdown.outerWidth()
@@ -234,8 +229,8 @@ SelectBox.prototype = {
     };
 
     var width = Math.max(
-      adaptiveWidth - size.dropdown.outerWidth + size.dropdown.width,
-      size.selectbox.outerWidth - size.dropdown.outerWidth + size.dropdown.width
+      realWidth - size.dropdown.outerWidth + size.dropdown.width,
+      adaptiveWidth - size.dropdown.outerWidth + size.dropdown.width
     );
 
     width = Math.max(width, context.options.dropdownWidth || 0);
@@ -243,8 +238,8 @@ SelectBox.prototype = {
     dropdown.width(width);
 
     if (!context.opened) {
-      context.dropdown.css('visibility', 'visible');
       context.dropdown.detach();
+      context.dropdown.css('visibility', 'visible');
     }
 
     return context;
