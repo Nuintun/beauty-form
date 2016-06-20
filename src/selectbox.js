@@ -66,7 +66,7 @@ function SelectBox(element, options){
         + (option.group ? ' ui-beauty-select-optgroup-option' : '')
         + (option.className ? ' ' + option.className : '') + '" '
         + option.indexAttr + '="' + option.index + '" title="'
-        + option.text + '" tabindex="-1">' + option.text + '</dd>';
+        + option.text + '">' + option.text + '</dd>';
     },
     dropdownWidth: null,
     optionIndexAttr: 'data-option',
