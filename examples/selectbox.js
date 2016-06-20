@@ -58,6 +58,7 @@ function SelectBox(element, options){
         + option.indexAttr + '="' + option.index + '" title="'
         + option.text + '" tabindex="-1">' + option.text + '</dd>';
     },
+    dropdownWidth: null,
     optionIndexAttr: 'data-option',
     optionSelectedClass: 'ui-beauty-select-option-selected',
     optionDisabledClass: 'ui-beauty-select-option-disabled'
@@ -233,10 +234,14 @@ SelectBox.prototype = {
       }
     };
 
-    dropdown.width(Math.max(
-      size.selectbox.outerWidth - size.dropdown.outerWidth + size.dropdown.width,
-      adaptiveWidth - size.dropdown.outerWidth + size.dropdown.width
-    ));
+    var width = Math.max(
+      adaptiveWidth - size.dropdown.outerWidth + size.dropdown.width,
+      size.selectbox.outerWidth - size.dropdown.outerWidth + size.dropdown.width
+    );
+
+    width = Math.max(width, context.options.dropdownWidth || 0);
+
+    dropdown.width(width);
 
     if (!context.opened) {
       context.dropdown.css('visibility', 'visible');
