@@ -53,8 +53,8 @@ function SelectBox(element, options){
   options = $.extend({
     title: function (element, text){
       return '<i class="ui-beauty-select-align-middle"></i>'
-        + '<div class="ui-beauty-select-title" title="' + text + '">'
-        + text + '</div><i class="ui-beauty-select-icon"></i>';
+        + '<span class="ui-beauty-select-title" title="' + text + '">'
+        + text + '</span><i class="ui-beauty-select-icon"></i>';
     },
     dropdown: function (element, options){
       return '<dl class="ui-beauty-select-dropdown-items">' + options + '</dl>';
