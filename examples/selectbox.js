@@ -1,4 +1,4 @@
-define("selectbox", ["./css/selectbox.css.js","jquery","./util"], function(require, exports, module){
+define("selectbox", ["./css/selectbox.css.js","jquery","./util","./scrollintoviewifneeded"], function(require, exports, module){
 /*!
  * selectbox
  * Date: 2015/6/12
@@ -14,6 +14,7 @@ require('./css/selectbox.css.js');
 
 var $ = require('jquery');
 var util = require('./util');
+var scrollIntoViewIfNeeded = require('./scrollintoviewifneeded');
 
 var timer;
 var reference = 0;
@@ -390,11 +391,7 @@ SelectBox.prototype = {
 
     selected.addClass(selectedClass);
 
-    if (document.documentElement.scrollIntoViewIfNeeded) {
-      selected[0].scrollIntoViewIfNeeded();
-    } else {
-      selected[0].scrollIntoView();
-    }
+    scrollIntoViewIfNeeded(selected[0]);
 
     return context;
   },
