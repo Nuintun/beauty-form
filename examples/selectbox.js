@@ -389,7 +389,12 @@ SelectBox.prototype = {
       .find('[' + options.optionIndexAttr + '=' + selectedIndex + ']');
 
     selected.addClass(selectedClass);
-    selected[0].scrollIntoView();
+
+    if (document.documentElement.scrollIntoViewIfNeeded) {
+      selected[0].scrollIntoViewIfNeeded();
+    } else {
+      selected[0].scrollIntoView();
+    }
 
     return context;
   },
