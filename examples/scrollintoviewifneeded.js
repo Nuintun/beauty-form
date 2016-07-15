@@ -57,7 +57,8 @@ module.exports = function (element, centerIfNeeded){
     };
   }
 
-  var parent, area = makeArea(
+  var parent;
+  var area = makeArea(
     element.offsetLeft, element.offsetTop,
     element.offsetWidth, element.offsetHeight
   );
