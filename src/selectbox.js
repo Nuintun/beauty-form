@@ -13,6 +13,7 @@ require('./css/selectbox.css');
 
 var $ = require('jquery');
 var util = require('./util');
+var scrollIntoViewIfNeeded = require('./scrollintoviewifneeded');
 
 var timer;
 var reference = 0;
@@ -389,11 +390,7 @@ SelectBox.prototype = {
 
     selected.addClass(selectedClass);
 
-    if (document.documentElement.scrollIntoViewIfNeeded) {
-      selected[0].scrollIntoViewIfNeeded();
-    } else {
-      selected[0].scrollIntoView();
-    }
+    scrollIntoViewIfNeeded(selected[0]);
 
     return context;
   },

@@ -16,17 +16,18 @@
     "url": "https://github.com/nuintun/beauty-form/issues"
   },
   "keywords": [
+    "form",
     "beauty",
-    "form"
+    "beautify"
   ],
   "private": true,
   "dependencies": {
-    "del": "^2.2.0",
+    "del": "^2.2.1",
     "gulp": "^3.9.1",
     "pedding": "^1.0.0",
-    "chokidar": "^1.5.2",
-    "cssnano": "^3.7.0",
-    "uglify-js": "^2.6.2",
+    "chokidar": "^1.6.0",
+    "cssnano": "^3.7.2",
+    "uglify-js": "^2.7.0",
     "gulp-concat": "^2.6.0",
     "gulp-plumber": "^1.1.0",
     "gulp-cmd": "https://github.com/nuintun/gulp-cmd/archive/master.tar.gz",
