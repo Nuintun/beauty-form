@@ -23,16 +23,16 @@ module.exports = function (element, centerIfNeeded){
 
   function makeArea(left, top, width, height){
     return {
-      'left': left,
-      'top': top,
-      'width': width,
-      'height': height,
-      'right': left + width,
-      'bottom': top + height,
-      'translate': function (x, y){
+      left: left,
+      top: top,
+      width: width,
+      height: height,
+      right: left + width,
+      bottom: top + height,
+      translate: function (x, y){
         return makeArea(x + left, y + top, width, height);
       },
-      'relativeFromTo': function (lhs, rhs){
+      relativeFromTo: function (lhs, rhs){
         var newLeft = left, newTop = top;
 
         lhs = lhs.offsetParent;
