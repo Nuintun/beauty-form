@@ -247,11 +247,12 @@ SelectBox.prototype = {
 
     clone.insertAfter(context.element);
 
-    var width = Math.max(clone.outerWidth(), context.element.outerWidth())
-      - size.dropdown.outerWidth + size.dropdown.width;
+    var width = clone.outerWidth();
 
     clone.remove();
 
+    width = Math.max(width, context.element.outerWidth())
+      - size.dropdown.outerWidth + size.dropdown.width;
     width = Math.max(width, context.options.dropdownWidth || 0);
 
     dropdown.width(width);
