@@ -245,7 +245,7 @@ SelectBox.prototype = {
       'left': '-100%'
     });
 
-    clone.insertAfter(context.element);
+    clone.insertBefore(context.element);
 
     var width = clone.outerWidth();
 
