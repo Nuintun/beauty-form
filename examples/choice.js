@@ -149,8 +149,9 @@ Choice.prototype = {
     return this;
   },
   check: function (){
-    var type = this.type;
-    var element = this.element[0];
+    var context = this;
+    var type = context.type;
+    var element = context.element[0];
 
     element.checked = true;
 
@@ -158,11 +159,12 @@ Choice.prototype = {
       radio(element);
     }
 
-    return this.refresh();
+    return context.refresh();
   },
   uncheck: function (){
-    var type = this.type;
-    var element = this.element[0];
+    var context = this;
+    var type = context.type;
+    var element = context.element[0];
 
     element.checked = false;
 
@@ -170,7 +172,7 @@ Choice.prototype = {
       radio(element);
     }
 
-    return this.refresh();
+    return context.refresh();
   },
   enable: function (){
     this.element[0].disabled = false;
@@ -183,14 +185,15 @@ Choice.prototype = {
     return this.refresh();
   },
   refresh: function (){
-    var element = this.element[0];
+    var context = this;
+    var element = context.element[0];
 
-    this.choice
+    context.choice
       .toggleClass('ui-beauty-choice-checked', element.checked)
       .toggleClass('ui-beauty-choice-disabled', element.disabled)
       .toggleClass('ui-beauty-choice-focus', util.activeElement() === element);
 
-    return this;
+    return context;
   },
   destroy: function (){
     var context = this;

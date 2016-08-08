@@ -209,15 +209,16 @@ SelectBox.prototype = {
     return context;
   },
   __sizeSelectbox: function (){
-    var element = this.element;
-    var selectbox = this.selectbox;
+    var context = this;
+    var element = context.element;
+    var selectbox = context.selectbox;
     var width = element.outerWidth() - selectbox.outerWidth() + selectbox.width();
     var height = element.outerHeight() - selectbox.outerHeight() + selectbox.height();
 
     selectbox.width(width);
     selectbox.height(height);
 
-    return this;
+    return context;
   },
   __sizeDropdown: function (){
     var context = this;
