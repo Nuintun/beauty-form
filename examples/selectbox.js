@@ -245,9 +245,10 @@ SelectBox.prototype = {
       'left': '-100%'
     });
 
-    clone.appendTo(document.body);
+    clone.insertAfter(context.element);
 
-    var width = clone.outerWidth() - size.dropdown.outerWidth + size.dropdown.width;
+    var width = Math.max(clone.outerWidth(), context.element.outerWidth())
+      - size.dropdown.outerWidth + size.dropdown.width;
 
     clone.remove();
 
