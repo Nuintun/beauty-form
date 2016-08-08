@@ -22,6 +22,12 @@ var actived = null;
 var win = $(window);
 var doc = $(document);
 
+// viewport size
+var VIEWPORT = {
+  width: win.width(),
+  height: win.height()
+};
+
 /**
  * compile
  * @param context
@@ -145,6 +151,9 @@ SelectBox.prototype = {
       win.on('resize' + namespace, function (){
         clearTimeout(timer);
 
+        VIEWPORT.width = win.width();
+        VIEWPORT.height = win.height();
+
         timer = setTimeout(function (){
           actived.opened && actived.__position();
         }, 0);
@@ -218,16 +227,8 @@ SelectBox.prototype = {
       context.dropdown.appendTo(context.selectbox);
     }
 
-    var element = context.element;
     var dropdown = context.dropdown;
-    var realWidth = element.outerWidth();
-
-    element.width('auto');
-
-    var adaptiveWidth = element.outerWidth();
-
-    element.outerWidth(realWidth);
-
+    var clone = context.element.clone();
     var size = {
       dropdown: {
         width: dropdown.width(),
@@ -235,10 +236,19 @@ SelectBox.prototype = {
       }
     };
 
-    var width = Math.max(
-      realWidth - size.dropdown.outerWidth + size.dropdown.width,
-      adaptiveWidth - size.dropdown.outerWidth + size.dropdown.width
-    );
+    clone.css({
+      'position': 'absolute',
+      'visibility': 'hidden',
+      'width': 'auto',
+      'top': '-100%',
+      'left': '-100%'
+    });
+
+    clone.appendTo(document.body);
+
+    var width = clone.outerWidth() - size.dropdown.outerWidth + size.dropdown.width;
+
+    clone.remove();
 
     width = Math.max(width, context.options.dropdownWidth || 0);
 
@@ -257,8 +267,7 @@ SelectBox.prototype = {
     if (context.opened) {
       var selectbox = context.selectbox;
       var dropdown = context.dropdown;
-      var scrollTop = win.scrollTop();
-      var offset = selectbox.offset();
+      var offset = selectbox[0].getBoundingClientRect();
 
       var size = {
         window: { height: win.height() },
@@ -266,9 +275,7 @@ SelectBox.prototype = {
         dropdown: { outerHeight: dropdown.outerHeight() }
       };
 
-      var top = offset.top - scrollTop;
-      var bottom = size.window.height - top - size.selectbox.outerHeight;
-      var position = top > bottom ? 'top' : 'bottom';
+      var position = offset.top > win.height() - offset.bottom ? 'top' : 'bottom';
 
       dropdown
         .removeClass('ui-beauty-select-dropdown-' + (position === 'top' ? 'bottom' : 'top'))
