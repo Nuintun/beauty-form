@@ -461,7 +461,16 @@ SelectBox.prototype = {
     return context.__refreshSelectbox();
   },
   select: function (index){
-    this.element[0].selectedIndex = index;
+    var context = this;
+    var element = context.element[0];
+    var oldIndex = element.selectedIndex;
+
+    index = index >>> 0;
+    element.selectedIndex = index;
+
+    if (oldIndex !== index) {
+      context.element.trigger('change');
+    }
 
     return this.__renderTitlebox();
   },
