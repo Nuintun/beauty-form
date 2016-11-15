@@ -62,8 +62,7 @@ define("jquery", [], function(require, exports, module){
 
   var support = {};
 
-  var
-    version = "1.12.4",
+  var version = "1.12.4",
 
   // Define a local copy of jQuery
     jQuery = function (selector, context){

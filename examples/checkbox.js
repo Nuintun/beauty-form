@@ -15,11 +15,11 @@ require('./css/checkbox.css.js');
 var $ = require('jquery');
 var Choice = require('./choice');
 
-$.fn.checkbox = function (method){
+$.fn.checkbox = function(method) {
   var elements = this;
   var args = [].slice.call(arguments, 1);
 
-  return elements.each(function (){
+  return elements.each(function() {
     var choice = Choice.get(this);
 
     if (!choice) {

@@ -22,8 +22,8 @@ var doc = $(document);
  * radio
  * @param element
  */
-function radio(element){
-  doc.find('input[type=radio][name=' + element.name + ']').each(function (){
+function radio(element) {
+  doc.find('input[type=radio][name=' + element.name + ']').each(function() {
     var choice = Choice.get(this);
 
     if (choice && element !== this) {
@@ -37,7 +37,7 @@ function radio(element){
  * @param element
  * @constructor
  */
-function Choice(element){
+function Choice(element) {
   var context = this;
 
   context.destroyed = false;
@@ -63,7 +63,7 @@ function Choice(element){
  * @param element
  * @returns {*}
  */
-Choice.get = function (element){
+Choice.get = function(element) {
   element = $(element);
 
   return element.data('beauty-choice');
@@ -85,7 +85,7 @@ Choice.get = function (element){
  * }}
  */
 Choice.prototype = {
-  __init: function (){
+  __init: function() {
     var type = this.type;
 
     if (!reference[type]) {
@@ -94,7 +94,7 @@ Choice.prototype = {
       var namespace = '.beauty-' + type;
       var selector = 'input[type=' + type + ']';
 
-      doc.on('change' + namespace, selector, function (){
+      doc.on('change' + namespace, selector, function() {
         var choice = Choice.get(this);
 
         if (choice) {
@@ -106,13 +106,13 @@ Choice.prototype = {
         }
       });
 
-      doc.on('focusin' + namespace, selector, function (){
+      doc.on('focusin' + namespace, selector, function() {
         var choice = Choice.get(this);
 
         choice && choice.refresh();
       });
 
-      doc.on('focusout' + namespace, selector, function (){
+      doc.on('focusout' + namespace, selector, function() {
         var choice = Choice.get(this);
 
         choice && choice.refresh();
@@ -121,7 +121,7 @@ Choice.prototype = {
 
     return this.__beauty();
   },
-  __beauty: function (){
+  __beauty: function() {
     var context = this;
     var element = context.element;
 
@@ -138,17 +138,17 @@ Choice.prototype = {
 
     return context.refresh();
   },
-  focus: function (){
+  focus: function() {
     this.element.trigger('focus');
 
     return this;
   },
-  blur: function (){
+  blur: function() {
     this.element.trigger('blur');
 
     return this;
   },
-  check: function (){
+  check: function() {
     var context = this;
     var type = context.type;
     var element = context.element[0];
@@ -161,7 +161,7 @@ Choice.prototype = {
 
     return context.refresh();
   },
-  uncheck: function (){
+  uncheck: function() {
     var context = this;
     var type = context.type;
     var element = context.element[0];
@@ -174,17 +174,17 @@ Choice.prototype = {
 
     return context.refresh();
   },
-  enable: function (){
+  enable: function() {
     this.element[0].disabled = false;
 
     return this.refresh();
   },
-  disable: function (){
+  disable: function() {
     this.element[0].disabled = true;
 
     return this.refresh();
   },
-  refresh: function (){
+  refresh: function() {
     var context = this;
     var element = context.element[0];
 
@@ -195,7 +195,7 @@ Choice.prototype = {
 
     return context;
   },
-  destroy: function (){
+  destroy: function() {
     var context = this;
 
     if (context.destroyed) return;

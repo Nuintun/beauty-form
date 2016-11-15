@@ -15,11 +15,11 @@ require('./css/radiobox.css.js');
 var $ = require('jquery');
 var Choice = require('./choice');
 
-$.fn.radiobox = function (method){
+$.fn.radiobox = function(method) {
   var elements = this;
   var args = [].slice.call(arguments, 1);
 
-  return elements.each(function (){
+  return elements.each(function() {
     var choice = Choice.get(this);
 
     if (!choice) {

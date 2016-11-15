@@ -33,7 +33,7 @@ var VIEWPORT = {
  * @param template
  * @returns {string}
  */
-function compile(context, template){
+function compile(context, template) {
   var args = [].slice.call(arguments, 2);
   var html = template.apply(context, args);
 
@@ -44,7 +44,7 @@ function compile(context, template){
   }
 }
 
-function SelectBox(element, options){
+function SelectBox(element, options) {
   var context = this;
 
   context.type = 'select';
@@ -57,23 +57,23 @@ function SelectBox(element, options){
   }
 
   options = $.extend({
-    title: function (element, text){
-      return '<i class="ui-beauty-select-align-middle"></i>'
-        + '<span class="ui-beauty-select-title" title="' + text + '">'
-        + text + '</span><i class="ui-beauty-select-icon"></i>';
+    title: function(element, text) {
+      return '<i class="ui-beauty-select-align-middle"></i>' +
+        '<span class="ui-beauty-select-title" title="' + text + '">' +
+        text + '</span><i class="ui-beauty-select-icon"></i>';
     },
-    dropdown: function (element, options){
+    dropdown: function(element, options) {
       return '<dl class="ui-beauty-select-dropdown-items">' + options + '</dl>';
     },
-    optgroup: function (element, label){
+    optgroup: function(element, label) {
       return '<dt class="ui-beauty-select-optgroup" title="' + label + '">' + label + '</dt>';
     },
-    option: function (element, option){
-      return '<dd class="ui-beauty-select-option'
-        + (option.group ? ' ui-beauty-select-optgroup-option' : '')
-        + (option.className ? ' ' + option.className : '') + '" '
-        + option.indexAttr + '="' + option.index + '" title="'
-        + option.text + '">' + option.text + '</dd>';
+    option: function(element, option) {
+      return '<dd class="ui-beauty-select-option' +
+        (option.group ? ' ui-beauty-select-optgroup-option' : '') +
+        (option.className ? ' ' + option.className : '') + '" ' +
+        option.indexAttr + '="' + option.index + '" title="' +
+        option.text + '">' + option.text + '</dd>';
     },
     dropdownWidth: null,
     optionIndexAttr: 'data-option',
@@ -81,7 +81,7 @@ function SelectBox(element, options){
     optionDisabledClass: 'ui-beauty-select-option-disabled'
   }, options);
 
-  $.each(['title', 'dropdown', 'optgroup', 'option'], function (index, prop){
+  $.each(['title', 'dropdown', 'optgroup', 'option'], function(index, prop) {
     if ($.type(options[prop]) !== 'function') {
       throw new TypeError('Options.' + prop + ' must be a function.');
     }
@@ -97,14 +97,14 @@ function SelectBox(element, options){
  * @param element
  * @returns {*}
  */
-SelectBox.get = function (element){
+SelectBox.get = function(element) {
   element = $(element);
 
   return element.data('beauty-select');
 };
 
 SelectBox.prototype = {
-  __init: function (){
+  __init: function() {
     var context = this;
     var type = context.type;
     var options = context.options;
@@ -115,7 +115,7 @@ SelectBox.prototype = {
     if (!reference) {
       var selector = 'select';
 
-      doc.on('change' + namespace, selector, function (){
+      doc.on('change' + namespace, selector, function() {
         var selectbox = SelectBox.get(this);
 
         if (selectbox) {
@@ -124,13 +124,13 @@ SelectBox.prototype = {
         }
       });
 
-      doc.on('focusin' + namespace + ' focusout' + namespace, selector, function (){
+      doc.on('focusin' + namespace + ' focusout' + namespace, selector, function() {
         var selectbox = SelectBox.get(this);
 
         selectbox && selectbox.__refreshSelectbox();
       });
 
-      doc.on('mousedown' + namespace, function (e){
+      doc.on('mousedown' + namespace, function(e) {
         var target = e.target;
         var selectbox = actived.selectbox[0];
 
@@ -140,20 +140,20 @@ SelectBox.prototype = {
         }
       });
 
-      doc.on('keydown' + namespace, function (e){
+      doc.on('keydown' + namespace, function(e) {
         if (e.which === 9 || e.which === 27) {
           actived.opened && actived.close();
           actived.__refreshSelectbox();
         }
       });
 
-      win.on('resize' + namespace, function (){
+      win.on('resize' + namespace, function() {
         clearTimeout(timer);
 
         VIEWPORT.width = win.width();
         VIEWPORT.height = win.height();
 
-        timer = setTimeout(function (){
+        timer = setTimeout(function() {
           actived.opened && actived.__position();
         }, 0);
       });
@@ -161,7 +161,7 @@ SelectBox.prototype = {
 
     context.__beauty();
 
-    context.element.on('keypress' + namespace, function (e){
+    context.element.on('keypress' + namespace, function(e) {
       if (e.which === 13) {
         e.preventDefault();
 
@@ -173,7 +173,7 @@ SelectBox.prototype = {
       }
     });
 
-    context.selectbox.on('mousedown' + namespace, function (e){
+    context.selectbox.on('mousedown' + namespace, function(e) {
       var select = context.element;
 
       if (select[0].disabled) return;
@@ -194,7 +194,7 @@ SelectBox.prototype = {
       }
     });
 
-    context.selectbox.on('click' + namespace, '[' + options.optionIndexAttr + ']', function (e){
+    context.selectbox.on('click' + namespace, '[' + options.optionIndexAttr + ']', function(e) {
       e.preventDefault();
 
       var option = $(this);
@@ -207,7 +207,7 @@ SelectBox.prototype = {
 
     return context;
   },
-  __sizeSelectbox: function (){
+  __sizeSelectbox: function() {
     var context = this;
     var element = context.element;
     var selectbox = context.selectbox;
@@ -219,7 +219,7 @@ SelectBox.prototype = {
 
     return context;
   },
-  __sizeDropdown: function (){
+  __sizeDropdown: function() {
     var context = this;
 
     if (!context.opened) {
@@ -250,8 +250,7 @@ SelectBox.prototype = {
 
     clone.remove();
 
-    width = Math.max(width, context.element.outerWidth())
-      - size.dropdown.outerWidth + size.dropdown.width;
+    width = Math.max(width, context.element.outerWidth()) - size.dropdown.outerWidth + size.dropdown.width;
     width = Math.max(width, context.options.dropdownWidth || 0);
 
     dropdown.width(width);
@@ -263,7 +262,7 @@ SelectBox.prototype = {
 
     return context;
   },
-  __position: function (){
+  __position: function() {
     var context = this;
 
     if (context.opened) {
@@ -290,7 +289,7 @@ SelectBox.prototype = {
 
     return context;
   },
-  __renderTitlebox: function (){
+  __renderTitlebox: function() {
     var context = this;
     var element = context.element[0];
     var selected = $(element.options[element.selectedIndex]);
@@ -304,23 +303,21 @@ SelectBox.prototype = {
 
     return context;
   },
-  __renderDropdown: function (){
+  __renderDropdown: function() {
     var index = 0;
     var dropdown = '';
     var context = this;
     var options = context.options;
     var selectedIndex = context.element[0].selectedIndex;
 
-    function option(element, group){
+    function option(element, group) {
       var selected = index === selectedIndex;
       var option = {
         group: group,
         index: index++,
         text: element.html(),
         indexAttr: options.optionIndexAttr,
-        className: element[0].disabled
-          ? options.optionDisabledClass
-          : ( selected ? options.optionSelectedClass : '')
+        className: element[0].disabled ? options.optionDisabledClass : (selected ? options.optionSelectedClass : '')
       };
 
       dropdown += compile(
@@ -331,7 +328,7 @@ SelectBox.prototype = {
       );
     }
 
-    function optgroup(element){
+    function optgroup(element) {
       dropdown += compile(
         context,
         options.optgroup,
@@ -342,7 +339,7 @@ SelectBox.prototype = {
 
     var items = context.element.children();
 
-    items.each(function (){
+    items.each(function() {
       var element = $(this);
 
       switch (this.nodeName.toLowerCase()) {
@@ -351,7 +348,7 @@ SelectBox.prototype = {
           break;
         case 'optgroup':
           optgroup(element);
-          element.children().each(function (){
+          element.children().each(function() {
             option($(this), element);
           });
           break;
@@ -367,16 +364,16 @@ SelectBox.prototype = {
 
     return context;
   },
-  __refreshSelectbox: function (){
+  __refreshSelectbox: function() {
     var context = this;
     var element = context.element[0];
     var selectbox = context.selectbox;
     var focused = util.activeElement();
 
-    focused = context.opened
-      || focused === element
-      || focused === selectbox[0]
-      || $.contains(selectbox[0], focused);
+    focused = context.opened ||
+      focused === element ||
+      focused === selectbox[0] ||
+      $.contains(selectbox[0], focused);
 
     selectbox
       .toggleClass('ui-beauty-select-disabled', element.disabled)
@@ -384,7 +381,7 @@ SelectBox.prototype = {
 
     return context;
   },
-  __refreshSelected: function (){
+  __refreshSelected: function() {
     var context = this;
     var options = context.options;
     var dropdown = context.dropdown;
@@ -404,7 +401,7 @@ SelectBox.prototype = {
 
     return context;
   },
-  __beauty: function (){
+  __beauty: function() {
     var context = this;
     var element = context.element;
 
@@ -429,27 +426,27 @@ SelectBox.prototype = {
 
     return context.refresh();
   },
-  focus: function (){
+  focus: function() {
     this.element.trigger('focus');
 
     return this;
   },
-  blur: function (){
+  blur: function() {
     this.element.trigger('blur');
 
     return this;
   },
-  enable: function (){
+  enable: function() {
     this.element[0].disabled = false;
 
     return this.__refreshSelectbox();
   },
-  disable: function (){
+  disable: function() {
     this.element[0].disabled = true;
 
     return this.__refreshSelectbox();
   },
-  refresh: function (){
+  refresh: function() {
     var context = this;
 
     context.__sizeSelectbox();
@@ -459,7 +456,7 @@ SelectBox.prototype = {
 
     return context.__refreshSelectbox();
   },
-  select: function (index){
+  select: function(index) {
     var context = this;
     var element = context.element[0];
     var oldIndex = element.selectedIndex;
@@ -473,7 +470,7 @@ SelectBox.prototype = {
 
     return this.__renderTitlebox();
   },
-  open: function (){
+  open: function() {
     var context = this;
 
     if (context.opened) return context;
@@ -494,7 +491,7 @@ SelectBox.prototype = {
 
     return context;
   },
-  close: function (){
+  close: function() {
     var context = this;
 
     if (context.opened) {
@@ -506,7 +503,7 @@ SelectBox.prototype = {
 
     return context;
   },
-  destroy: function (){
+  destroy: function() {
     var context = this;
 
     if (!context.destroyed) {
@@ -537,14 +534,14 @@ SelectBox.prototype = {
   }
 };
 
-$.fn.selectbox = function (){
+$.fn.selectbox = function() {
   var elements = this;
   var method, options;
   var args = [].slice.call(arguments, 1);
 
   method = options = arguments[0];
 
-  return elements.each(function (){
+  return elements.each(function() {
     var select = SelectBox.get(this);
 
     if (!select) {
