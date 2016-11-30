@@ -23,6 +23,9 @@ $.fn.checkbox = function(method) {
 
     if (!choice) {
       choice = new Choice(this);
+
+      // WAI-ARIA
+      choice.choice.attr('role', 'checkbox');
     }
 
     if (method) {

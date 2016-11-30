@@ -69,7 +69,7 @@ function SelectBox(element, options) {
       return '<dt class="ui-beauty-select-optgroup" title="' + label + '">' + label + '</dt>';
     },
     option: function(element, option) {
-      return '<dd class="ui-beauty-select-option' +
+      return '<dd role="option" class="ui-beauty-select-option' +
         (option.group ? ' ui-beauty-select-optgroup-option' : '') +
         (option.className ? ' ' + option.className : '') + '" ' +
         option.indexAttr + '="' + option.index + '" title="' +
@@ -408,10 +408,10 @@ SelectBox.prototype = {
     if (!SelectBox.get(element)) {
       element.addClass('ui-beauty-select-hidden');
 
-      var selectbox = $('<div tabindex="-1" class="ui-beauty-select"/>');
+      var selectbox = $('<div role="combobox" tabindex="-1" class="ui-beauty-select"/>');
 
       context.titlebox = $('<div class="ui-beauty-select-titlebox"/>');
-      context.dropdown = $('<div class="ui-beauty-select-dropdown"/>');
+      context.dropdown = $('<div role="listbox" class="ui-beauty-select-dropdown"/>');
 
       selectbox
         .append(context.titlebox)

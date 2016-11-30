@@ -23,6 +23,9 @@ $.fn.radiobox = function(method) {
 
     if (!choice) {
       choice = new Choice(this);
+
+      // WAI-ARIA
+      choice.choice.attr('role', 'radio');
     }
 
     if (method) {
