@@ -58,9 +58,9 @@ function SelectBox(element, options) {
 
   options = $.extend({
     title: function(element, text) {
-      return '<i class="ui-beauty-select-align-middle"></i>' +
-        '<span class="ui-beauty-select-title" title="' + text + '">' +
-        text + '</span><i class="ui-beauty-select-icon"></i>';
+      return '<i class="ui-beauty-select-align-middle"></i>'
+        + '<span class="ui-beauty-select-title" title="' + text + '">'
+        + text + '</span><i class="ui-beauty-select-icon"></i>';
     },
     dropdown: function(element, options) {
       return '<dl class="ui-beauty-select-dropdown-items">' + options + '</dl>';
@@ -69,11 +69,11 @@ function SelectBox(element, options) {
       return '<dt class="ui-beauty-select-optgroup" title="' + label + '">' + label + '</dt>';
     },
     option: function(element, option) {
-      return '<dd role="option" class="ui-beauty-select-option' +
-        (option.group ? ' ui-beauty-select-optgroup-option' : '') +
-        (option.className ? ' ' + option.className : '') + '" ' +
-        option.indexAttr + '="' + option.index + '" title="' +
-        option.text + '">' + option.text + '</dd>';
+      return '<dd role="option" class="ui-beauty-select-option'
+        + (option.group ? ' ui-beauty-select-optgroup-option' : '')
+        + (option.className ? ' ' + option.className : '') + '" '
+        + option.indexAttr + '="' + option.index + '" title="'
+        + option.text + '">' + option.text + '</dd>';
     },
     dropdownWidth: null,
     optionIndexAttr: 'data-option',
@@ -370,10 +370,10 @@ SelectBox.prototype = {
     var selectbox = context.selectbox;
     var focused = util.activeElement();
 
-    focused = context.opened ||
-      focused === element ||
-      focused === selectbox[0] ||
-      $.contains(selectbox[0], focused);
+    focused = context.opened
+      || focused === element
+      || focused === selectbox[0]
+      || $.contains(selectbox[0], focused);
 
     selectbox
       .toggleClass('ui-beauty-select-disabled', element.disabled)

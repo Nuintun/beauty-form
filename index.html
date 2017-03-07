@@ -6,30 +6,41 @@
     <script type="text/javascript" src="./examples/sea.js"></script>
     <style type="text/css">
       body {
-        margin: 0; padding: 0;
+        margin: 0;
+        padding: 0;
         text-align: center;
       }
+
       div {
-        margin: 16px 0 0; padding: 0;
+        margin: 16px 0 0;
+        padding: 0;
       }
+
       select {
         vertical-align: middle;
-        margin: 0; padding: 6px;
+        margin: 0;
+        padding: 6px;
       }
+
       input[type=radio],
       input[type=checkbox] {
         vertical-align: middle;
-        margin: 0; padding: 0;
-        width: 16px; height: 16px;
+        margin: 0;
+        padding: 0;
+        width: 16px;
+        height: 16px;
       }
+
       label {
         font-size: 14px;
         line-height: 16px;
       }
+
       .ui-beauty-select,
       .ui-beauty-choice {
         vertical-align: middle;
       }
+
       select + label,
       input + label,
       .ui-beauty-select + label,
@@ -38,16 +49,21 @@
         -ms-user-select: none;
         -moz-user-select: none;
         -webkit-user-select: none;
-        vertical-align: middle; margin-left: 3px;
+        vertical-align: middle;
+        margin-left: 3px;
       }
+
       [disabled] + label,
       .ui-beauty-select-disabled + label,
       .ui-beauty-choice-disabled + label {
-        color: #e6e6e6; cursor: not-allowed;
+        color: #e6e6e6;
+        cursor: not-allowed;
       }
+
       .ui-button {
         display: inline-block;
-        *display: inline; *zoom: 1;
+        *display: inline;
+        *zoom: 1;
         padding: 6px 12px;
         margin-bottom: 0;
         font-size: 14px;
@@ -65,26 +81,29 @@
         background-image: none;
         border: 1px solid transparent;
       }
+
       .ui-button-success {
         color: #fff;
         background-color: #5cb85c;
         border-color: #4cae4c;
       }
+
       body > button {
         margin-top: 88px;
       }
+
     </style>
   </head>
   <body>
     <button id="button" class="ui-button ui-button-success">（启用 / 取消）表单美化</button>
     <div>
-      <input id="checkbox-1" type="checkbox"/><label for="checkbox-1">复选美化</label>
+      <input id="checkbox-1" type="checkbox" /><label for="checkbox-1">复选美化</label>
       <input id="checkbox-2" type="checkbox" checked/><label for="checkbox-2">复选美化</label>
       <input id="checkbox-3" type="checkbox" disabled/><label for="checkbox-3">复选美化</label>
       <input id="checkbox-4" type="checkbox" disabled checked/><label for="checkbox-4">复选美化</label>
     </div>
     <div>
-      <input id="radio-1" type="radio" name="radio"/><label for="radio-1">单选美化</label>
+      <input id="radio-1" type="radio" name="radio" /><label for="radio-1">单选美化</label>
       <input id="radio-2" type="radio" name="radio" checked/><label for="radio-2">单选美化</label>
       <input id="radio-3" type="radio" name="radio-disabled" disabled/><label for="radio-3">单选美化</label>
       <input id="radio-4" type="radio" name="radio-disabled" disabled checked/><label for="radio-4">单选美化</label>
@@ -149,7 +168,7 @@
     </div>
     <script type="text/javascript">
       if (!console) {
-        console.log = function (){};
+        console.log = function() {};
       }
 
       seajs.config({
@@ -163,10 +182,10 @@
           './examples/radiobox',
           './examples/selectbox'
         ],
-        function ($){
+        function($) {
           var checkbox, radiobox, selectbox;
 
-          function beauty(){
+          function beauty() {
             if (checkbox) {
               checkbox = false;
 

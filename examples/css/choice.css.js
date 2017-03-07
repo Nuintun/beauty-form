@@ -1,5 +1,1 @@
-define("css/choice.css.js", ["import-style"], function(require, exports, module){
-var style = require("import-style");
-
-style.css(".ui-beauty-choice {\n  display: inline-block;\n  *display: inline; *zoom: 1;\n  width: 16px; height: 16px;\n  margin: 0; padding: 0;\n  font-size: 0; line-height: 0;\n  overflow: hidden;\n}\n.ui-beauty-choice > input {\n  width: 100%; height: 100%; outline: 0 none;\n  margin: 0; padding: 0; opacity: 0;\n  -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);\n  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);\n}\n:root .ui-beauty-choice > input {\n  -ms-filter: none; filter: none;\n}\n.ui-beauty-choice-disabled > input {\n  cursor: not-allowed;\n}\n");
-});
+define("css/choice.css.js",["import-style"],function(i,e,o){i("import-style").css(".ui-beauty-choice{display:inline-block;*display:inline;*zoom:1;width:16px;height:16px;margin:0;padding:0;font-size:0;line-height:0;overflow:hidden}.ui-beauty-choice>input{width:100%;height:100%;outline:0 none;margin:0;padding:0;opacity:0;-ms-filter:progid:DXImageTransform.Microsoft.Alpha(Opacity=0);filter:progid:DXImageTransform.Microsoft.Alpha(Opacity=0)}:root .ui-beauty-choice>input{-ms-filter:none;filter:none}.ui-beauty-choice-disabled>input{cursor:not-allowed}")});

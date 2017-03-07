@@ -6,7 +6,6 @@
 'use strict';
 
 // 开启 DEBUG 开关
-process.env.DEBUG_FD = '1';
 process.env.DEBUG_COLORS = 'true';
 process.env.DEBUG = 'gulp-css,gulp-cmd';
 
@@ -21,8 +20,8 @@ var extname = path.extname;
 var resolve = path.resolve;
 var gulp = require('gulp');
 var rimraf = require('del');
-var css = require('gulp-css');
-var cmd = require('gulp-cmd');
+var css = require('@nuintun/gulp-css');
+var cmd = require('@nuintun/gulp-cmd');
 var colors = cmd.colors;
 var pedding = require('pedding');
 var cssnano = require('cssnano');
@@ -30,13 +29,13 @@ var uglify = require('uglify-js');
 var chokidar = require('chokidar');
 var concat = require('gulp-concat');
 var plumber = require('gulp-plumber');
-var switchStream = require('switch-stream');
+var switchStream = require('@nuintun/switch-stream');
 var bookmark = Date.now();
 var runtime = ['src/sea.js'];
 
 // compress javascript file
-function compress(){
-  return switchStream(function (vinyl){
+function compress() {
+  return switchStream(function(vinyl) {
     if (extname(vinyl.path) === '.js') {
       return 'js';
     }
@@ -45,7 +44,7 @@ function compress(){
       return 'css';
     }
   }, {
-    js: switchStream.through(function (vinyl, encoding, next){
+    js: switchStream.through(function(vinyl, encoding, next) {
       try {
         var result = uglify.minify(vinyl.contents.toString(), { fromString: true });
         vinyl.contents = new Buffer(result.code);
@@ -56,7 +55,7 @@ function compress(){
       this.push(vinyl);
       next();
     }),
-    css: switchStream.through(function (vinyl, encoding, next){
+    css: switchStream.through(function(vinyl, encoding, next) {
       var context = this;
 
       cssnano.process(vinyl.contents.toString(), {
@@ -66,7 +65,7 @@ function compress(){
           cascade: false,
           remove: false
         }
-      }).then(function (result){
+      }).then(function(result) {
         vinyl.contents = new Buffer(result.css);
 
         context.push(vinyl);
@@ -78,7 +77,7 @@ function compress(){
 
 // rewrite cmd plugins
 var CMDPLUGINS = {
-  css: function (vinyl, options, next){
+  css: function(vinyl, options, next) {
     var context = this;
 
     cssnano.process(vinyl.contents.toString(), {
@@ -88,10 +87,10 @@ var CMDPLUGINS = {
         cascade: false,
         remove: false
       }
-    }).then(function (result){
+    }).then(function(result) {
       vinyl.contents = new Buffer(result.css);
 
-      cmd.defaults.plugins.css.exec(vinyl, options, function (vinyl){
+      cmd.defaults.plugins.css.exec(vinyl, options, function(vinyl) {
         try {
           var result = uglify.minify(vinyl.contents.toString(), { fromString: true });
           vinyl.contents = new Buffer(result.code);
@@ -106,11 +105,11 @@ var CMDPLUGINS = {
   }
 };
 
-['js', 'json', 'tpl', 'html'].forEach(function (name){
-  CMDPLUGINS[name] = function (vinyl, options, next){
+['js', 'json', 'tpl', 'html'].forEach(function(name) {
+  CMDPLUGINS[name] = function(vinyl, options, next) {
     var context = this;
     // transform
-    cmd.defaults.plugins[name].exec(vinyl, options, function (vinyl){
+    cmd.defaults.plugins[name].exec(vinyl, options, function(vinyl) {
       try {
         var result = uglify.minify(vinyl.contents.toString(), { fromString: true });
         vinyl.contents = new Buffer(result.code);
@@ -126,7 +125,7 @@ var CMDPLUGINS = {
 
 // rewrite css plugins
 var CSSPLUGINS = {
-  css: function (vinyl, options, next){
+  css: function(vinyl, options, next) {
     var context = this;
 
     cssnano.process(vinyl.contents.toString(), {
@@ -136,10 +135,10 @@ var CSSPLUGINS = {
         cascade: false,
         remove: false
       }
-    }).then(function (result){
+    }).then(function(result) {
       vinyl.contents = new Buffer(result.css);
 
-      css.defaults.plugins.css.exec(vinyl, options, function (vinyl){
+      css.defaults.plugins.css.exec(vinyl, options, function(vinyl) {
         context.push(vinyl);
         next();
       });
@@ -148,7 +147,7 @@ var CSSPLUGINS = {
 };
 
 // file watch
-function watch(glob, options, callabck){
+function watch(glob, options, callabck) {
   if (typeof options === 'function') {
     callabck = options;
     options = {};
@@ -164,7 +163,7 @@ function watch(glob, options, callabck){
 
   // bing event
   if (callabck) {
-    watcher.on('all', function (event, path){
+    watcher.on('all', function(event, path) {
       if (path && !/___jb_tmp___$/.test(path)) {
         callabck.apply(this, arguments);
       }
@@ -175,14 +174,14 @@ function watch(glob, options, callabck){
   return watcher;
 }
 
-function getAlias(){
+function getAlias() {
   delete require.cache[require.resolve('./alias.json')];
 
   return require('./alias.json');
 }
 
 // css resource path
-function onpath(path, property, file, wwwroot){
+function onpath(path, property, file, wwwroot) {
   if (/^[^./\\]/.test(path)) {
     path = './' + path;
   }
@@ -200,7 +199,7 @@ function onpath(path, property, file, wwwroot){
 }
 
 // date format
-function dateFormat(date, format){
+function dateFormat(date, format) {
   // 参数错误
   if (!date instanceof Date) {
     throw new TypeError('Param date must be a Date');
@@ -218,7 +217,7 @@ function dateFormat(date, format){
     'S': date.getMilliseconds() //毫秒
   };
 
-  format = format.replace(/([yMdhmsqS])+/g, function (all, t){
+  format = format.replace(/([yMdhmsqS])+/g, function(all, t) {
     var v = map[t];
 
     if (v !== undefined) {
@@ -239,14 +238,14 @@ function dateFormat(date, format){
 }
 
 // clean task
-gulp.task('clean', function (){
+gulp.task('clean', function() {
   bookmark = Date.now();
 
   rimraf.sync(['examples']);
 });
 
 // runtime task
-gulp.task('runtime', ['clean'], function (){
+gulp.task('runtime', ['clean'], function() {
   // loader file
   gulp.src(runtime, { base: 'src', nodir: true })
     .pipe(plumber())
@@ -255,7 +254,7 @@ gulp.task('runtime', ['clean'], function (){
 });
 
 // runtime task
-gulp.task('runtime-product', ['clean'], function (){
+gulp.task('runtime-product', ['clean'], function() {
   // loader file
   gulp.src(runtime, { base: 'src', nodir: true })
     .pipe(plumber())
@@ -265,9 +264,9 @@ gulp.task('runtime-product', ['clean'], function (){
 });
 
 // develop task
-gulp.task('default', ['runtime'], function (){
+gulp.task('default', ['runtime'], function() {
   // complete callback
-  var complete = pedding(1, function (){
+  var complete = pedding(1, function() {
     var now = new Date();
 
     console.log(
@@ -294,11 +293,11 @@ gulp.task('default', ['runtime'], function (){
 });
 
 // develop watch task
-gulp.task('watch', ['default'], function (){
+gulp.task('watch', ['default'], function() {
   var base = join(process.cwd(), 'src');
 
   // debug watcher
-  function debugWatcher(event, path){
+  function debugWatcher(event, path) {
     var now = new Date();
 
     console.log(
@@ -311,7 +310,7 @@ gulp.task('watch', ['default'], function (){
   }
 
   // complete callback
-  function complete(){
+  function complete() {
     var now = new Date();
 
     console.log(
@@ -326,7 +325,7 @@ gulp.task('watch', ['default'], function (){
   watch([
     'src/**/*',
     '!src/sea.js'
-  ], function (event, path){
+  ], function(event, path) {
     var rpath = relative(join(base, ''), path);
 
     bookmark = Date.now();
@@ -353,9 +352,9 @@ gulp.task('watch', ['default'], function (){
 });
 
 // product task
-gulp.task('product', ['runtime-product'], function (){
+gulp.task('product', ['runtime-product'], function() {
   // complete callback
-  var complete = pedding(1, function (){
+  var complete = pedding(1, function() {
     var now = new Date();
 
     console.log(
@@ -376,9 +375,7 @@ gulp.task('product', ['runtime-product'], function (){
       alias: getAlias(),
       ignore: ['jquery'],
       plugins: CMDPLUGINS,
-      include: function (id){
-        return id && id.indexOf('toast') === 0 ? 'all' : 'self';
-      },
+      include: 'self',
       css: {
         onpath: onpath
       }

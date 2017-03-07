@@ -143,9 +143,9 @@
       return path.substring(0, last);
     }
 
-    return (path.substring(last - 2) === ".js" ||
-      path.indexOf("?") > 0 ||
-      lastC === 47 /* "/" */ ) ? path : path + ".js";
+    return (path.substring(last - 2) === ".js"
+      || path.indexOf("?") > 0
+      || lastC === 47 /* "/" */ ) ? path : path + ".js";
   }
 
   var PATHS_RE = /^([^/:]+)(\/.+)$/;
@@ -187,9 +187,9 @@
       for (var i = 0, len = map.length; i < len; i++) {
         var rule = map[i];
 
-        ret = isFunction(rule) ?
-          (rule(uri) || uri) :
-          uri.replace(rule[0], rule[1]);
+        ret = isFunction(rule)
+          ? (rule(uri) || uri)
+          : uri.replace(rule[0], rule[1]);
 
         // Only apply the first matched rule
         if (ret !== uri) break;
@@ -331,12 +331,14 @@
     var doc = document;
     var scripts = doc.scripts;
     // Recommend to add `seajsnode` id for the `sea.js` script element
-    var loaderScript = doc.getElementById("seajsnode") ||
-      scripts[scripts.length - 1];
+    var loaderScript = doc.getElementById("seajsnode")
+      || scripts[scripts.length - 1];
 
     function getScriptAbsoluteSrc(node) {
-      return node.hasAttribute ? // non-IE6/7
-        node.src :
+      return node.hasAttribute
+        ? // non-IE6/7
+        node.src
+        :
         // see http://msdn.microsoft.com/en-us/library/ms536429(VS.85).aspx
         node.getAttribute("src", 4);
     }
@@ -394,9 +396,9 @@
       currentlyAddingScript = node;
 
       // ref: #185 & http://dev.jquery.com/ticket/2709
-      baseElement ?
-        head.insertBefore(node, baseElement) :
-        head.appendChild(node);
+      baseElement
+        ? head.insertBefore(node, baseElement)
+        : head.appendChild(node);
 
       currentlyAddingScript = null;
     }
@@ -646,9 +648,9 @@
     // Exec factory
     var factory = mod.factory;
 
-    var exports = isFunction(factory) ?
-      factory.call(mod.exports = {}, require, mod.exports, mod) :
-      factory;
+    var exports = isFunction(factory)
+      ? factory.call(mod.exports = {}, require, mod.exports, mod)
+      : factory;
 
     if (exports === undefined) {
       exports = mod.exports;
@@ -706,9 +708,9 @@
     });
 
     if (!emitData.requested) {
-      requestCache ?
-        requestCache[emitData.requestUri] = sendRequest :
-        sendRequest();
+      requestCache
+        ? requestCache[emitData.requestUri] = sendRequest
+        : sendRequest();
     }
 
     function sendRequest() {
@@ -799,7 +801,8 @@
     // Emit `define` event, used in nocache plugin, seajs node version etc
     emit("define", meta);
 
-    meta.uri ? Module.save(meta.uri, meta) :
+    meta.uri ? Module.save(meta.uri, meta)
+      :
       // Save information for "saving" work in the script onload event
       anonymousMeta = meta;
   };
