@@ -1,5 +1,4 @@
-beauty-form
-=========
+# beauty-form
 
 >Beautify the web forms
 >
