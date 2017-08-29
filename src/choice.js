@@ -1,24 +1,20 @@
 /*!
  * choice
- * Date: 2015/6/7
+ * Date: 2015/06/07
  * https://github.com/nuintun/beauty-form
  *
  * This is licensed under the MIT License (MIT).
  * For details, see: https://github.com/nuintun/beauty-form/blob/master/LICENSE
  */
 
-'use strict';
-
-require('./css/choice.css');
-
-var $ = require('jquery');
-var util = require('./util');
+import $ from 'jquery';
+import { doc, activeElement } from './util';
 
 var reference = {};
-var doc = $(document);
 
 /**
  * radio
+ *
  * @param element
  */
 function radio(element) {
@@ -33,10 +29,11 @@ function radio(element) {
 
 /**
  * Choice
+ *
  * @param element
  * @constructor
  */
-function Choice(element) {
+export default function Choice(element) {
   var context = this;
 
   context.destroyed = false;
@@ -59,6 +56,7 @@ function Choice(element) {
 
 /**
  * get
+ *
  * @param element
  * @returns {*}
  */
@@ -70,6 +68,7 @@ Choice.get = function(element) {
 
 /**
  * Choice.prototype
+ *
  * @type {{
  *   init: Choice.init,
  *   focus: Choice.focus,
@@ -132,6 +131,8 @@ Choice.prototype = {
       reference[type]++;
       context.choice = element.parent();
 
+      context.choice.attr('role', choice.type);
+
       element.data('beauty-choice', context);
     }
 
@@ -190,7 +191,7 @@ Choice.prototype = {
     context.choice
       .toggleClass('ui-beauty-choice-checked', element.checked)
       .toggleClass('ui-beauty-choice-disabled', element.disabled)
-      .toggleClass('ui-beauty-choice-focus', util.activeElement() === element);
+      .toggleClass('ui-beauty-choice-focus', activeElement() === element);
 
     return context;
   },
@@ -218,6 +219,3 @@ Choice.prototype = {
     context.destroyed = true;
   }
 };
-
-// 公开接口
-module.exports = Choice;

@@ -1,25 +1,19 @@
 /*!
  * selectbox
- * Date: 2015/6/12
+ * Date: 2015/06/12
  * https://github.com/nuintun/beauty-form
  *
  * This is licensed under the MIT License (MIT).
  * For details, see: https://github.com/nuintun/beauty-form/blob/master/LICENSE
  */
 
-'use strict';
-
-require('./css/selectbox.css');
-
-var $ = require('jquery');
-var util = require('./util');
-var scrollIntoViewIfNeeded = require('./scrollintoviewifneeded');
+import $ from 'jquery';
+import { win, doc, activeElement } from './util';
+import scrollIntoViewIfNeeded from './scrollintoviewifneeded';
 
 var timer;
 var reference = 0;
 var actived = null;
-var win = $(window);
-var doc = $(document);
 
 // viewport size
 var VIEWPORT = {
@@ -29,6 +23,7 @@ var VIEWPORT = {
 
 /**
  * compile
+ *
  * @param context
  * @param template
  * @returns {string}
@@ -44,7 +39,7 @@ function compile(context, template) {
   }
 }
 
-function SelectBox(element, options) {
+export default function SelectBox(element, options) {
   var context = this;
 
   context.type = 'select';
@@ -94,6 +89,7 @@ function SelectBox(element, options) {
 
 /**
  * get
+ *
  * @param element
  * @returns {*}
  */
@@ -368,7 +364,7 @@ SelectBox.prototype = {
     var context = this;
     var element = context.element[0];
     var selectbox = context.selectbox;
-    var focused = util.activeElement();
+    var focused = activeElement();
 
     focused = context.opened
       || focused === element
@@ -533,25 +529,3 @@ SelectBox.prototype = {
     }
   }
 };
-
-$.fn.selectbox = function() {
-  var elements = this;
-  var method, options;
-  var args = [].slice.call(arguments, 1);
-
-  method = options = arguments[0];
-
-  return elements.each(function() {
-    var select = SelectBox.get(this);
-
-    if (!select) {
-      select = new SelectBox(this, options);
-    }
-
-    if ($.type(method) === 'string') {
-      select[method] && select[method].apply(select, args);
-    }
-  });
-};
-
-module.exports = $;

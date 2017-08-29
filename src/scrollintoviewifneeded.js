@@ -1,6 +1,6 @@
 /*!
  * scrollIntoViewIfNeeded
- * Date: 2016/7/15
+ * Date: 2016/07/15
  * https://github.com/nuintun/beauty-form
  * https://github.com/stipsan/scroll-into-view-if-needed
  *
@@ -8,18 +8,17 @@
  * For details, see: https://github.com/nuintun/beauty-form/blob/master/LICENSE
  */
 
-'use strict';
-
 // native
 var native = document.documentElement.scrollIntoViewIfNeeded;
 
 /**
  * scrollIntoViewIfNeeded
+ *
  * @param {HTMLElement} element
  * @param {Boolean} centerIfNeeded
  * @returns
  */
-module.exports = function(element, centerIfNeeded) {
+export default function scrollIntoViewIfNeeded(element, centerIfNeeded) {
   if (!element) {
     throw new Error('Element is required in scrollIntoViewIfNeeded');
   }
