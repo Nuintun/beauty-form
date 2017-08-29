@@ -1,1 +1,0 @@
-define("util",[],function(t,e,n){"use strict";n.exports={activeElement:function(){try{var t=document.activeElement,e=t.contentDocument;return e&&e.activeElement||t}catch(t){}}}});

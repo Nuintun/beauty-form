@@ -1,1 +1,0 @@
-define("checkbox",["./css/checkbox.css.js","jquery","./choice"],function(c,e,s){"use strict";c("./css/checkbox.css.js");var o=c("jquery"),t=c("./choice");o.fn.checkbox=function(c){var e=this,s=[].slice.call(arguments,1);return e.each(function(){var e=t.get(this);e||(e=new t(this),e.choice.attr("role","checkbox")),c&&e[c]&&e[c].apply(e,s)})},s.exports=o});

@@ -7,6 +7,8 @@
  * For details, see: https://github.com/nuintun/beauty-form/blob/master/LICENSE
  */
 
+import $ from 'jquery';
+
 export var win = $(window);
 export var doc = $(document);
 

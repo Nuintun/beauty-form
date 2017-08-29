@@ -1,1 +1,0 @@
-define("radiobox",["./css/radiobox.css.js","jquery","./choice"],function(c,i,o){"use strict";c("./css/radiobox.css.js");var s=c("jquery"),r=c("./choice");s.fn.radiobox=function(c){var i=this,o=[].slice.call(arguments,1);return i.each(function(){var i=r.get(this);i||(i=new r(this),i.choice.attr("role","radio")),c&&i[c]&&i[c].apply(i,o)})},o.exports=s});

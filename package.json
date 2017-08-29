@@ -24,6 +24,9 @@
   "dependencies": {
     "rollup": "^0.49.1",
     "uglify-es": "^3.0.28",
-    "rollup-plugin-postcss": "^0.5.4"
+    "cssnano": "^3.10.0",
+    "autoprefixer": "^7.1.3",
+    "fs-extra": "^4.0.1",
+    "rollup-plugin-css": "https://github.com/nuintun/rollup-plugin-css/archive/master.tar.gz"
   }
 }

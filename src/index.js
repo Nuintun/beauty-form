@@ -7,10 +7,12 @@
  * For details, see: https://github.com/nuintun/beauty-form/blob/master/LICENSE
  */
 
+import './css/choice.css';
 import './css/checkbox.css';
 import './css/radiobox.css';
 import './css/selectbox.css';
 
+import $ from 'jquery';
 import Choice from './choice';
 import SelectBox from './selectbox';
 
@@ -39,3 +41,5 @@ function create(Class) {
 $.fn.checkbox = create(Choice);
 $.fn.radiobox = create(Choice);
 $.fn.selectbox = create(SelectBox);
+
+export default $;

@@ -3,7 +3,6 @@
   <head>
     <meta charset="UTF-8">
     <title>Beauty Form</title>
-    <script type="text/javascript" src="./examples/sea.js"></script>
     <style type="text/css">
       body {
         margin: 0;
@@ -91,8 +90,10 @@
       body > button {
         margin-top: 88px;
       }
-
     </style>
+    <link rel="stylesheet" href="../dist/css/beauty-form.min.css" />
+    <script src="./jquery.js"></script>
+    <script src="../dist/beauty-form.min.js"></script>
   </head>
   <body>
     <button id="button" class="ui-button ui-button-success">（启用 / 取消）表单美化</button>
@@ -171,57 +172,43 @@
         console.log = function() {};
       }
 
-      seajs.config({
-        base: './examples'
-      });
+      var checkbox, radiobox, selectbox;
 
-      seajs.use(
-        [
-          './examples/jquery',
-          './examples/checkbox',
-          './examples/radiobox',
-          './examples/selectbox'
-        ],
-        function($) {
-          var checkbox, radiobox, selectbox;
+      function beauty() {
+        if (checkbox) {
+          checkbox = false;
 
-          function beauty() {
-            if (checkbox) {
-              checkbox = false;
+          $('input[type=checkbox]').checkbox('destroy');
+        } else {
+          checkbox = true;
 
-              $('input[type=checkbox]').checkbox('destroy');
-            } else {
-              checkbox = true;
-
-              $('input[type=checkbox]').checkbox();
-            }
-
-            if (radiobox) {
-              radiobox = false;
-
-              $('input[type=radio]').radiobox('destroy');
-            } else {
-              radiobox = true;
-
-              $('input[type=radio]').radiobox();
-            }
-
-            if (selectbox) {
-              selectbox = false;
-
-              $('select').selectbox('destroy');
-            } else {
-              selectbox = true;
-
-              $('select').selectbox();
-            }
-          }
-
-          beauty();
-
-          $('#button').on('click', beauty);
+          $('input[type=checkbox]').checkbox();
         }
-      );
+
+        if (radiobox) {
+          radiobox = false;
+
+          $('input[type=radio]').radiobox('destroy');
+        } else {
+          radiobox = true;
+
+          $('input[type=radio]').radiobox();
+        }
+
+        if (selectbox) {
+          selectbox = false;
+
+          $('select').selectbox('destroy');
+        } else {
+          selectbox = true;
+
+          $('select').selectbox();
+        }
+      }
+
+      beauty();
+
+      $('#button').on('click', beauty);
     </script>
   </body>
 </html>

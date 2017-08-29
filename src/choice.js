@@ -131,7 +131,7 @@ Choice.prototype = {
       reference[type]++;
       context.choice = element.parent();
 
-      context.choice.attr('role', choice.type);
+      context.choice.attr('role', context.choice.type);
 
       element.data('beauty-choice', context);
     }
