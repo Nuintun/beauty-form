@@ -38,7 +38,7 @@ export default function Choice(element) {
 
   context.destroyed = false;
   context.element = $(element);
-  context.type = context.element.attr('type');
+  context.type = element.type;
   context.type = context.type ? context.type.toLowerCase() : undefined;
 
   var choice = Choice.get(element);
@@ -93,13 +93,15 @@ Choice.prototype = {
       var namespace = '.beauty-' + type;
       var selector = 'input[type=' + type + ']';
 
-      doc.on('click' + namespace, selector, function() {
-        var choice = Choice.get(this);
+      if (type === 'checkbox') {
+        doc.on('click' + namespace, selector, function() {
+          var choice = Choice.get(this);
 
-        if (choice && type === 'checkbox') {
-          choice.refresh();
-        }
-      });
+          if (choice) {
+            choice.refresh();
+          }
+        });
+      }
 
       doc.on('change' + namespace, selector, function() {
         var choice = Choice.get(this);
@@ -231,7 +233,10 @@ Choice.prototype = {
     if (!reference[type]) {
       var namespace = '.beauty-' + type;
 
-      doc.off('click' + namespace);
+      if (context.type === 'checkbox') {
+        doc.off('click' + namespace);
+      }
+
       doc.off('change' + namespace);
       doc.off('focusin' + namespace);
       doc.off('focusout' + namespace);

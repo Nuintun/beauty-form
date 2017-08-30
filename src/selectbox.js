@@ -47,7 +47,7 @@ export default function SelectBox(element, options) {
   context.destroyed = false;
   context.element = $(element);
 
-  if (context.element.attr('multiple') !== undefined || context.element.attr('size') > 1) {
+  if (element.multiple || element.size > 1) {
     return context;
   }
 
