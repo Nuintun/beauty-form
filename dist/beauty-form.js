@@ -116,7 +116,8 @@
    */
   Choice.prototype = {
     __init: function() {
-      var type = this.type;
+      var context = this;
+      var type = context.type;
 
       if (!reference[type]) {
         reference[type] = 0;
@@ -157,7 +158,7 @@
         });
       }
 
-      return this.__beauty();
+      return context.__beauty();
     },
     __beauty: function() {
       var context = this;
