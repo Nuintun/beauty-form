@@ -22,15 +22,14 @@ function create(Class) {
 
     if (args.length > 1) {
       options = [].slice.call(args, 1);
-    } else {
-      options = method;
     }
 
     return this.each(function(index, element) {
       var instance = Class.get(element);
 
       if (!instance) {
-        instance = new Class(element, options);
+        // If not init, options = method
+        instance = new Class(element, method);
       } else if (instance[method]) {
         instance[method].apply(instance, options);
       }

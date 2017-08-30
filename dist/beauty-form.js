@@ -23,13 +23,13 @@
    */
   function activeElement() {
     try {
-      // try: ie8~9, iframe #26
+      // Try: ie8~9, iframe #26
       var activeElement = document.activeElement;
       var contentDocument = activeElement.contentDocument;
 
       return contentDocument && contentDocument.activeElement || activeElement;
     } catch (e) {
-      // do nothing
+      // Do nothing
     }
   }
 
@@ -277,7 +277,7 @@
       throw new Error('Element is required in scrollIntoViewIfNeeded');
     }
 
-    // use native
+    // Use native
     if (native) {
       return element.scrollIntoViewIfNeeded(centerIfNeeded);
     }
@@ -337,7 +337,7 @@
       var clientLeft = parent.offsetLeft + parent.clientLeft;
       var clientTop = parent.offsetTop + parent.clientTop;
 
-      // make area relative to parent's client area.
+      // Make area relative to parent's client area.
       area = area.relativeFromTo(element, parent).translate(-clientLeft, -clientTop);
 
       var scrollLeft = withinBounds(
@@ -355,13 +355,13 @@
       parent.scrollLeft = scrollLeft;
       parent.scrollTop = scrollTop;
 
-      // determine actual scroll amount by reading back scroll properties.
+      // Determine actual scroll amount by reading back scroll properties.
       area = area.translate(
         clientLeft - parent.scrollLeft,
         clientTop - parent.scrollTop
       );
 
-      // rewrite element
+      // Rewrite element
       element = parent;
     }
   }
@@ -909,15 +909,14 @@
 
       if (args.length > 1) {
         options = [].slice.call(args, 1);
-      } else {
-        options = method;
       }
 
       return this.each(function(index, element) {
         var instance = Class.get(element);
 
         if (!instance) {
-          instance = new Class(element, options);
+          // If not init, options = method
+          instance = new Class(element, method);
         } else if (instance[method]) {
           instance[method].apply(instance, options);
         }

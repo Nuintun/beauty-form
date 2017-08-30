@@ -23,7 +23,7 @@ export default function scrollIntoViewIfNeeded(element, centerIfNeeded) {
     throw new Error('Element is required in scrollIntoViewIfNeeded');
   }
 
-  // use native
+  // Use native
   if (native) {
     return element.scrollIntoViewIfNeeded(centerIfNeeded);
   }
@@ -83,7 +83,7 @@ export default function scrollIntoViewIfNeeded(element, centerIfNeeded) {
     var clientLeft = parent.offsetLeft + parent.clientLeft;
     var clientTop = parent.offsetTop + parent.clientTop;
 
-    // make area relative to parent's client area.
+    // Make area relative to parent's client area.
     area = area.relativeFromTo(element, parent).translate(-clientLeft, -clientTop);
 
     var scrollLeft = withinBounds(
@@ -101,13 +101,13 @@ export default function scrollIntoViewIfNeeded(element, centerIfNeeded) {
     parent.scrollLeft = scrollLeft;
     parent.scrollTop = scrollTop;
 
-    // determine actual scroll amount by reading back scroll properties.
+    // Determine actual scroll amount by reading back scroll properties.
     area = area.translate(
       clientLeft - parent.scrollLeft,
       clientTop - parent.scrollTop
     );
 
-    // rewrite element
+    // Rewrite element
     element = parent;
   }
 };

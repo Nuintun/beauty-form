@@ -17,12 +17,12 @@ export var doc = $(document);
  */
 export function activeElement() {
   try {
-    // try: ie8~9, iframe #26
+    // Try: ie8~9, iframe #26
     var activeElement = document.activeElement;
     var contentDocument = activeElement.contentDocument;
 
     return contentDocument && contentDocument.activeElement || activeElement;
   } catch (e) {
-    // do nothing
+    // Do nothing
   }
 }
