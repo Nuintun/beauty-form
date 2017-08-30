@@ -99,17 +99,17 @@
     <button id="button" class="ui-button ui-button-success">（启用 / 取消）表单美化</button>
     <div>
       <input id="checkbox-1" type="checkbox" /><label for="checkbox-1">复选美化</label>
-      <input id="checkbox-2" type="checkbox" checked/><label for="checkbox-2">复选美化</label>
-      <input id="checkbox-3" type="checkbox" disabled/><label for="checkbox-3">复选美化</label>
-      <input id="checkbox-4" type="checkbox" disabled checked/><label for="checkbox-4">复选美化</label>
-      <input id="checkbox-5" type="checkbox"/><label for="checkbox-5">复选美化</label>
-      <input id="checkbox-6" type="checkbox" disabled/><label for="checkbox-6">复选美化</label>
+      <input id="checkbox-2" type="checkbox" checked /><label for="checkbox-2">复选美化</label>
+      <input id="checkbox-3" type="checkbox" disabled /><label for="checkbox-3">复选美化</label>
+      <input id="checkbox-4" type="checkbox" disabled checked /><label for="checkbox-4">复选美化</label>
+      <input id="checkbox-5" type="checkbox" checked /><label for="checkbox-5">复选美化</label>
+      <input id="checkbox-6" type="checkbox" disabled /><label for="checkbox-6">复选美化</label>
     </div>
     <div>
       <input id="radio-1" type="radio" name="radio" /><label for="radio-1">单选美化</label>
-      <input id="radio-2" type="radio" name="radio" checked/><label for="radio-2">单选美化</label>
-      <input id="radio-3" type="radio" name="radio-disabled" disabled/><label for="radio-3">单选美化</label>
-      <input id="radio-4" type="radio" name="radio-disabled" disabled checked/><label for="radio-4">单选美化</label>
+      <input id="radio-2" type="radio" name="radio" checked /><label for="radio-2">单选美化</label>
+      <input id="radio-3" type="radio" name="radio-disabled" disabled /><label for="radio-3">单选美化</label>
+      <input id="radio-4" type="radio" name="radio-disabled" disabled checked /><label for="radio-4">单选美化</label>
     </div>
     <div>
       <select id="select-1">
@@ -185,7 +185,6 @@
           checkbox = true;
 
           $('input[type=checkbox]').checkbox();
-          $('#checkbox-5, #checkbox-6').checkbox('indeterminate', true);
         }
 
         if (radiobox) {
@@ -210,6 +209,8 @@
       }
 
       beauty();
+
+      $('#checkbox-5, #checkbox-6').checkbox('indeterminate', true);
 
       $('#button').on('click', beauty);
     </script>

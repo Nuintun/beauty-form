@@ -221,24 +221,20 @@
 
       if (context.type === 'radio') return context;
 
-      value = Boolean(value);
+      context.element[0].indeterminate = Boolean(value);
 
-      context.element[0].indeterminate = value;
-
-      context.choice.toggleClass('ui-beauty-choice-indeterminate', value);
-
-      return context;
+      return context.refresh();
     },
     refresh: function() {
       var context = this;
       var element = context.element[0];
+      var indeterminate = element.indeterminate;
 
       context.choice
-        .toggleClass('ui-beauty-choice-checked', element.checked)
         .toggleClass('ui-beauty-choice-disabled', element.disabled)
-        .toggleClass('ui-beauty-choice-focus', activeElement() === element);
-
-      context.indeterminate();
+        .toggleClass('ui-beauty-choice-indeterminate', indeterminate)
+        .toggleClass('ui-beauty-choice-focus', activeElement() === element)
+        .toggleClass('ui-beauty-choice-checked', !indeterminate && element.checked);
 
       return context;
     },
