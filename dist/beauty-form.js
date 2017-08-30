@@ -124,6 +124,14 @@
         var namespace = '.beauty-' + type;
         var selector = 'input[type=' + type + ']';
 
+        doc.on('click' + namespace, selector, function() {
+          var choice = Choice.get(this);
+
+          if (choice && type === 'checkbox') {
+            choice.refresh();
+          }
+        });
+
         doc.on('change' + namespace, selector, function() {
           var choice = Choice.get(this);
 
@@ -254,6 +262,7 @@
       if (!reference[type]) {
         var namespace = '.beauty-' + type;
 
+        doc.off('click' + namespace);
         doc.off('change' + namespace);
         doc.off('focusin' + namespace);
         doc.off('focusout' + namespace);
