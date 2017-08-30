@@ -30,7 +30,10 @@ function create(Class) {
       if (!instance) {
         // If not init, options = method
         instance = new Class(element, method);
-      } else if (instance[method]) {
+      }
+
+      // Call method
+      if (instance[method]) {
         instance[method].apply(instance, options);
       }
     });
