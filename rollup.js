@@ -7,42 +7,58 @@ const css = require('rollup-plugin-css');
 const cssnano = require('cssnano');
 const autoprefixer = require('autoprefixer');
 
-const cssfile = 'dist/css/beauty-form.css';
-
 rollup.rollup({
   legacy: true,
   input: 'src/index.js',
   external: ['jquery'],
   plugins: [css({
     include: '**/*.css',
-    extract: cssfile,
+    extract: 'dist/css/beauty-form.css',
     plugins: [autoprefixer({
       add: true,
       remove: true,
       browsers: ['> 1% in CN', '> 5%', 'ie >= 8']
-    })]
+    })],
+    onwrite: function(cssfile) {
+      cssfile = cssfile.replace(/\\/g, '/');
+
+      // css
+      console.log(`  Build ${ cssfile } success!`);
+
+      const cssmin = 'dist/css/beauty-form.min.css';
+
+      cssnano
+        .process(fs.readFileSync(cssfile), { safe: true })
+        .then(function(result) {
+          fs.outputFileSync(cssmin, result.css);
+          console.log(`  Build ${ cssmin } success!`);
+        })
+        .catch(function(error) {
+          console.error(error);
+        });
+    }
   })]
 }).then(function(bundle) {
 
   const jsfile = 'dist/beauty-form.js';
 
-  bundle.write({
-    file: jsfile,
+  bundle.generate({
     format: 'umd',
     indent: true,
     strict: true,
     amd: { id: 'beauty-form' },
     name: 'beautyForm',
     globals: { jquery: 'jQuery' }
-  }).then(function() {
+  }).then(function(result) {
     // js
+    fs.outputFileSync(jsfile, result.code);
     console.log(`  Build ${ jsfile } success!`);
 
     const jsmin = 'dist/beauty-form.min.js';
     const jsmap = 'beauty-form.js.map';
 
-    const result = uglify.minify({
-      'beauty-form.js': fs.readFileSync(jsfile).toString()
+    result = uglify.minify({
+      'beauty-form.js': result.code
     }, {
       ecma: 5,
       ie8: true,
@@ -54,21 +70,6 @@ rollup.rollup({
     console.log(`  Build ${ jsmin } success!`);
     fs.outputFileSync(jsfile + '.map', result.map);
     console.log(`  Build ${ jsfile + '.map' } success!`);
-
-    // css
-    console.log(`  Build ${ cssfile } success!`);
-
-    const cssmin = 'dist/css/beauty-form.min.css';
-
-    cssnano
-      .process(fs.readFileSync(cssfile), { safe: true })
-      .then(function(result) {
-        fs.outputFileSync(cssmin, result.css);
-        console.log(`  Build ${ cssmin } success!`);
-      })
-      .catch(function(error) {
-        console.error(error);
-      });
 
     // images
     const imgfile = 'dist/images';

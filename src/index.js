@@ -42,4 +42,8 @@ $.fn.checkbox = create(Choice);
 $.fn.radiobox = create(Choice);
 $.fn.selectbox = create(SelectBox);
 
-export default $;
+export default {
+  Checkbox: Choice,
+  RadioBox: Choice,
+  SelectBox: SelectBox
+};
