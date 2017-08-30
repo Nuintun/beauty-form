@@ -184,6 +184,21 @@ Choice.prototype = {
 
     return this.refresh();
   },
+  indeterminate: function(value) {
+    var context = this;
+
+    if (context.type === 'radio') return context;
+
+    value = Boolean(value);
+
+    var element = context.element;
+
+    element[0].indeterminate = value;
+
+    element.toggleClass('ui-beauty-choice-indeterminate', value);
+
+    return context;
+  },
   refresh: function() {
     var context = this;
     var element = context.element[0];
@@ -192,6 +207,8 @@ Choice.prototype = {
       .toggleClass('ui-beauty-choice-checked', element.checked)
       .toggleClass('ui-beauty-choice-disabled', element.disabled)
       .toggleClass('ui-beauty-choice-focus', activeElement() === element);
+
+    context.indeterminate();
 
     return context;
   },
