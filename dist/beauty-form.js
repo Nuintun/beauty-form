@@ -227,7 +227,9 @@
 
       element[0].indeterminate = value;
 
-      element.toggleClass('ui-beauty-choice-indeterminate', value);
+      element
+        .removeClass('ui-beauty-choice-checked')
+        .toggleClass('ui-beauty-choice-indeterminate', value);
 
       return context;
     },
