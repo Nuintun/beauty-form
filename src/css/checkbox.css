@@ -6,6 +6,10 @@
   background: url(../images/checkbox-checked.png) no-repeat center;
 }
 
+.ui-beauty-checkbox.ui-beauty-choice-indeterminate {
+  background: url(../images/checkbox-indeterminate.png) no-repeat center;
+}
+
 .ui-beauty-checkbox.ui-beauty-choice-disabled {
   cursor: not-allowed;
   background: url(../images/checkbox-disabled.png) no-repeat center;
@@ -13,4 +17,8 @@
 
 .ui-beauty-checkbox.ui-beauty-choice-checked.ui-beauty-choice-disabled {
   background: url(../images/checkbox-checked-disabled.png) no-repeat center;
+}
+
+.ui-beauty-checkbox.ui-beauty-choice-indeterminate.ui-beauty-choice-disabled {
+  background: url(../images/checkbox-indeterminate-disabled.png) no-repeat center;
 }

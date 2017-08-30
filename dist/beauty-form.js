@@ -223,13 +223,9 @@
 
       value = Boolean(value);
 
-      var element = context.element;
+      context.element[0].indeterminate = value;
 
-      element[0].indeterminate = value;
-
-      element
-        .removeClass('ui-beauty-choice-checked')
-        .toggleClass('ui-beauty-choice-indeterminate', value);
+      context.choice.toggleClass('ui-beauty-choice-indeterminate', value);
 
       return context;
     },
