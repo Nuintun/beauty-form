@@ -1,5 +1,5 @@
 /*!
- * choice
+ * Choice
  * Date: 2015/06/07
  * https://github.com/nuintun/beauty-form
  *
@@ -8,6 +8,7 @@
  */
 
 import $ from 'jquery';
+import Observer from './observer';
 import { doc, activeElement } from './util';
 
 var reference = {};
@@ -39,6 +40,7 @@ export default function Choice(element) {
   context.destroyed = false;
   context.element = $(element);
   context.type = element.type;
+  context.__observer = new Observer(element);
   context.type = context.type ? context.type.toLowerCase() : undefined;
 
   var choice = Choice.get(element);
@@ -90,20 +92,11 @@ Choice.prototype = {
     if (!reference[type]) {
       reference[type] = 0;
 
+      var node = context.element[0];
       var namespace = '.beauty-' + type;
       var selector = 'input[type=' + type + ']';
 
-      if (type === 'checkbox') {
-        doc.on('click' + namespace, selector, function() {
-          var choice = Choice.get(this);
-
-          if (choice) {
-            choice.refresh();
-          }
-        });
-      }
-
-      doc.on('change' + namespace, selector, function() {
+      function refresh() {
         var choice = Choice.get(this);
 
         if (choice) {
@@ -111,21 +104,19 @@ Choice.prototype = {
             radio(this);
           }
 
-          choice.refresh();
+          setTimeout(function() {
+            choice.refresh();
+          });
         }
-      });
+      }
 
-      doc.on('focusin' + namespace, selector, function() {
-        var choice = Choice.get(this);
+      context.__observer.watch('checked', refresh);
+      context.__observer.watch('disabled', refresh);
+      context.__observer.watch('indeterminate', refresh);
 
-        choice && choice.refresh();
-      });
-
-      doc.on('focusout' + namespace, selector, function() {
-        var choice = Choice.get(this);
-
-        choice && choice.refresh();
-      });
+      doc.on('change' + namespace, selector, refresh);
+      doc.on('focusin' + namespace, selector, refresh);
+      doc.on('focusout' + namespace, selector, refresh);
     }
 
     return context.__beauty();
@@ -146,61 +137,6 @@ Choice.prototype = {
 
       element.data('beauty-choice', context);
     }
-
-    return context.refresh();
-  },
-  focus: function() {
-    this.element.trigger('focus');
-
-    return this;
-  },
-  blur: function() {
-    this.element.trigger('blur');
-
-    return this;
-  },
-  check: function() {
-    var context = this;
-    var type = context.type;
-    var element = context.element[0];
-
-    element.checked = true;
-
-    if (type === 'radio') {
-      radio(element);
-    }
-
-    return context.refresh();
-  },
-  uncheck: function() {
-    var context = this;
-    var type = context.type;
-    var element = context.element[0];
-
-    element.checked = false;
-
-    if (type === 'radio') {
-      radio(element);
-    }
-
-    return context.refresh();
-  },
-  enable: function() {
-    this.element[0].disabled = false;
-
-    return this.refresh();
-  },
-  disable: function() {
-    this.element[0].disabled = true;
-
-    return this.refresh();
-  },
-  indeterminate: function(value) {
-    var context = this;
-
-    if (context.type === 'radio') return context;
-
-    context.element[0].indeterminate = Boolean(value);
 
     return context.refresh();
   },
@@ -233,14 +169,14 @@ Choice.prototype = {
     if (!reference[type]) {
       var namespace = '.beauty-' + type;
 
-      if (context.type === 'checkbox') {
-        doc.off('click' + namespace);
-      }
-
       doc.off('change' + namespace);
       doc.off('focusin' + namespace);
       doc.off('focusout' + namespace);
     }
+
+    context.__observer.unwatch('checked');
+    context.__observer.unwatch('disabled');
+    context.__observer.unwatch('indeterminate');
 
     context.destroyed = true;
   }

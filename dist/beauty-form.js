@@ -7,6 +7,68 @@
   $ = $ && $.hasOwnProperty('default') ? $['default'] : $;
 
   /*!
+   * Observer
+   * Date: 2017/08/30
+   * https://github.com/nuintun/beauty-form
+   *
+   * This is licensed under the MIT License (MIT).
+   * For details, see: https://github.com/nuintun/beauty-form/blob/master/LICENSE
+   */
+
+  var defineProperty = Object.defineProperty;
+  var getPrototypeOf = Object.getPrototypeOf;
+  var getOwnPropertyDescriptor = Object.getOwnPropertyDescriptor;
+  var getNodeDescriptor = getPrototypeOf ? function(node, prop) {
+    return getOwnPropertyDescriptor(getPrototypeOf(node), prop)
+      || getOwnPropertyDescriptor(Element.prototype, prop)
+      || getOwnPropertyDescriptor(HTMLElement.prototype, prop);
+  } : function(node, prop) {
+    var descr = getOwnPropertyDescriptor(node.constructor.prototype, prop);
+
+    if (descr && descr.set) return descr;
+
+    return getOwnPropertyDescriptor(Element.prototype, prop);
+  };
+
+  function Observer(node) {
+    this.node = node;
+  }
+
+  Observer.prototype = {
+    watch: function(prop, handler) {
+      var node = this.node;
+
+      var descr = getNodeDescriptor(node, prop);
+
+      defineProperty(node, prop, {
+        configurable: true,
+        enumerable: descr.enumerable,
+        set: function(value) {
+          var stale = node[prop];
+
+          if (stale !== value) {
+            setTimeout(function() {
+              handler.call(node, stale, value);
+            }, 0);
+          }
+
+          return descr.set.call(node, value);
+        },
+        get: function() {
+          return descr.get.call(node);
+        }
+      });
+
+      return this;
+    },
+    unwatch: function(prop) {
+      delete this.node[prop];
+
+      return this;
+    }
+  };
+
+  /*!
    * util
    * Date: 2016/06/14
    * https://github.com/nuintun/beauty-form
@@ -34,7 +96,7 @@
   }
 
   /*!
-   * choice
+   * Choice
    * Date: 2015/06/07
    * https://github.com/nuintun/beauty-form
    *
@@ -71,6 +133,7 @@
     context.destroyed = false;
     context.element = $(element);
     context.type = element.type;
+    context.__observer = new Observer(element);
     context.type = context.type ? context.type.toLowerCase() : undefined;
 
     var choice = Choice.get(element);
@@ -125,17 +188,7 @@
         var namespace = '.beauty-' + type;
         var selector = 'input[type=' + type + ']';
 
-        if (type === 'checkbox') {
-          doc.on('click' + namespace, selector, function() {
-            var choice = Choice.get(this);
-
-            if (choice) {
-              choice.refresh();
-            }
-          });
-        }
-
-        doc.on('change' + namespace, selector, function() {
+        function refresh() {
           var choice = Choice.get(this);
 
           if (choice) {
@@ -143,21 +196,19 @@
               radio(this);
             }
 
-            choice.refresh();
+            setTimeout(function() {
+              choice.refresh();
+            });
           }
-        });
+        }
 
-        doc.on('focusin' + namespace, selector, function() {
-          var choice = Choice.get(this);
+        context.__observer.watch('checked', refresh);
+        context.__observer.watch('disabled', refresh);
+        context.__observer.watch('indeterminate', refresh);
 
-          choice && choice.refresh();
-        });
-
-        doc.on('focusout' + namespace, selector, function() {
-          var choice = Choice.get(this);
-
-          choice && choice.refresh();
-        });
+        doc.on('change' + namespace, selector, refresh);
+        doc.on('focusin' + namespace, selector, refresh);
+        doc.on('focusout' + namespace, selector, refresh);
       }
 
       return context.__beauty();
@@ -178,61 +229,6 @@
 
         element.data('beauty-choice', context);
       }
-
-      return context.refresh();
-    },
-    focus: function() {
-      this.element.trigger('focus');
-
-      return this;
-    },
-    blur: function() {
-      this.element.trigger('blur');
-
-      return this;
-    },
-    check: function() {
-      var context = this;
-      var type = context.type;
-      var element = context.element[0];
-
-      element.checked = true;
-
-      if (type === 'radio') {
-        radio(element);
-      }
-
-      return context.refresh();
-    },
-    uncheck: function() {
-      var context = this;
-      var type = context.type;
-      var element = context.element[0];
-
-      element.checked = false;
-
-      if (type === 'radio') {
-        radio(element);
-      }
-
-      return context.refresh();
-    },
-    enable: function() {
-      this.element[0].disabled = false;
-
-      return this.refresh();
-    },
-    disable: function() {
-      this.element[0].disabled = true;
-
-      return this.refresh();
-    },
-    indeterminate: function(value) {
-      var context = this;
-
-      if (context.type === 'radio') return context;
-
-      context.element[0].indeterminate = Boolean(value);
 
       return context.refresh();
     },
@@ -265,14 +261,14 @@
       if (!reference[type]) {
         var namespace = '.beauty-' + type;
 
-        if (context.type === 'checkbox') {
-          doc.off('click' + namespace);
-        }
-
         doc.off('change' + namespace);
         doc.off('focusin' + namespace);
         doc.off('focusout' + namespace);
       }
+
+      context.__observer.unwatch('checked');
+      context.__observer.unwatch('disabled');
+      context.__observer.unwatch('indeterminate');
 
       context.destroyed = true;
     }
@@ -393,7 +389,7 @@
   }
 
   /*!
-   * selectbox
+   * SelectBox
    * Date: 2015/06/12
    * https://github.com/nuintun/beauty-form
    *
@@ -936,6 +932,8 @@
       if (args.length > 1) {
         options = [].slice.call(args, 1);
       }
+
+      options = options || [];
 
       return this.each(function(index, element) {
         var instance = Class.get(element);

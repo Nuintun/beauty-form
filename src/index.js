@@ -24,6 +24,8 @@ function create(Class) {
       options = [].slice.call(args, 1);
     }
 
+    options = options || [];
+
     return this.each(function(index, element) {
       var instance = Class.get(element);
 

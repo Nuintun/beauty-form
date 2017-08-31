@@ -1,5 +1,5 @@
 /*!
- * selectbox
+ * SelectBox
  * Date: 2015/06/12
  * https://github.com/nuintun/beauty-form
  *
