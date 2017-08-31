@@ -887,8 +887,8 @@
         element.removeData('beauty-select');
         element.removeClass('ui-beauty-select-hidden');
 
-        context.observer.watch('disabled', refresh);
-        context.observer.watch('selectedIndex', refresh);
+        context.observer.unwatch('disabled');
+        context.observer.unwatch('selectedIndex');
 
         if (!--reference$1) {
           doc.off('change' + namespace);

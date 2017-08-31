@@ -495,8 +495,8 @@ SelectBox.prototype = {
       element.removeData('beauty-select');
       element.removeClass('ui-beauty-select-hidden');
 
-      context.observer.watch('disabled', refresh);
-      context.observer.watch('selectedIndex', refresh);
+      context.observer.unwatch('disabled');
+      context.observer.unwatch('selectedIndex');
 
       if (!--reference) {
         doc.off('change' + namespace);
