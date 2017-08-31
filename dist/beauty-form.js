@@ -7,68 +7,6 @@
   $ = $ && $.hasOwnProperty('default') ? $['default'] : $;
 
   /*!
-   * Observer
-   * Date: 2017/08/30
-   * https://github.com/nuintun/beauty-form
-   *
-   * This is licensed under the MIT License (MIT).
-   * For details, see: https://github.com/nuintun/beauty-form/blob/master/LICENSE
-   */
-
-  var defineProperty = Object.defineProperty;
-  var getPrototypeOf = Object.getPrototypeOf;
-  var getOwnPropertyDescriptor = Object.getOwnPropertyDescriptor;
-  var getNodeDescriptor = getPrototypeOf ? function(node, prop) {
-    return getOwnPropertyDescriptor(getPrototypeOf(node), prop)
-      || getOwnPropertyDescriptor(Element.prototype, prop)
-      || getOwnPropertyDescriptor(HTMLElement.prototype, prop);
-  } : function(node, prop) {
-    var descr = getOwnPropertyDescriptor(node.constructor.prototype, prop);
-
-    if (descr && descr.set) return descr;
-
-    return getOwnPropertyDescriptor(Element.prototype, prop);
-  };
-
-  function Observer(node) {
-    this.node = node;
-  }
-
-  Observer.prototype = {
-    watch: function(prop, handler) {
-      var node = this.node;
-
-      var descr = getNodeDescriptor(node, prop);
-
-      defineProperty(node, prop, {
-        configurable: true,
-        enumerable: descr.enumerable,
-        set: function(value) {
-          var stale = node[prop];
-
-          if (stale !== value) {
-            setTimeout(function() {
-              handler.call(node, stale, value);
-            }, 0);
-          }
-
-          return descr.set.call(node, value);
-        },
-        get: function() {
-          return descr.get.call(node);
-        }
-      });
-
-      return this;
-    },
-    unwatch: function(prop) {
-      delete this.node[prop];
-
-      return this;
-    }
-  };
-
-  /*!
    * util
    * Date: 2016/06/14
    * https://github.com/nuintun/beauty-form
@@ -79,6 +17,8 @@
 
   var win = $(window);
   var doc = $(document);
+
+  var toString = Object.prototype.toString;
 
   /**
    * 获取当前焦点的元素
@@ -94,6 +34,117 @@
       // Do nothing
     }
   }
+
+  function typeIs(value, dataType) {
+    return toString.call(value) === '[object ' + dataType + ']';
+  }
+
+  /*!
+   * Observer
+   * Date: 2017/08/30
+   * https://github.com/nuintun/beauty-form
+   *
+   * This is licensed under the MIT License (MIT).
+   * For details, see: https://github.com/nuintun/beauty-form/blob/master/LICENSE
+   */
+
+  var defineProperty = Object.defineProperty;
+  var getPrototypeOf = Object.getPrototypeOf;
+  var getOwnPropertyDescriptor = Object.getOwnPropertyDescriptor;
+  var getNodeDescriptor = getPrototypeOf ? function(node, prop) {
+    return getOwnPropertyDescriptor(getPrototypeOf(node), prop)
+      || getOwnPropertyDescriptor(Element.prototype, prop)
+      || getOwnPropertyDescriptor(HTMLElement.prototype, prop)
+      || getOwnPropertyDescriptor(Node.prototype, prop);
+  } : function(node, prop) {
+    var descr = getOwnPropertyDescriptor(node.constructor.prototype, prop);
+
+    if (descr && descr.set) return descr;
+
+    return getOwnPropertyDescriptor(Element.prototype, prop);
+  };
+
+  function Observer(node) {
+    this.node = node;
+  }
+
+  Observer.prototype = {
+    watch: function(prop, handler) {
+      var node = this.node;
+      var descr = getNodeDescriptor(node, prop);
+
+      var config = {
+        configurable: true,
+        enumerable: descr.enumerable
+      };
+
+      if (descr.hasOwnProperty('value')) {
+        config.writable = !!descr.writable;
+
+        console.log(prop, descr.writable, typeof descr.value);
+
+        return this;
+
+        if (typeIs(descr.value, 'Function')) {
+          config.value = function() {
+            var value = descr.value.apply(node, arguments);
+
+            handler.apply(node, arguments);
+
+            return value;
+          };
+        } else {
+          var stale = node[prop];
+
+          if (config.writable) {
+            config.set = function(value) {
+              if (stale !== value) {
+                handler.call(node, stale, value);
+
+                stale = value;
+
+                return value;
+              }
+            };
+
+            config.get = function() {
+              return stale;
+            };
+          } else {
+            config.value = stale;
+          }
+        }
+      } else {
+        if (descr.set) {
+          config.set = function(value) {
+            var stale = node[prop];
+
+            if (stale !== value) {
+              descr.set.call(node, value);
+              handler.call(node, stale, value);
+            }
+
+            return value;
+          };
+        }
+
+        if (descr.get) {
+          config.get = function() {
+            return descr.get.call(node);
+          };
+        }
+      }
+
+      defineProperty(node, prop, config);
+
+      return this;
+    },
+    unwatch: function(prop) {
+      delete this.node[prop];
+
+      return this;
+    }
+  };
 
   /*!
    * Choice
@@ -204,6 +255,8 @@
 
         context.__observer.watch('checked', refresh);
         context.__observer.watch('disabled', refresh);
+        context.__observer.watch('setAttribute', refresh);
+        context.__observer.watch('removeAttribute', refresh);
         context.__observer.watch('indeterminate', refresh);
 
         doc.on('change' + namespace, selector, refresh);
@@ -268,6 +321,8 @@
 
       context.__observer.unwatch('checked');
       context.__observer.unwatch('disabled');
+      context.__observer.unwatch('setAttribute');
+      context.__observer.unwatch('removeAttribute');
       context.__observer.unwatch('indeterminate');
 
       context.destroyed = true;
@@ -927,6 +982,10 @@
 
   function create(Class) {
     return function(method, options) {
+      if (method === 'api') {
+        return Class.get(this[0]);
+      }
+
       var args = arguments;
 
       if (args.length > 1) {
@@ -936,16 +995,16 @@
       options = options || [];
 
       return this.each(function(index, element) {
-        var instance = Class.get(element);
+        var api = Class.get(element);
 
-        if (!instance) {
+        if (!api) {
           // If not init, options = method
-          instance = new Class(element, method);
+          api = new Class(element, method);
         }
 
         // Call method
-        if (instance[method]) {
-          instance[method].apply(instance, options);
+        if (api[method]) {
+          api[method].apply(api, options);
         }
       });
     };

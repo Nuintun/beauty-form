@@ -12,6 +12,8 @@ import $ from 'jquery';
 export var win = $(window);
 export var doc = $(document);
 
+var toString = Object.prototype.toString;
+
 /**
  * 获取当前焦点的元素
  */
@@ -25,4 +27,8 @@ export function activeElement() {
   } catch (e) {
     // Do nothing
   }
+}
+
+export function typeIs(value, dataType) {
+  return toString.call(value) === '[object ' + dataType + ']';
 }

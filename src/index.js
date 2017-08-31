@@ -18,6 +18,10 @@ import SelectBox from './selectbox';
 
 function create(Class) {
   return function(method, options) {
+    if (method === 'api') {
+      return Class.get(this[0]);
+    }
+
     var args = arguments;
 
     if (args.length > 1) {
@@ -27,16 +31,16 @@ function create(Class) {
     options = options || [];
 
     return this.each(function(index, element) {
-      var instance = Class.get(element);
+      var api = Class.get(element);
 
-      if (!instance) {
+      if (!api) {
         // If not init, options = method
-        instance = new Class(element, method);
+        api = new Class(element, method);
       }
 
       // Call method
-      if (instance[method]) {
-        instance[method].apply(instance, options);
+      if (api[method]) {
+        api[method].apply(api, options);
       }
     });
   };

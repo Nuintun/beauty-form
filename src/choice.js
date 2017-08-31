@@ -112,6 +112,8 @@ Choice.prototype = {
 
       context.__observer.watch('checked', refresh);
       context.__observer.watch('disabled', refresh);
+      context.__observer.watch('setAttribute', refresh);
+      context.__observer.watch('removeAttribute', refresh);
       context.__observer.watch('indeterminate', refresh);
 
       doc.on('change' + namespace, selector, refresh);
@@ -176,6 +178,8 @@ Choice.prototype = {
 
     context.__observer.unwatch('checked');
     context.__observer.unwatch('disabled');
+    context.__observer.unwatch('setAttribute');
+    context.__observer.unwatch('removeAttribute');
     context.__observer.unwatch('indeterminate');
 
     context.destroyed = true;
