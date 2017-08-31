@@ -28,7 +28,3 @@ export function activeElement() {
     // Do nothing
   }
 }
-
-export function typeIs(value, dataType) {
-  return toString.call(value) === '[object ' + dataType + ']';
-}

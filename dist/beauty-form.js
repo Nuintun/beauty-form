@@ -7,39 +7,6 @@
   $ = $ && $.hasOwnProperty('default') ? $['default'] : $;
 
   /*!
-   * util
-   * Date: 2016/06/14
-   * https://github.com/nuintun/beauty-form
-   *
-   * This is licensed under the MIT License (MIT).
-   * For details, see: https://github.com/nuintun/beauty-form/blob/master/LICENSE
-   */
-
-  var win = $(window);
-  var doc = $(document);
-
-  var toString = Object.prototype.toString;
-
-  /**
-   * 获取当前焦点的元素
-   */
-  function activeElement() {
-    try {
-      // Try: ie8~9, iframe #26
-      var activeElement = document.activeElement;
-      var contentDocument = activeElement.contentDocument;
-
-      return contentDocument && contentDocument.activeElement || activeElement;
-    } catch (e) {
-      // Do nothing
-    }
-  }
-
-  function typeIs(value, dataType) {
-    return toString.call(value) === '[object ' + dataType + ']';
-  }
-
-  /*!
    * Observer
    * Date: 2017/08/30
    * https://github.com/nuintun/beauty-form
@@ -50,6 +17,7 @@
 
   var defineProperty = Object.defineProperty;
   var getPrototypeOf = Object.getPrototypeOf;
+  var hasOwnProperty = Object.prototype.hasOwnProperty;
   var getOwnPropertyDescriptor = Object.getOwnPropertyDescriptor;
   var getNodeDescriptor = getPrototypeOf ? function(node, prop) {
     return getOwnPropertyDescriptor(getPrototypeOf(node), prop)
@@ -57,12 +25,16 @@
       || getOwnPropertyDescriptor(HTMLElement.prototype, prop)
       || getOwnPropertyDescriptor(Node.prototype, prop);
   } : function(node, prop) {
-    var descr = getOwnPropertyDescriptor(node.constructor.prototype, prop);
+    var prototype = Element.prototype;
 
-    if (descr && descr.set) return descr;
+    if (!hasOwnProperty.call(prototype, prop)) {
+      prototype = node.constructor.prototype;
+    }
 
-    return getOwnPropertyDescriptor(Element.prototype, prop);
+    return getOwnPropertyDescriptor(prototype, prop);
   };
+
+  window.getNodeDescriptor = getNodeDescriptor;
 
   function Observer(node) {
     this.node = node;
@@ -73,48 +45,12 @@
       var node = this.node;
       var descr = getNodeDescriptor(node, prop);
 
-      var config = {
-        configurable: true,
-        enumerable: descr.enumerable
-      };
+      if (!descr.hasOwnProperty('value')) {
+        var config = {
+          configurable: true,
+          enumerable: descr.enumerable
+        };
 
-      if (descr.hasOwnProperty('value')) {
-        config.writable = !!descr.writable;
-
-        console.log(prop, descr.writable, typeof descr.value);
-
-        return this;
-
-        if (typeIs(descr.value, 'Function')) {
-          config.value = function() {
-            var value = descr.value.apply(node, arguments);
-
-            handler.apply(node, arguments);
-
-            return value;
-          };
-        } else {
-          var stale = node[prop];
-
-          if (config.writable) {
-            config.set = function(value) {
-              if (stale !== value) {
-                handler.call(node, stale, value);
-
-                stale = value;
-
-                return value;
-              }
-            };
-
-            config.get = function() {
-              return stale;
-            };
-          } else {
-            config.value = stale;
-          }
-        }
-      } else {
         if (descr.set) {
           config.set = function(value) {
             var stale = node[prop];
@@ -133,9 +69,9 @@
             return descr.get.call(node);
           };
         }
-      }
 
-      defineProperty(node, prop, config);
+        defineProperty(node, prop, config);
+      }
 
       return this;
     },
@@ -147,6 +83,33 @@
   };
 
   /*!
+   * util
+   * Date: 2016/06/14
+   * https://github.com/nuintun/beauty-form
+   *
+   * This is licensed under the MIT License (MIT).
+   * For details, see: https://github.com/nuintun/beauty-form/blob/master/LICENSE
+   */
+
+  var win = $(window);
+  var doc = $(document);
+
+  /**
+   * 获取当前焦点的元素
+   */
+  function activeElement() {
+    try {
+      // Try: ie8~9, iframe #26
+      var activeElement = document.activeElement;
+      var contentDocument = activeElement.contentDocument;
+
+      return contentDocument && contentDocument.activeElement || activeElement;
+    } catch (e) {
+      // Do nothing
+    }
+  }
+
+  /*!
    * Choice
    * Date: 2015/06/07
    * https://github.com/nuintun/beauty-form
@@ -155,7 +118,7 @@
    * For details, see: https://github.com/nuintun/beauty-form/blob/master/LICENSE
    */
 
-  var reference = {};
+  var reference = 0;
 
   /**
    * radio
@@ -184,7 +147,7 @@
     context.destroyed = false;
     context.element = $(element);
     context.type = element.type;
-    context.__observer = new Observer(element);
+    context.observer = new Observer(element);
     context.type = context.type ? context.type.toLowerCase() : undefined;
 
     var choice = Choice.get(element);
@@ -233,31 +196,23 @@
       var context = this;
       var type = context.type;
 
-      if (!reference[type]) {
-        reference[type] = 0;
+      function refresh() {
+        var choice = Choice.get(this);
 
+        if (choice) {
+          type === 'radio' && radio(this);
+
+          choice.refresh();
+        }
+      }
+
+      context.observer.watch('checked', refresh);
+      context.observer.watch('disabled', refresh);
+      context.observer.watch('indeterminate', refresh);
+
+      if (!reference) {
         var namespace = '.beauty-' + type;
         var selector = 'input[type=' + type + ']';
-
-        function refresh() {
-          var choice = Choice.get(this);
-
-          if (choice) {
-            if (type === 'radio') {
-              radio(this);
-            }
-
-            setTimeout(function() {
-              choice.refresh();
-            });
-          }
-        }
-
-        context.__observer.watch('checked', refresh);
-        context.__observer.watch('disabled', refresh);
-        context.__observer.watch('setAttribute', refresh);
-        context.__observer.watch('removeAttribute', refresh);
-        context.__observer.watch('indeterminate', refresh);
 
         doc.on('change' + namespace, selector, refresh);
         doc.on('focusin' + namespace, selector, refresh);
@@ -275,12 +230,13 @@
 
         element.wrap('<i tabindex="-1" class="ui-beauty-choice ui-beauty-' + type + '"/>');
 
-        reference[type]++;
         context.choice = element.parent();
 
         context.choice.attr('role', context.choice.type);
 
         element.data('beauty-choice', context);
+
+        reference++;
       }
 
       return context.refresh();
@@ -309,21 +265,17 @@
       element.unwrap();
       element.removeData('beauty-choice');
 
-      reference[type]--;
+      context.observer.unwatch('checked');
+      context.observer.unwatch('disabled');
+      context.observer.unwatch('indeterminate');
 
-      if (!reference[type]) {
+      if (!--reference) {
         var namespace = '.beauty-' + type;
 
         doc.off('change' + namespace);
         doc.off('focusin' + namespace);
         doc.off('focusout' + namespace);
       }
-
-      context.__observer.unwatch('checked');
-      context.__observer.unwatch('disabled');
-      context.__observer.unwatch('setAttribute');
-      context.__observer.unwatch('removeAttribute');
-      context.__observer.unwatch('indeterminate');
 
       context.destroyed = true;
     }
@@ -487,6 +439,7 @@
     context.opened = false;
     context.destroyed = false;
     context.element = $(element);
+    context.observer = new Observer(element);
 
     if (element.multiple || element.size > 1) {
       return context;
@@ -549,23 +502,29 @@
 
       actived = context;
 
+      function change() {
+        var selectbox = SelectBox.get(this);
+
+        if (selectbox) {
+          selectbox.__renderTitlebox();
+          selectbox.opened && selectbox.__refreshSelected();
+        }
+      }
+
+      function refresh() {
+        var selectbox = SelectBox.get(this);
+
+        selectbox && selectbox.__refreshSelectbox();
+      }
+
+      context.observer.watch('disabled', refresh);
+      context.observer.watch('selectedIndex', change);
+
       if (!reference$1) {
         var selector = 'select';
 
-        doc.on('change' + namespace, selector, function() {
-          var selectbox = SelectBox.get(this);
-
-          if (selectbox) {
-            selectbox.__renderTitlebox();
-            selectbox.opened && selectbox.__refreshSelected();
-          }
-        });
-
-        doc.on('focusin' + namespace + ' focusout' + namespace, selector, function() {
-          var selectbox = SelectBox.get(this);
-
-          selectbox && selectbox.__refreshSelectbox();
-        });
+        doc.on('change' + namespace, selector, change);
+        doc.on('focusin' + namespace + ' focusout' + namespace, selector, refresh);
 
         doc.on('mousedown' + namespace, function(e) {
           var target = e.target;
@@ -611,13 +570,11 @@
       });
 
       context.selectbox.on('mousedown' + namespace, function(e) {
+        e.preventDefault();
+
         var select = context.element;
 
         if (select[0].disabled) return;
-
-        e.preventDefault();
-
-        context.focus();
 
         if (context.opened) {
           var target = e.target;
@@ -629,6 +586,10 @@
         } else {
           context.open();
         }
+
+        setTimeout(function() {
+          select.focus();
+        }, 0);
       });
 
       context.selectbox.on('click' + namespace, '[' + options.optionIndexAttr + ']', function(e) {
@@ -638,7 +599,8 @@
 
         if (option.hasClass(options.optionDisabledClass)) return;
 
-        context.select(option.attr(options.optionIndexAttr));
+        context.element[0].selectedIndex = option.attr(options.optionIndexAttr);
+
         context.close();
       });
 
@@ -727,16 +689,19 @@
       return context;
     },
     __renderTitlebox: function() {
+      var template = '';
       var context = this;
+      var selected = null;
       var element = context.element[0];
-      var selected = $(element.options[element.selectedIndex]);
+      var title = context.options.title;
+      var selectedIndex = element.selectedIndex;
 
-      context.titlebox.html(compile(
-        context,
-        context.options.title,
-        selected,
-        selected.html()
-      ));
+      if (selectedIndex >= 0) {
+        selected = element.options[selectedIndex];
+        template = selected.innerHTML;
+      }
+
+      context.titlebox.html(compile(context, title, selected, template));
 
       return context;
     },
@@ -856,32 +821,12 @@
 
         context.selectbox = selectbox;
 
-        reference$1++;
-
         element.data('beauty-select', context);
+
+        reference$1++;
       }
 
       return context.refresh();
-    },
-    focus: function() {
-      this.element.trigger('focus');
-
-      return this;
-    },
-    blur: function() {
-      this.element.trigger('blur');
-
-      return this;
-    },
-    enable: function() {
-      this.element[0].disabled = false;
-
-      return this.__refreshSelectbox();
-    },
-    disable: function() {
-      this.element[0].disabled = true;
-
-      return this.__refreshSelectbox();
     },
     refresh: function() {
       var context = this;
@@ -892,20 +837,6 @@
       context.__sizeDropdown();
 
       return context.__refreshSelectbox();
-    },
-    select: function(index) {
-      var context = this;
-      var element = context.element[0];
-      var oldIndex = element.selectedIndex;
-
-      index = index >>> 0;
-      element.selectedIndex = index;
-
-      if (oldIndex !== index) {
-        context.element.trigger('change');
-      }
-
-      return this.__renderTitlebox();
     },
     open: function() {
       var context = this;
@@ -952,12 +883,14 @@
         context.element.off('keypress' + namespace);
         context.selectbox.remove();
         context.dropdown.remove();
+
         element.removeData('beauty-select');
         element.removeClass('ui-beauty-select-hidden');
 
-        reference$1--;
+        context.observer.watch('disabled', refresh);
+        context.observer.watch('selectedIndex', refresh);
 
-        if (!reference$1) {
+        if (!--reference$1) {
           doc.off('change' + namespace);
           doc.off('focusin' + namespace);
           doc.off('focusout' + namespace);

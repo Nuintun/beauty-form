@@ -90,10 +90,11 @@
       body > button {
         margin-top: 88px;
       }
+
     </style>
-    <link rel="stylesheet" href="../dist/css/beauty-form.min.css" />
+    <link rel="stylesheet" href="../dist/css/beauty-form.css" />
     <script src="./jquery.js"></script>
-    <script src="../dist/beauty-form.min.js"></script>
+    <script src="../dist/beauty-form.js"></script>
   </head>
   <body>
     <button id="button" class="ui-button ui-button-success">（启用 / 取消）表单美化</button>
@@ -212,6 +213,8 @@
 
       var x = document.getElementById('checkbox-1');
       var y = document.getElementById('select-1');
+
+      x.indeterminate = true;
 
       $('#button').on('click', beauty);
     </script>

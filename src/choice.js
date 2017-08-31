@@ -11,7 +11,7 @@ import $ from 'jquery';
 import Observer from './observer';
 import { doc, activeElement } from './util';
 
-var reference = {};
+var reference = 0;
 
 /**
  * radio
@@ -40,7 +40,7 @@ export default function Choice(element) {
   context.destroyed = false;
   context.element = $(element);
   context.type = element.type;
-  context.__observer = new Observer(element);
+  context.observer = new Observer(element);
   context.type = context.type ? context.type.toLowerCase() : undefined;
 
   var choice = Choice.get(element);
@@ -89,32 +89,24 @@ Choice.prototype = {
     var context = this;
     var type = context.type;
 
-    if (!reference[type]) {
-      reference[type] = 0;
+    function refresh() {
+      var choice = Choice.get(this);
 
+      if (choice) {
+        type === 'radio' && radio(this);
+
+        choice.refresh();
+      }
+    }
+
+    context.observer.watch('checked', refresh);
+    context.observer.watch('disabled', refresh);
+    context.observer.watch('indeterminate', refresh);
+
+    if (!reference) {
       var node = context.element[0];
       var namespace = '.beauty-' + type;
       var selector = 'input[type=' + type + ']';
-
-      function refresh() {
-        var choice = Choice.get(this);
-
-        if (choice) {
-          if (type === 'radio') {
-            radio(this);
-          }
-
-          setTimeout(function() {
-            choice.refresh();
-          });
-        }
-      }
-
-      context.__observer.watch('checked', refresh);
-      context.__observer.watch('disabled', refresh);
-      context.__observer.watch('setAttribute', refresh);
-      context.__observer.watch('removeAttribute', refresh);
-      context.__observer.watch('indeterminate', refresh);
 
       doc.on('change' + namespace, selector, refresh);
       doc.on('focusin' + namespace, selector, refresh);
@@ -132,12 +124,13 @@ Choice.prototype = {
 
       element.wrap('<i tabindex="-1" class="ui-beauty-choice ui-beauty-' + type + '"/>');
 
-      reference[type]++;
       context.choice = element.parent();
 
       context.choice.attr('role', context.choice.type);
 
       element.data('beauty-choice', context);
+
+      reference++;
     }
 
     return context.refresh();
@@ -166,21 +159,17 @@ Choice.prototype = {
     element.unwrap();
     element.removeData('beauty-choice');
 
-    reference[type]--;
+    context.observer.unwatch('checked');
+    context.observer.unwatch('disabled');
+    context.observer.unwatch('indeterminate');
 
-    if (!reference[type]) {
+    if (!--reference) {
       var namespace = '.beauty-' + type;
 
       doc.off('change' + namespace);
       doc.off('focusin' + namespace);
       doc.off('focusout' + namespace);
     }
-
-    context.__observer.unwatch('checked');
-    context.__observer.unwatch('disabled');
-    context.__observer.unwatch('setAttribute');
-    context.__observer.unwatch('removeAttribute');
-    context.__observer.unwatch('indeterminate');
 
     context.destroyed = true;
   }

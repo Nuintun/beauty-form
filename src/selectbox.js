@@ -8,6 +8,7 @@
  */
 
 import $ from 'jquery';
+import Observer from './observer';
 import { win, doc, activeElement } from './util';
 import scrollIntoViewIfNeeded from './scrollintoviewifneeded';
 
@@ -46,6 +47,7 @@ export default function SelectBox(element, options) {
   context.opened = false;
   context.destroyed = false;
   context.element = $(element);
+  context.observer = new Observer(element);
 
   if (element.multiple || element.size > 1) {
     return context;
@@ -108,23 +110,29 @@ SelectBox.prototype = {
 
     actived = context;
 
+    function change() {
+      var selectbox = SelectBox.get(this);
+
+      if (selectbox) {
+        selectbox.__renderTitlebox();
+        selectbox.opened && selectbox.__refreshSelected();
+      }
+    };
+
+    function refresh() {
+      var selectbox = SelectBox.get(this);
+
+      selectbox && selectbox.__refreshSelectbox();
+    };
+
+    context.observer.watch('disabled', refresh);
+    context.observer.watch('selectedIndex', change);
+
     if (!reference) {
       var selector = 'select';
 
-      doc.on('change' + namespace, selector, function() {
-        var selectbox = SelectBox.get(this);
-
-        if (selectbox) {
-          selectbox.__renderTitlebox();
-          selectbox.opened && selectbox.__refreshSelected();
-        }
-      });
-
-      doc.on('focusin' + namespace + ' focusout' + namespace, selector, function() {
-        var selectbox = SelectBox.get(this);
-
-        selectbox && selectbox.__refreshSelectbox();
-      });
+      doc.on('change' + namespace, selector, change);
+      doc.on('focusin' + namespace + ' focusout' + namespace, selector, refresh);
 
       doc.on('mousedown' + namespace, function(e) {
         var target = e.target;
@@ -170,13 +178,11 @@ SelectBox.prototype = {
     });
 
     context.selectbox.on('mousedown' + namespace, function(e) {
+      e.preventDefault();
+
       var select = context.element;
 
       if (select[0].disabled) return;
-
-      e.preventDefault();
-
-      context.focus();
 
       if (context.opened) {
         var target = e.target;
@@ -188,6 +194,10 @@ SelectBox.prototype = {
       } else {
         context.open();
       }
+
+      setTimeout(function() {
+        select.focus();
+      }, 0);
     });
 
     context.selectbox.on('click' + namespace, '[' + options.optionIndexAttr + ']', function(e) {
@@ -197,7 +207,8 @@ SelectBox.prototype = {
 
       if (option.hasClass(options.optionDisabledClass)) return;
 
-      context.select(option.attr(options.optionIndexAttr));
+      context.element[0].selectedIndex = option.attr(options.optionIndexAttr);
+
       context.close();
     });
 
@@ -286,16 +297,19 @@ SelectBox.prototype = {
     return context;
   },
   __renderTitlebox: function() {
+    var template = '';
     var context = this;
+    var selected = null;
     var element = context.element[0];
-    var selected = $(element.options[element.selectedIndex]);
+    var title = context.options.title;
+    var selectedIndex = element.selectedIndex;
 
-    context.titlebox.html(compile(
-      context,
-      context.options.title,
-      selected,
-      selected.html()
-    ));
+    if (selectedIndex >= 0) {
+      selected = element.options[selectedIndex];
+      template = selected.innerHTML;
+    }
+
+    context.titlebox.html(compile(context, title, selected, template));
 
     return context;
   },
@@ -415,32 +429,12 @@ SelectBox.prototype = {
 
       context.selectbox = selectbox;
 
-      reference++;
-
       element.data('beauty-select', context);
+
+      reference++;
     }
 
     return context.refresh();
-  },
-  focus: function() {
-    this.element.trigger('focus');
-
-    return this;
-  },
-  blur: function() {
-    this.element.trigger('blur');
-
-    return this;
-  },
-  enable: function() {
-    this.element[0].disabled = false;
-
-    return this.__refreshSelectbox();
-  },
-  disable: function() {
-    this.element[0].disabled = true;
-
-    return this.__refreshSelectbox();
   },
   refresh: function() {
     var context = this;
@@ -451,20 +445,6 @@ SelectBox.prototype = {
     context.__sizeDropdown();
 
     return context.__refreshSelectbox();
-  },
-  select: function(index) {
-    var context = this;
-    var element = context.element[0];
-    var oldIndex = element.selectedIndex;
-
-    index = index >>> 0;
-    element.selectedIndex = index;
-
-    if (oldIndex !== index) {
-      context.element.trigger('change');
-    }
-
-    return this.__renderTitlebox();
   },
   open: function() {
     var context = this;
@@ -511,12 +491,14 @@ SelectBox.prototype = {
       context.element.off('keypress' + namespace);
       context.selectbox.remove();
       context.dropdown.remove();
+
       element.removeData('beauty-select');
       element.removeClass('ui-beauty-select-hidden');
 
-      reference--;
+      context.observer.watch('disabled', refresh);
+      context.observer.watch('selectedIndex', refresh);
 
-      if (!reference) {
+      if (!--reference) {
         doc.off('change' + namespace);
         doc.off('focusin' + namespace);
         doc.off('focusout' + namespace);
