@@ -1,7 +1,7 @@
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('jquery')) :
-  typeof define === 'function' && define.amd ? define('beauty-form', ['jquery'], factory) :
-  (global.beautyForm = factory(global.jQuery));
+  typeof define === 'function' && define.amd ? define('beautify-form', ['jquery'], factory) :
+  (global.beautifyForm = factory(global.jQuery));
 }(this, (function ($) { 'use strict';
 
   $ = $ && $.hasOwnProperty('default') ? $['default'] : $;
@@ -114,10 +114,10 @@
   /*!
    * Choice
    * Date: 2015/06/07
-   * https://github.com/nuintun/beauty-form
+   * https://github.com/nuintun/beautify-form
    *
    * This is licensed under the MIT License (MIT).
-   * For details, see: https://github.com/nuintun/beauty-form/blob/master/LICENSE
+   * For details, see: https://github.com/nuintun/beautify-form/blob/master/LICENSE
    */
 
   var reference = {};
@@ -176,7 +176,7 @@
   Choice.get = function(element) {
     element = $(element);
 
-    return element.data('beauty-choice');
+    return element.data('beautify-choice');
   };
 
   /**
@@ -191,7 +191,7 @@
    *   enable: Choice.enable,
    *   disable: Choice.disable,
    *   refresh: Choice.refresh,
-   *   beauty: Choice.beauty,
+   *   beautify: Choice.beautify,
    *   destory: Choice.destory
    * }}
    */
@@ -220,7 +220,7 @@
       reference[type] = reference[type] || 0;
 
       if (!reference[type]) {
-        var namespace = '.beauty-' + type;
+        var namespace = '.beautify-' + type;
         var selector = 'input[type=' + type + ']';
 
         doc.on('focusin' + namespace, selector, refresh);
@@ -233,20 +233,20 @@
         }
       }
 
-      return context.__beauty();
+      return context.__beautify();
     },
-    __beauty: function() {
+    __beautify: function() {
       var context = this;
       var type = context.type;
       var element = context.element;
 
-      element.wrap('<i tabindex="-1" class="ui-beauty-choice ui-beauty-' + type + '"/>');
+      element.wrap('<i tabindex="-1" class="ui-beautify-choice ui-beautify-' + type + '"/>');
 
       context.choice = element.parent();
 
       context.choice.attr('role', type);
 
-      element.data('beauty-choice', context);
+      element.data('beautify-choice', context);
 
       reference[type]++;
 
@@ -260,15 +260,15 @@
       var indeterminate = element.indeterminate;
 
       choice
-        .toggleClass('ui-beauty-choice-disabled', element.disabled)
-        .toggleClass('ui-beauty-choice-focus', activeElement() === element);
+        .toggleClass('ui-beautify-choice-disabled', element.disabled)
+        .toggleClass('ui-beautify-choice-focus', activeElement() === element);
 
       if (type === 'checkbox') {
         choice
-          .toggleClass('ui-beauty-choice-checked', !indeterminate && element.checked)
-          .toggleClass('ui-beauty-choice-indeterminate', indeterminate);
+          .toggleClass('ui-beautify-choice-checked', !indeterminate && element.checked)
+          .toggleClass('ui-beautify-choice-indeterminate', indeterminate);
       } else {
-        choice.toggleClass('ui-beauty-choice-checked', element.checked);
+        choice.toggleClass('ui-beautify-choice-checked', element.checked);
       }
 
       return context;
@@ -282,7 +282,7 @@
       var element = context.element;
 
       element.unwrap();
-      element.removeData('beauty-choice');
+      element.removeData('beautify-choice');
 
       context.observer.unwatch('checked');
       context.observer.unwatch('disabled');
@@ -294,7 +294,7 @@
       }
 
       if (!--reference[type]) {
-        var namespace = '.beauty-' + type;
+        var namespace = '.beautify-' + type;
 
         doc.off('focusin' + namespace);
         doc.off('change' + namespace);
@@ -428,10 +428,10 @@
   /*!
    * SelectBox
    * Date: 2015/06/12
-   * https://github.com/nuintun/beauty-form
+   * https://github.com/nuintun/beautify-form
    *
    * This is licensed under the MIT License (MIT).
-   * For details, see: https://github.com/nuintun/beauty-form/blob/master/LICENSE
+   * For details, see: https://github.com/nuintun/beautify-form/blob/master/LICENSE
    */
 
   var timer;
@@ -477,27 +477,27 @@
 
     options = $.extend({
       title: function(element, text) {
-        return '<i class="ui-beauty-select-align-middle"></i>'
-          + '<span class="ui-beauty-select-title" title="' + text + '">'
-          + text + '</span><i class="ui-beauty-select-icon"></i>';
+        return '<i class="ui-beautify-select-align-middle"></i>'
+          + '<span class="ui-beautify-select-title" title="' + text + '">'
+          + text + '</span><i class="ui-beautify-select-icon"></i>';
       },
       dropdown: function(element, options) {
-        return '<dl class="ui-beauty-select-dropdown-items">' + options + '</dl>';
+        return '<dl class="ui-beautify-select-dropdown-items">' + options + '</dl>';
       },
       optgroup: function(element, label) {
-        return '<dt class="ui-beauty-select-optgroup" title="' + label + '">' + label + '</dt>';
+        return '<dt class="ui-beautify-select-optgroup" title="' + label + '">' + label + '</dt>';
       },
       option: function(element, option) {
-        return '<dd role="option" class="ui-beauty-select-option'
-          + (option.group ? ' ui-beauty-select-optgroup-option' : '')
+        return '<dd role="option" class="ui-beautify-select-option'
+          + (option.group ? ' ui-beautify-select-optgroup-option' : '')
           + (option.className ? ' ' + option.className : '') + '" '
           + option.indexAttr + '="' + option.index + '" title="'
           + option.text + '">' + option.text + '</dd>';
       },
       dropdownWidth: null,
       optionIndexAttr: 'data-option',
-      optionSelectedClass: 'ui-beauty-select-option-selected',
-      optionDisabledClass: 'ui-beauty-select-option-disabled'
+      optionSelectedClass: 'ui-beautify-select-option-selected',
+      optionDisabledClass: 'ui-beautify-select-option-disabled'
     }, options);
 
     $.each(['title', 'dropdown', 'optgroup', 'option'], function(index, prop) {
@@ -520,7 +520,7 @@
   SelectBox.get = function(element) {
     element = $(element);
 
-    return element.data('beauty-select');
+    return element.data('beautify-select');
   };
 
   SelectBox.prototype = {
@@ -528,7 +528,7 @@
       var context = this;
       var type = context.type;
       var options = context.options;
-      var namespace = '.beauty-' + type;
+      var namespace = '.beautify-' + type;
 
       actived = context;
 
@@ -586,7 +586,7 @@
         });
       }
 
-      context.__beauty();
+      context.__beautify();
 
       context.element.on('keypress' + namespace, function(e) {
         if (e.which === 13) {
@@ -709,8 +709,8 @@
         var position = offset.top > win.height() - offset.bottom ? 'top' : 'bottom';
 
         dropdown
-          .removeClass('ui-beauty-select-dropdown-' + (position === 'top' ? 'bottom' : 'top'))
-          .addClass('ui-beauty-select-dropdown-' + position);
+          .removeClass('ui-beautify-select-dropdown-' + (position === 'top' ? 'bottom' : 'top'))
+          .addClass('ui-beautify-select-dropdown-' + position);
 
         dropdown.css({
           top: position === 'bottom' ? size.selectbox.outerHeight : -size.dropdown.outerHeight
@@ -809,8 +809,8 @@
         || $.contains(selectbox[0], focused);
 
       selectbox
-        .toggleClass('ui-beauty-select-disabled', element.disabled)
-        .toggleClass('ui-beauty-select-focus', focused);
+        .toggleClass('ui-beautify-select-disabled', element.disabled)
+        .toggleClass('ui-beautify-select-focus', focused);
 
       return context;
     },
@@ -835,16 +835,16 @@
 
       return context;
     },
-    __beauty: function() {
+    __beautify: function() {
       var context = this;
       var element = context.element;
 
-      element.addClass('ui-beauty-select-hidden');
+      element.addClass('ui-beautify-select-hidden');
 
-      var selectbox = $('<div role="combobox" tabindex="-1" class="ui-beauty-select"/>');
+      var selectbox = $('<div role="combobox" tabindex="-1" class="ui-beautify-select"/>');
 
-      context.titlebox = $('<div class="ui-beauty-select-titlebox"/>');
-      context.dropdown = $('<div role="listbox" class="ui-beauty-select-dropdown"/>');
+      context.titlebox = $('<div class="ui-beautify-select-titlebox"/>');
+      context.dropdown = $('<div role="listbox" class="ui-beautify-select-dropdown"/>');
 
       selectbox
         .append(context.titlebox)
@@ -852,7 +852,7 @@
 
       context.selectbox = selectbox;
 
-      element.data('beauty-select', context);
+      element.data('beautify-select', context);
 
       reference$1++;
 
@@ -882,7 +882,7 @@
 
       actived = context;
 
-      context.selectbox.addClass('ui-beauty-select-opened');
+      context.selectbox.addClass('ui-beautify-select-opened');
       context.dropdown.appendTo(context.selectbox);
       context.__position();
       context.__refreshSelected();
@@ -896,7 +896,7 @@
         context.opened = false;
 
         context.dropdown.detach();
-        context.selectbox.removeClass('ui-beauty-select-opened');
+        context.selectbox.removeClass('ui-beautify-select-opened');
       }
 
       return context;
@@ -907,15 +907,15 @@
       if (!context.destroyed) {
         var type = context.type;
         var element = context.element;
-        var namespace = '.beauty-' + type;
+        var namespace = '.beautify-' + type;
 
         context.selectbox.off();
         context.element.off('keypress' + namespace);
         context.selectbox.remove();
         context.dropdown.remove();
 
-        element.removeData('beauty-select');
-        element.removeClass('ui-beauty-select-hidden');
+        element.removeData('beautify-select');
+        element.removeClass('ui-beautify-select-hidden');
 
         context.observer.unwatch('disabled');
         context.observer.unwatch('selectedIndex');

@@ -35,15 +35,15 @@
         line-height: 16px;
       }
 
-      .ui-beauty-select,
-      .ui-beauty-choice {
+      .ui-beautify-select,
+      .ui-beautify-choice {
         vertical-align: middle;
       }
 
       select + label,
       input + label,
-      .ui-beauty-select + label,
-      .ui-beauty-choice + label {
+      .ui-beautify-select + label,
+      .ui-beautify-choice + label {
         user-select: none;
         -ms-user-select: none;
         -moz-user-select: none;
@@ -53,8 +53,8 @@
       }
 
       [disabled] + label,
-      .ui-beauty-select-disabled + label,
-      .ui-beauty-choice-disabled + label {
+      .ui-beautify-select-disabled + label,
+      .ui-beautify-choice-disabled + label {
         color: #e6e6e6;
         cursor: not-allowed;
       }
@@ -91,9 +91,9 @@
         margin-top: 88px;
       }
     </style>
-    <link rel="stylesheet" href="../dist/css/beauty-form.css" />
+    <link rel="stylesheet" href="../dist/css/beautify-form.css" />
     <script src="./jquery.js"></script>
-    <script src="../dist/beauty-form.js"></script>
+    <script src="../dist/beautify-form.js"></script>
   </head>
   <body>
     <button id="button" class="ui-button ui-button-success">（启用 / 取消）表单美化</button>
@@ -176,7 +176,7 @@
 
       var checkbox, radiobox, selectbox;
 
-      function beauty() {
+      function beautify() {
         if (checkbox) {
           checkbox = false;
 
@@ -208,11 +208,11 @@
         }
       }
 
-      beauty();
+      beautify();
 
       $('#checkbox-5, #checkbox-6').prop('indeterminate', true);
 
-      $('#button').on('click', beauty);
+      $('#button').on('click', beautify);
     </script>
   </body>
 </html>

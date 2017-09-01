@@ -13,7 +13,7 @@ rollup.rollup({
   external: ['jquery'],
   plugins: [css({
     include: '**/*.css',
-    extract: 'dist/css/beauty-form.css',
+    extract: 'dist/css/beautify-form.css',
     plugins: [autoprefixer({
       add: true,
       remove: true,
@@ -25,7 +25,7 @@ rollup.rollup({
       // css
       console.log(`  Build ${ cssfile } success!`);
 
-      const cssmin = 'dist/css/beauty-form.min.css';
+      const cssmin = 'dist/css/beautify-form.min.css';
 
       cssnano
         .process(fs.readFileSync(cssfile), { safe: true })
@@ -40,25 +40,25 @@ rollup.rollup({
   })]
 }).then(function(bundle) {
 
-  const jsfile = 'dist/beauty-form.js';
+  const jsfile = 'dist/beautify-form.js';
 
   bundle.generate({
     format: 'umd',
     indent: true,
     strict: true,
-    amd: { id: 'beauty-form' },
-    name: 'beautyForm',
+    amd: { id: 'beautify-form' },
+    name: 'beautifyForm',
     globals: { jquery: 'jQuery' }
   }).then(function(result) {
     // js
     fs.outputFileSync(jsfile, result.code);
     console.log(`  Build ${ jsfile } success!`);
 
-    const jsmin = 'dist/beauty-form.min.js';
-    const jsmap = 'beauty-form.js.map';
+    const jsmin = 'dist/beautify-form.min.js';
+    const jsmap = 'beautify-form.js.map';
 
     result = uglify.minify({
-      'beauty-form.js': result.code
+      'beautify-form.js': result.code
     }, {
       ecma: 5,
       ie8: true,

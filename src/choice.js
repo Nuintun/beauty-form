@@ -1,10 +1,10 @@
 /*!
  * Choice
  * Date: 2015/06/07
- * https://github.com/nuintun/beauty-form
+ * https://github.com/nuintun/beautify-form
  *
  * This is licensed under the MIT License (MIT).
- * For details, see: https://github.com/nuintun/beauty-form/blob/master/LICENSE
+ * For details, see: https://github.com/nuintun/beautify-form/blob/master/LICENSE
  */
 
 import $ from 'jquery';
@@ -67,7 +67,7 @@ export default function Choice(element) {
 Choice.get = function(element) {
   element = $(element);
 
-  return element.data('beauty-choice');
+  return element.data('beautify-choice');
 };
 
 /**
@@ -82,7 +82,7 @@ Choice.get = function(element) {
  *   enable: Choice.enable,
  *   disable: Choice.disable,
  *   refresh: Choice.refresh,
- *   beauty: Choice.beauty,
+ *   beautify: Choice.beautify,
  *   destory: Choice.destory
  * }}
  */
@@ -111,7 +111,7 @@ Choice.prototype = {
     reference[type] = reference[type] || 0;
 
     if (!reference[type]) {
-      var namespace = '.beauty-' + type;
+      var namespace = '.beautify-' + type;
       var selector = 'input[type=' + type + ']';
 
       doc.on('focusin' + namespace, selector, refresh);
@@ -124,20 +124,20 @@ Choice.prototype = {
       }
     }
 
-    return context.__beauty();
+    return context.__beautify();
   },
-  __beauty: function() {
+  __beautify: function() {
     var context = this;
     var type = context.type;
     var element = context.element;
 
-    element.wrap('<i tabindex="-1" class="ui-beauty-choice ui-beauty-' + type + '"/>');
+    element.wrap('<i tabindex="-1" class="ui-beautify-choice ui-beautify-' + type + '"/>');
 
     context.choice = element.parent();
 
     context.choice.attr('role', type);
 
-    element.data('beauty-choice', context);
+    element.data('beautify-choice', context);
 
     reference[type]++;
 
@@ -151,15 +151,15 @@ Choice.prototype = {
     var indeterminate = element.indeterminate;
 
     choice
-      .toggleClass('ui-beauty-choice-disabled', element.disabled)
-      .toggleClass('ui-beauty-choice-focus', activeElement() === element)
+      .toggleClass('ui-beautify-choice-disabled', element.disabled)
+      .toggleClass('ui-beautify-choice-focus', activeElement() === element)
 
     if (type === 'checkbox') {
       choice
-        .toggleClass('ui-beauty-choice-checked', !indeterminate && element.checked)
-        .toggleClass('ui-beauty-choice-indeterminate', indeterminate);
+        .toggleClass('ui-beautify-choice-checked', !indeterminate && element.checked)
+        .toggleClass('ui-beautify-choice-indeterminate', indeterminate);
     } else {
-      choice.toggleClass('ui-beauty-choice-checked', element.checked);
+      choice.toggleClass('ui-beautify-choice-checked', element.checked);
     }
 
     return context;
@@ -173,7 +173,7 @@ Choice.prototype = {
     var element = context.element;
 
     element.unwrap();
-    element.removeData('beauty-choice');
+    element.removeData('beautify-choice');
 
     context.observer.unwatch('checked');
     context.observer.unwatch('disabled');
@@ -185,7 +185,7 @@ Choice.prototype = {
     }
 
     if (!--reference[type]) {
-      var namespace = '.beauty-' + type;
+      var namespace = '.beautify-' + type;
 
       doc.off('focusin' + namespace);
       doc.off('change' + namespace);

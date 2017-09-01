@@ -1,10 +1,10 @@
 /*!
  * SelectBox
  * Date: 2015/06/12
- * https://github.com/nuintun/beauty-form
+ * https://github.com/nuintun/beautify-form
  *
  * This is licensed under the MIT License (MIT).
- * For details, see: https://github.com/nuintun/beauty-form/blob/master/LICENSE
+ * For details, see: https://github.com/nuintun/beautify-form/blob/master/LICENSE
  */
 
 import $ from 'jquery';
@@ -55,27 +55,27 @@ export default function SelectBox(element, options) {
 
   options = $.extend({
     title: function(element, text) {
-      return '<i class="ui-beauty-select-align-middle"></i>'
-        + '<span class="ui-beauty-select-title" title="' + text + '">'
-        + text + '</span><i class="ui-beauty-select-icon"></i>';
+      return '<i class="ui-beautify-select-align-middle"></i>'
+        + '<span class="ui-beautify-select-title" title="' + text + '">'
+        + text + '</span><i class="ui-beautify-select-icon"></i>';
     },
     dropdown: function(element, options) {
-      return '<dl class="ui-beauty-select-dropdown-items">' + options + '</dl>';
+      return '<dl class="ui-beautify-select-dropdown-items">' + options + '</dl>';
     },
     optgroup: function(element, label) {
-      return '<dt class="ui-beauty-select-optgroup" title="' + label + '">' + label + '</dt>';
+      return '<dt class="ui-beautify-select-optgroup" title="' + label + '">' + label + '</dt>';
     },
     option: function(element, option) {
-      return '<dd role="option" class="ui-beauty-select-option'
-        + (option.group ? ' ui-beauty-select-optgroup-option' : '')
+      return '<dd role="option" class="ui-beautify-select-option'
+        + (option.group ? ' ui-beautify-select-optgroup-option' : '')
         + (option.className ? ' ' + option.className : '') + '" '
         + option.indexAttr + '="' + option.index + '" title="'
         + option.text + '">' + option.text + '</dd>';
     },
     dropdownWidth: null,
     optionIndexAttr: 'data-option',
-    optionSelectedClass: 'ui-beauty-select-option-selected',
-    optionDisabledClass: 'ui-beauty-select-option-disabled'
+    optionSelectedClass: 'ui-beautify-select-option-selected',
+    optionDisabledClass: 'ui-beautify-select-option-disabled'
   }, options);
 
   $.each(['title', 'dropdown', 'optgroup', 'option'], function(index, prop) {
@@ -98,7 +98,7 @@ export default function SelectBox(element, options) {
 SelectBox.get = function(element) {
   element = $(element);
 
-  return element.data('beauty-select');
+  return element.data('beautify-select');
 };
 
 SelectBox.prototype = {
@@ -106,7 +106,7 @@ SelectBox.prototype = {
     var context = this;
     var type = context.type;
     var options = context.options;
-    var namespace = '.beauty-' + type;
+    var namespace = '.beautify-' + type;
 
     actived = context;
 
@@ -164,7 +164,7 @@ SelectBox.prototype = {
       });
     }
 
-    context.__beauty();
+    context.__beautify();
 
     context.element.on('keypress' + namespace, function(e) {
       if (e.which === 13) {
@@ -287,8 +287,8 @@ SelectBox.prototype = {
       var position = offset.top > win.height() - offset.bottom ? 'top' : 'bottom';
 
       dropdown
-        .removeClass('ui-beauty-select-dropdown-' + (position === 'top' ? 'bottom' : 'top'))
-        .addClass('ui-beauty-select-dropdown-' + position);
+        .removeClass('ui-beautify-select-dropdown-' + (position === 'top' ? 'bottom' : 'top'))
+        .addClass('ui-beautify-select-dropdown-' + position);
 
       dropdown.css({
         top: position === 'bottom' ? size.selectbox.outerHeight : -size.dropdown.outerHeight
@@ -387,8 +387,8 @@ SelectBox.prototype = {
       || $.contains(selectbox[0], focused);
 
     selectbox
-      .toggleClass('ui-beauty-select-disabled', element.disabled)
-      .toggleClass('ui-beauty-select-focus', focused);
+      .toggleClass('ui-beautify-select-disabled', element.disabled)
+      .toggleClass('ui-beautify-select-focus', focused);
 
     return context;
   },
@@ -413,16 +413,16 @@ SelectBox.prototype = {
 
     return context;
   },
-  __beauty: function() {
+  __beautify: function() {
     var context = this;
     var element = context.element;
 
-    element.addClass('ui-beauty-select-hidden');
+    element.addClass('ui-beautify-select-hidden');
 
-    var selectbox = $('<div role="combobox" tabindex="-1" class="ui-beauty-select"/>');
+    var selectbox = $('<div role="combobox" tabindex="-1" class="ui-beautify-select"/>');
 
-    context.titlebox = $('<div class="ui-beauty-select-titlebox"/>');
-    context.dropdown = $('<div role="listbox" class="ui-beauty-select-dropdown"/>');
+    context.titlebox = $('<div class="ui-beautify-select-titlebox"/>');
+    context.dropdown = $('<div role="listbox" class="ui-beautify-select-dropdown"/>');
 
     selectbox
       .append(context.titlebox)
@@ -430,7 +430,7 @@ SelectBox.prototype = {
 
     context.selectbox = selectbox;
 
-    element.data('beauty-select', context);
+    element.data('beautify-select', context);
 
     reference++;
 
@@ -460,7 +460,7 @@ SelectBox.prototype = {
 
     actived = context;
 
-    context.selectbox.addClass('ui-beauty-select-opened');
+    context.selectbox.addClass('ui-beautify-select-opened');
     context.dropdown.appendTo(context.selectbox);
     context.__position();
     context.__refreshSelected();
@@ -474,7 +474,7 @@ SelectBox.prototype = {
       context.opened = false;
 
       context.dropdown.detach();
-      context.selectbox.removeClass('ui-beauty-select-opened');
+      context.selectbox.removeClass('ui-beautify-select-opened');
     }
 
     return context;
@@ -485,15 +485,15 @@ SelectBox.prototype = {
     if (!context.destroyed) {
       var type = context.type;
       var element = context.element;
-      var namespace = '.beauty-' + type;
+      var namespace = '.beautify-' + type;
 
       context.selectbox.off();
       context.element.off('keypress' + namespace);
       context.selectbox.remove();
       context.dropdown.remove();
 
-      element.removeData('beauty-select');
-      element.removeClass('ui-beauty-select-hidden');
+      element.removeData('beautify-select');
+      element.removeClass('ui-beautify-select-hidden');
 
       context.observer.unwatch('disabled');
       context.observer.unwatch('selectedIndex');

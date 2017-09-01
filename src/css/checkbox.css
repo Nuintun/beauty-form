@@ -1,24 +1,24 @@
-.ui-beauty-checkbox {
+.ui-beautify-checkbox {
   background: url(../images/checkbox.png) no-repeat center;
 }
 
-.ui-beauty-checkbox.ui-beauty-choice-checked {
+.ui-beautify-checkbox.ui-beautify-choice-checked {
   background: url(../images/checkbox-checked.png) no-repeat center;
 }
 
-.ui-beauty-checkbox.ui-beauty-choice-indeterminate {
+.ui-beautify-checkbox.ui-beautify-choice-indeterminate {
   background: url(../images/checkbox-indeterminate.png) no-repeat center;
 }
 
-.ui-beauty-checkbox.ui-beauty-choice-disabled {
+.ui-beautify-checkbox.ui-beautify-choice-disabled {
   cursor: not-allowed;
   background: url(../images/checkbox-disabled.png) no-repeat center;
 }
 
-.ui-beauty-checkbox.ui-beauty-choice-checked.ui-beauty-choice-disabled {
+.ui-beautify-checkbox.ui-beautify-choice-checked.ui-beautify-choice-disabled {
   background: url(../images/checkbox-checked-disabled.png) no-repeat center;
 }
 
-.ui-beauty-checkbox.ui-beauty-choice-indeterminate.ui-beauty-choice-disabled {
+.ui-beautify-checkbox.ui-beautify-choice-indeterminate.ui-beautify-choice-disabled {
   background: url(../images/checkbox-indeterminate-disabled.png) no-repeat center;
 }

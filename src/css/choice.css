@@ -1,4 +1,4 @@
-.ui-beauty-choice {
+.ui-beautify-choice {
   display: inline-block;
   *display: inline;
   *zoom: 1;
@@ -11,7 +11,7 @@
   overflow: hidden;
 }
 
-.ui-beauty-choice > input {
+.ui-beautify-choice > input {
   width: 100%;
   height: 100%;
   outline: 0 none;
@@ -21,11 +21,11 @@
   filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
 }
 
-:root .ui-beauty-choice > input {
+:root .ui-beautify-choice > input {
   -ms-filter: none;
   filter: none;
 }
 
-.ui-beauty-choice-disabled > input {
+.ui-beautify-choice-disabled > input {
   cursor: not-allowed;
 }
