@@ -8,7 +8,7 @@
  * For details, see: https://github.com/nuintun/beauty-form/blob/master/LICENSE
  */
 
-// native
+// Native
 var native = document.documentElement.scrollIntoViewIfNeeded;
 
 /**
@@ -16,7 +16,7 @@ var native = document.documentElement.scrollIntoViewIfNeeded;
  *
  * @param {HTMLElement} element
  * @param {Boolean} centerIfNeeded
- * @returns
+ * @returns {void}
  */
 export default function scrollIntoViewIfNeeded(element, centerIfNeeded) {
   if (!element) {

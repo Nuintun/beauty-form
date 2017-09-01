@@ -23,7 +23,9 @@ var getNodeDescriptor = getPrototypeOf ? function(node, prop) {
     prototype = node.constructor.prototype;
   }
 
-  return getOwnPropertyDescriptor(prototype, prop);
+  if (hasOwnProperty.call(prototype, prop)) {
+    return getOwnPropertyDescriptor(prototype, prop);
+  }
 };
 
 window.getNodeDescriptor = getNodeDescriptor;
@@ -37,7 +39,7 @@ Observer.prototype = {
     var node = this.node;
     var descr = getNodeDescriptor(node, prop);
 
-    if (!descr.hasOwnProperty('value')) {
+    if (descr && (descr.set || descr.get)) {
       var config = {
         configurable: true,
         enumerable: descr.enumerable
@@ -45,6 +47,7 @@ Observer.prototype = {
 
       if (descr.set) {
         config.set = function(value) {
+          var node = this;
           var stale = node[prop];
 
           if (stale !== value) {
@@ -57,9 +60,10 @@ Observer.prototype = {
       }
 
       if (descr.get) {
+        // IE8 can't direct use: config.get = descr.get
         config.get = function() {
-          return descr.get.call(node);
-        };
+          return descr.get.call(this);
+        }
       }
 
       defineProperty(node, prop, config);

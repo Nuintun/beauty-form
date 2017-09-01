@@ -31,7 +31,9 @@
       prototype = node.constructor.prototype;
     }
 
-    return getOwnPropertyDescriptor(prototype, prop);
+    if (hasOwnProperty.call(prototype, prop)) {
+      return getOwnPropertyDescriptor(prototype, prop);
+    }
   };
 
   window.getNodeDescriptor = getNodeDescriptor;
@@ -45,7 +47,7 @@
       var node = this.node;
       var descr = getNodeDescriptor(node, prop);
 
-      if (!descr.hasOwnProperty('value')) {
+      if (descr && (descr.set || descr.get)) {
         var config = {
           configurable: true,
           enumerable: descr.enumerable
@@ -53,6 +55,7 @@
 
         if (descr.set) {
           config.set = function(value) {
+            var node = this;
             var stale = node[prop];
 
             if (stale !== value) {
@@ -65,8 +68,9 @@
         }
 
         if (descr.get) {
+          // IE8 can't direct use: config.get = descr.get
           config.get = function() {
-            return descr.get.call(node);
+            return descr.get.call(this);
           };
         }
 
@@ -291,7 +295,7 @@
    * For details, see: https://github.com/nuintun/beauty-form/blob/master/LICENSE
    */
 
-  // native
+  // Native
   var native = document.documentElement.scrollIntoViewIfNeeded;
 
   /**
@@ -299,7 +303,7 @@
    *
    * @param {HTMLElement} element
    * @param {Boolean} centerIfNeeded
-   * @returns
+   * @returns {void}
    */
   function scrollIntoViewIfNeeded(element, centerIfNeeded) {
     if (!element) {
