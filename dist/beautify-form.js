@@ -1,7 +1,7 @@
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('jquery')) :
   typeof define === 'function' && define.amd ? define('beautify-form', ['jquery'], factory) :
-  (global.beautifyForm = factory(global.jQuery));
+  (global.BeautifyForm = factory(global.jQuery));
 }(this, (function ($) { 'use strict';
 
   $ = $ && $.hasOwnProperty('default') ? $['default'] : $;

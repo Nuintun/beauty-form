@@ -47,7 +47,7 @@ rollup.rollup({
     indent: true,
     strict: true,
     amd: { id: 'beautify-form' },
-    name: 'beautifyForm',
+    name: 'BeautifyForm',
     globals: { jquery: 'jQuery' }
   }).then(function(result) {
     // js
