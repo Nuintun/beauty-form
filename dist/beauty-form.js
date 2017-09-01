@@ -825,12 +825,13 @@
         .find('.' + selectedClass)
         .removeClass(selectedClass);
 
-      var selected = dropdown
-        .find('[' + options.optionIndexAttr + '=' + selectedIndex + ']');
+      var selected = dropdown.find('[' + options.optionIndexAttr + '=' + selectedIndex + ']');
 
       selected.addClass(selectedClass);
 
-      scrollIntoViewIfNeeded(selected[0]);
+      selected = selected[0];
+
+      selected && scrollIntoViewIfNeeded(selected);
 
       return context;
     },
