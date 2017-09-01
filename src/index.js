@@ -51,7 +51,7 @@ $.fn.radiobox = create(Choice);
 $.fn.selectbox = create(SelectBox);
 
 export default {
-  Checkbox: Choice,
+  CheckBox: Choice,
   RadioBox: Choice,
   SelectBox: SelectBox
 };

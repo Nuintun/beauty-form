@@ -978,7 +978,7 @@
   $.fn.selectbox = create(SelectBox);
 
   var index = {
-    Checkbox: Choice,
+    CheckBox: Choice,
     RadioBox: Choice,
     SelectBox: SelectBox
   };
