@@ -555,7 +555,7 @@
 
         doc.on('focusin' + namespace, selector, refresh);
         doc.on('change' + namespace, selector, change);
-        doc.on('focusout' + namespace, selector, change);
+        doc.on('focusout' + namespace, selector, refresh);
 
         doc.on('mousedown' + namespace, function(e) {
           var target = e.target;
