@@ -36,8 +36,6 @@
     }
   };
 
-  window.getNodeDescriptor = getNodeDescriptor;
-
   function Observer(node) {
     this.node = node;
   }

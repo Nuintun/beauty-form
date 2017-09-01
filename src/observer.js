@@ -28,8 +28,6 @@ var getNodeDescriptor = getPrototypeOf ? function(node, prop) {
   }
 };
 
-window.getNodeDescriptor = getNodeDescriptor;
-
 export default function Observer(node) {
   this.node = node;
 }
@@ -51,7 +49,7 @@ Observer.prototype = {
           var stale = node[prop];
 
           if (stale !== value) {
-            descr.set.call(node, value)
+            descr.set.call(node, value);
             handler.call(node, stale, value);
           }
 
