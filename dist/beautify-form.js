@@ -179,22 +179,6 @@
     return element.data('beautify-choice');
   };
 
-  /**
-   * Choice.prototype
-   *
-   * @type {{
-   *   init: Choice.init,
-   *   focus: Choice.focus,
-   *   blur: Choice.blur,
-   *   check: Choice.check,
-   *   uncheck: Choice.uncheck,
-   *   enable: Choice.enable,
-   *   disable: Choice.disable,
-   *   refresh: Choice.refresh,
-   *   beautify: Choice.beautify,
-   *   destory: Choice.destory
-   * }}
-   */
   Choice.prototype = {
     __init: function() {
       var context = this;
