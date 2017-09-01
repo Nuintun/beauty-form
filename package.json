@@ -22,7 +22,7 @@
   ],
   "private": true,
   "dependencies": {
-    "rollup": "^0.49.1",
+    "rollup": "^0.49.2",
     "uglify-es": "^3.0.28",
     "cssnano": "^3.10.0",
     "autoprefixer": "^7.1.3",
