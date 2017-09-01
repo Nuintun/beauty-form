@@ -90,7 +90,6 @@
       body > button {
         margin-top: 88px;
       }
-
     </style>
     <link rel="stylesheet" href="../dist/css/beauty-form.css" />
     <script src="./jquery.js"></script>
@@ -211,10 +210,7 @@
 
       beauty();
 
-      var x = document.getElementById('checkbox-1');
-      var y = document.getElementById('select-1');
-
-      x.indeterminate = true;
+      $('#checkbox-5, #checkbox-6').prop('indeterminate', true);
 
       $('#button').on('click', beauty);
     </script>

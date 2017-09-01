@@ -13,8 +13,8 @@ var hasOwnProperty = Object.prototype.hasOwnProperty;
 var getOwnPropertyDescriptor = Object.getOwnPropertyDescriptor;
 var getNodeDescriptor = getPrototypeOf ? function(node, prop) {
   return getOwnPropertyDescriptor(getPrototypeOf(node), prop)
-    || getOwnPropertyDescriptor(Element.prototype, prop)
     || getOwnPropertyDescriptor(HTMLElement.prototype, prop)
+    || getOwnPropertyDescriptor(Element.prototype, prop)
     || getOwnPropertyDescriptor(Node.prototype, prop);
 } : function(node, prop) {
   var prototype = Element.prototype;
