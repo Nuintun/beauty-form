@@ -120,7 +120,7 @@
    * For details, see: https://github.com/nuintun/beauty-form/blob/master/LICENSE
    */
 
-  var reference = 0;
+  var reference = {};
 
   /**
    * radio
@@ -128,13 +128,15 @@
    * @param element
    */
   function radio(element) {
-    doc.find('input[type=radio][name=' + element.name + ']').each(function() {
-      var choice = Choice.get(this);
+    doc
+      .find('input[type=radio][name=' + element.name + ']')
+      .each(function(index, radio) {
+        var choice = Choice.get(radio);
 
-      if (choice && element !== this) {
-        choice.refresh();
-      }
-    });
+        if (choice && element !== radio) {
+          choice.refresh();
+        }
+      });
   }
 
   /**
@@ -210,49 +212,64 @@
 
       context.observer.watch('checked', refresh);
       context.observer.watch('disabled', refresh);
-      context.observer.watch('indeterminate', refresh);
 
-      if (!reference) {
+      if (type === 'checkbox') {
+        context.observer.watch('indeterminate', refresh);
+      }
+
+      reference[type] = reference[type] || 0;
+
+      if (!reference[type]) {
         var namespace = '.beauty-' + type;
         var selector = 'input[type=' + type + ']';
 
-        doc.on('change' + namespace, selector, refresh);
         doc.on('focusin' + namespace, selector, refresh);
+        doc.on('change' + namespace, selector, refresh);
         doc.on('focusout' + namespace, selector, refresh);
+
+        if (type === 'checkbox') {
+          // If checkbox is indeterminate, IE8+ not fire change and indeterminate change event.
+          doc.on('click' + namespace, selector, refresh);
+        }
       }
 
       return context.__beauty();
     },
     __beauty: function() {
       var context = this;
+      var type = context.type;
       var element = context.element;
 
-      if (!Choice.get(element)) {
-        var type = context.type;
+      element.wrap('<i tabindex="-1" class="ui-beauty-choice ui-beauty-' + type + '"/>');
 
-        element.wrap('<i tabindex="-1" class="ui-beauty-choice ui-beauty-' + type + '"/>');
+      context.choice = element.parent();
 
-        context.choice = element.parent();
+      context.choice.attr('role', type);
 
-        context.choice.attr('role', context.choice.type);
+      element.data('beauty-choice', context);
 
-        element.data('beauty-choice', context);
-
-        reference++;
-      }
+      reference[type]++;
 
       return context.refresh();
     },
     refresh: function() {
       var context = this;
+      var type = context.type;
+      var choice = context.choice;
       var element = context.element[0];
       var indeterminate = element.indeterminate;
 
-      context.choice
+      choice
         .toggleClass('ui-beauty-choice-disabled', element.disabled)
-        .toggleClass('ui-beauty-choice-indeterminate', indeterminate)
-        .toggleClass('ui-beauty-choice-focus', activeElement() === element)
-        .toggleClass('ui-beauty-choice-checked', !indeterminate && element.checked);
+        .toggleClass('ui-beauty-choice-focus', activeElement() === element);
+
+      if (type === 'checkbox') {
+        choice
+          .toggleClass('ui-beauty-choice-checked', !indeterminate && element.checked)
+          .toggleClass('ui-beauty-choice-indeterminate', indeterminate);
+      } else {
+        choice.toggleClass('ui-beauty-choice-checked', element.checked);
+      }
 
       return context;
     },
@@ -269,14 +286,25 @@
 
       context.observer.unwatch('checked');
       context.observer.unwatch('disabled');
-      context.observer.unwatch('indeterminate');
 
-      if (!--reference) {
+      if (type === 'checkbox') {
+        context.observer.unwatch('indeterminate');
+
+        element.off('click' + namespace);
+      }
+
+      if (!--reference[type]) {
         var namespace = '.beauty-' + type;
 
-        doc.off('change' + namespace);
         doc.off('focusin' + namespace);
+        doc.off('change' + namespace);
         doc.off('focusout' + namespace);
+
+        if (type === 'checkbox') {
+          doc.off('click' + namespace);
+        }
+
+        delete reference[type];
       }
 
       context.destroyed = true;
@@ -525,8 +553,9 @@
       if (!reference$1) {
         var selector = 'select';
 
+        doc.on('focusin' + namespace, selector, refresh);
         doc.on('change' + namespace, selector, change);
-        doc.on('focusin' + namespace + ' focusout' + namespace, selector, refresh);
+        doc.on('focusout' + namespace, selector, change);
 
         doc.on('mousedown' + namespace, function(e) {
           var target = e.target;
@@ -809,24 +838,22 @@
       var context = this;
       var element = context.element;
 
-      if (!SelectBox.get(element)) {
-        element.addClass('ui-beauty-select-hidden');
+      element.addClass('ui-beauty-select-hidden');
 
-        var selectbox = $('<div role="combobox" tabindex="-1" class="ui-beauty-select"/>');
+      var selectbox = $('<div role="combobox" tabindex="-1" class="ui-beauty-select"/>');
 
-        context.titlebox = $('<div class="ui-beauty-select-titlebox"/>');
-        context.dropdown = $('<div role="listbox" class="ui-beauty-select-dropdown"/>');
+      context.titlebox = $('<div class="ui-beauty-select-titlebox"/>');
+      context.dropdown = $('<div role="listbox" class="ui-beauty-select-dropdown"/>');
 
-        selectbox
-          .append(context.titlebox)
-          .insertAfter(context.element);
+      selectbox
+        .append(context.titlebox)
+        .insertAfter(context.element);
 
-        context.selectbox = selectbox;
+      context.selectbox = selectbox;
 
-        element.data('beauty-select', context);
+      element.data('beauty-select', context);
 
-        reference$1++;
-      }
+      reference$1++;
 
       return context.refresh();
     },
@@ -893,8 +920,8 @@
         context.observer.unwatch('selectedIndex');
 
         if (!--reference$1) {
-          doc.off('change' + namespace);
           doc.off('focusin' + namespace);
+          doc.off('change' + namespace);
           doc.off('focusout' + namespace);
           doc.off('mousedown' + namespace);
           doc.off('keydown' + namespace);

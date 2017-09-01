@@ -131,8 +131,9 @@ SelectBox.prototype = {
     if (!reference) {
       var selector = 'select';
 
+      doc.on('focusin' + namespace, selector, refresh);
       doc.on('change' + namespace, selector, change);
-      doc.on('focusin' + namespace + ' focusout' + namespace, selector, refresh);
+      doc.on('focusout' + namespace, selector, change);
 
       doc.on('mousedown' + namespace, function(e) {
         var target = e.target;
@@ -415,24 +416,22 @@ SelectBox.prototype = {
     var context = this;
     var element = context.element;
 
-    if (!SelectBox.get(element)) {
-      element.addClass('ui-beauty-select-hidden');
+    element.addClass('ui-beauty-select-hidden');
 
-      var selectbox = $('<div role="combobox" tabindex="-1" class="ui-beauty-select"/>');
+    var selectbox = $('<div role="combobox" tabindex="-1" class="ui-beauty-select"/>');
 
-      context.titlebox = $('<div class="ui-beauty-select-titlebox"/>');
-      context.dropdown = $('<div role="listbox" class="ui-beauty-select-dropdown"/>');
+    context.titlebox = $('<div class="ui-beauty-select-titlebox"/>');
+    context.dropdown = $('<div role="listbox" class="ui-beauty-select-dropdown"/>');
 
-      selectbox
-        .append(context.titlebox)
-        .insertAfter(context.element);
+    selectbox
+      .append(context.titlebox)
+      .insertAfter(context.element);
 
-      context.selectbox = selectbox;
+    context.selectbox = selectbox;
 
-      element.data('beauty-select', context);
+    element.data('beauty-select', context);
 
-      reference++;
-    }
+    reference++;
 
     return context.refresh();
   },
@@ -499,8 +498,8 @@ SelectBox.prototype = {
       context.observer.unwatch('selectedIndex');
 
       if (!--reference) {
-        doc.off('change' + namespace);
         doc.off('focusin' + namespace);
+        doc.off('change' + namespace);
         doc.off('focusout' + namespace);
         doc.off('mousedown' + namespace);
         doc.off('keydown' + namespace);
