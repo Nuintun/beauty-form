@@ -194,8 +194,9 @@
         }
       }
 
-      context.observer.watch('checked', refresh);
-      context.observer.watch('disabled', refresh);
+      context.observer
+        .watch('checked', refresh)
+        .watch('disabled', refresh);
 
       if (type === 'checkbox') {
         context.observer.watch('indeterminate', refresh);
@@ -207,9 +208,10 @@
         var namespace = '.beautify-' + type;
         var selector = 'input[type=' + type + ']';
 
-        doc.on('focusin' + namespace, selector, refresh);
-        doc.on('change' + namespace, selector, refresh);
-        doc.on('focusout' + namespace, selector, refresh);
+        doc
+          .on('focusin' + namespace, selector, refresh)
+          .on('change' + namespace, selector, refresh)
+          .on('focusout' + namespace, selector, refresh);
 
         if (type === 'checkbox') {
           // If checkbox is indeterminate, IE8+ not fire change and indeterminate change event.
@@ -265,11 +267,13 @@
       var type = context.type;
       var element = context.element;
 
-      element.unwrap();
-      element.removeData('beautify-choice');
+      element
+        .unwrap()
+        .removeData('beautify-choice');
 
-      context.observer.unwatch('checked');
-      context.observer.unwatch('disabled');
+      context.observer
+        .unwatch('checked')
+        .unwatch('disabled');
 
       if (type === 'checkbox') {
         context.observer.unwatch('indeterminate');
@@ -280,9 +284,10 @@
       if (!--reference[type]) {
         var namespace = '.beautify-' + type;
 
-        doc.off('focusin' + namespace);
-        doc.off('change' + namespace);
-        doc.off('focusout' + namespace);
+        doc
+          .off('focusin' + namespace)
+          .off('change' + namespace)
+          .off('focusout' + namespace);
 
         if (type === 'checkbox') {
           doc.off('click' + namespace);
@@ -531,32 +536,32 @@
         selectbox && selectbox.__refreshSelectbox();
       }
 
-      context.observer.watch('disabled', refresh);
-      context.observer.watch('selectedIndex', change);
+      context.observer
+        .watch('disabled', refresh)
+        .watch('selectedIndex', change);
 
       if (!reference$1) {
         var selector = 'select';
 
-        doc.on('focusin' + namespace, selector, refresh);
-        doc.on('change' + namespace, selector, change);
-        doc.on('focusout' + namespace, selector, refresh);
+        doc
+          .on('focusin' + namespace, selector, refresh)
+          .on('change' + namespace, selector, change)
+          .on('focusout' + namespace, selector, refresh)
+          .on('mousedown' + namespace, function(e) {
+            var target = e.target;
+            var selectbox = actived.selectbox[0];
 
-        doc.on('mousedown' + namespace, function(e) {
-          var target = e.target;
-          var selectbox = actived.selectbox[0];
-
-          if (target !== selectbox && !$.contains(selectbox, target) && actived.opened) {
-            actived.close();
-            actived.__refreshSelectbox();
-          }
-        });
-
-        doc.on('keydown' + namespace, function(e) {
-          if (e.which === 9 || e.which === 27) {
-            actived.opened && actived.close();
-            actived.__refreshSelectbox();
-          }
-        });
+            if (target !== selectbox && !$.contains(selectbox, target) && actived.opened) {
+              actived.close();
+              actived.__refreshSelectbox();
+            }
+          })
+          .on('keydown' + namespace, function(e) {
+            if (e.which === 9 || e.which === 27) {
+              actived.opened && actived.close();
+              actived.__refreshSelectbox();
+            }
+          });
 
         win.on('resize' + namespace, function() {
           clearTimeout(timer);
@@ -584,40 +589,40 @@
         }
       });
 
-      context.selectbox.on('mousedown' + namespace, function(e) {
-        e.preventDefault();
+      context.selectbox
+        .on('mousedown' + namespace, function(e) {
+          e.preventDefault();
 
-        var select = context.element;
+          var select = context.element;
 
-        if (select[0].disabled) return;
+          if (select[0].disabled) return;
 
-        if (context.opened) {
-          var target = e.target;
-          var dropdown = context.dropdown[0];
+          if (context.opened) {
+            var target = e.target;
+            var dropdown = context.dropdown[0];
 
-          if (dropdown !== target && !$.contains(dropdown, target)) {
-            context.close();
+            if (dropdown !== target && !$.contains(dropdown, target)) {
+              context.close();
+            }
+          } else {
+            context.open();
           }
-        } else {
-          context.open();
-        }
 
-        setTimeout(function() {
-          select.focus();
-        }, 0);
-      });
+          setTimeout(function() {
+            select.focus();
+          }, 0);
+        })
+        .on('click' + namespace, '[' + options.optionIndexAttr + ']', function(e) {
+          e.preventDefault();
 
-      context.selectbox.on('click' + namespace, '[' + options.optionIndexAttr + ']', function(e) {
-        e.preventDefault();
+          var option = $(this);
 
-        var option = $(this);
+          if (option.hasClass(options.optionDisabledClass)) return;
 
-        if (option.hasClass(options.optionDisabledClass)) return;
+          context.element[0].selectedIndex = option.attr(options.optionIndexAttr);
 
-        context.element[0].selectedIndex = option.attr(options.optionIndexAttr);
-
-        context.close();
-      });
+          context.close();
+        });
 
       return context;
     },
@@ -893,23 +898,26 @@
         var element = context.element;
         var namespace = '.beautify-' + type;
 
-        context.selectbox.off();
         context.element.off('keypress' + namespace);
-        context.selectbox.remove();
+        context.selectbox.off().remove();
         context.dropdown.remove();
 
-        element.removeData('beautify-select');
-        element.removeClass('ui-beautify-select-hidden');
+        element
+          .removeData('beautify-select')
+          .removeClass('ui-beautify-select-hidden');
 
-        context.observer.unwatch('disabled');
-        context.observer.unwatch('selectedIndex');
+        context.observer
+          .unwatch('disabled')
+          .unwatch('selectedIndex');
 
         if (!--reference$1) {
-          doc.off('focusin' + namespace);
-          doc.off('change' + namespace);
-          doc.off('focusout' + namespace);
-          doc.off('mousedown' + namespace);
-          doc.off('keydown' + namespace);
+          doc
+            .off('focusin' + namespace)
+            .off('change' + namespace)
+            .off('focusout' + namespace)
+            .off('mousedown' + namespace)
+            .off('keydown' + namespace);
+
           win.off('resize' + namespace);
         }
 

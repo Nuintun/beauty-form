@@ -85,8 +85,9 @@ Choice.prototype = {
       }
     }
 
-    context.observer.watch('checked', refresh);
-    context.observer.watch('disabled', refresh);
+    context.observer
+      .watch('checked', refresh)
+      .watch('disabled', refresh);
 
     if (type === 'checkbox') {
       context.observer.watch('indeterminate', refresh);
@@ -98,9 +99,10 @@ Choice.prototype = {
       var namespace = '.beautify-' + type;
       var selector = 'input[type=' + type + ']';
 
-      doc.on('focusin' + namespace, selector, refresh);
-      doc.on('change' + namespace, selector, refresh);
-      doc.on('focusout' + namespace, selector, refresh);
+      doc
+        .on('focusin' + namespace, selector, refresh)
+        .on('change' + namespace, selector, refresh)
+        .on('focusout' + namespace, selector, refresh);
 
       if (type === 'checkbox') {
         // If checkbox is indeterminate, IE8+ not fire change and indeterminate change event.
@@ -156,11 +158,13 @@ Choice.prototype = {
     var type = context.type;
     var element = context.element;
 
-    element.unwrap();
-    element.removeData('beautify-choice');
+    element
+      .unwrap()
+      .removeData('beautify-choice');
 
-    context.observer.unwatch('checked');
-    context.observer.unwatch('disabled');
+    context.observer
+      .unwatch('checked')
+      .unwatch('disabled');
 
     if (type === 'checkbox') {
       context.observer.unwatch('indeterminate');
@@ -171,9 +175,10 @@ Choice.prototype = {
     if (!--reference[type]) {
       var namespace = '.beautify-' + type;
 
-      doc.off('focusin' + namespace);
-      doc.off('change' + namespace);
-      doc.off('focusout' + namespace);
+      doc
+        .off('focusin' + namespace)
+        .off('change' + namespace)
+        .off('focusout' + namespace);
 
       if (type === 'checkbox') {
         doc.off('click' + namespace);
