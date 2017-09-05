@@ -18,12 +18,15 @@ var getNodeDescriptor = getPrototypeOf ? function(node, prop) {
     || getOwnPropertyDescriptor(Node.prototype, prop);
 } : function(node, prop) {
   var prototype = Element.prototype;
+  var owner = hasOwnProperty.call(prototype, prop);
 
-  if (!hasOwnProperty.call(prototype, prop)) {
+  if (!owner) {
     prototype = node.constructor.prototype;
+    owner = hasOwnProperty.call(prototype, prop);
   }
 
-  if (hasOwnProperty.call(prototype, prop)) {
+  // IE8 not returned undefined with non own property
+  if (owner) {
     return getOwnPropertyDescriptor(prototype, prop);
   }
 };
