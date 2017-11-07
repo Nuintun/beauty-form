@@ -4,8 +4,6 @@
   (global.BeautifyForm = factory(global.jQuery));
 }(this, (function ($) { 'use strict';
 
-  $ = $ && $.hasOwnProperty('default') ? $['default'] : $;
-
   /*!
    * Observer
    * Date: 2017/08/30
