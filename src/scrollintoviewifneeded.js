@@ -1,22 +1,16 @@
-/*!
- * scrollIntoViewIfNeeded
- * Date: 2016/07/15
- * https://github.com/nuintun/beauty-form
- * https://github.com/stipsan/scroll-into-view-if-needed
- *
- * This is licensed under the MIT License (MIT).
- * For details, see: https://github.com/nuintun/beauty-form/blob/master/LICENSE
+/**
+ * @module scrollintoviewifneeded
+ * @license MIT
+ * @version 2016/07/15
  */
 
 // Native
 var native = document.documentElement.scrollIntoViewIfNeeded;
 
 /**
- * scrollIntoViewIfNeeded
- *
+ * @function scrollIntoViewIfNeeded
  * @param {HTMLElement} element
- * @param {Boolean} centerIfNeeded
- * @returns {void}
+ * @param {boolean} centerIfNeeded
  */
 export default function scrollIntoViewIfNeeded(element, centerIfNeeded) {
   if (!element) {
@@ -29,7 +23,7 @@ export default function scrollIntoViewIfNeeded(element, centerIfNeeded) {
   }
 
   function withinBounds(value, min, max, extent) {
-    if (false === centerIfNeeded || max <= value + extent && value <= min + extent) {
+    if (false === centerIfNeeded || (max <= value + extent && value <= min + extent)) {
       return Math.min(max, Math.max(min, value));
     } else {
       return (min + max) / 2;
@@ -74,10 +68,7 @@ export default function scrollIntoViewIfNeeded(element, centerIfNeeded) {
   }
 
   var parent;
-  var area = makeArea(
-    element.offsetLeft, element.offsetTop,
-    element.offsetWidth, element.offsetHeight
-  );
+  var area = makeArea(element.offsetLeft, element.offsetTop, element.offsetWidth, element.offsetHeight);
 
   while ((parent = element.parentNode) !== document) {
     var clientLeft = parent.offsetLeft + parent.clientLeft;
@@ -86,28 +77,17 @@ export default function scrollIntoViewIfNeeded(element, centerIfNeeded) {
     // Make area relative to parent's client area.
     area = area.relativeFromTo(element, parent).translate(-clientLeft, -clientTop);
 
-    var scrollLeft = withinBounds(
-      parent.scrollLeft,
-      area.right - parent.clientWidth, area.left,
-      parent.clientWidth
-    );
+    var scrollLeft = withinBounds(parent.scrollLeft, area.right - parent.clientWidth, area.left, parent.clientWidth);
 
-    var scrollTop = withinBounds(
-      parent.scrollTop,
-      area.bottom - parent.clientHeight, area.top,
-      parent.clientHeight
-    );
+    var scrollTop = withinBounds(parent.scrollTop, area.bottom - parent.clientHeight, area.top, parent.clientHeight);
 
     parent.scrollLeft = scrollLeft;
     parent.scrollTop = scrollTop;
 
     // Determine actual scroll amount by reading back scroll properties.
-    area = area.translate(
-      clientLeft - parent.scrollLeft,
-      clientTop - parent.scrollTop
-    );
+    area = area.translate(clientLeft - parent.scrollLeft, clientTop - parent.scrollTop);
 
     // Rewrite element
     element = parent;
   }
-};
+}

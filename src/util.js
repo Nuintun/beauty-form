@@ -1,10 +1,7 @@
-/*!
- * util
- * Date: 2016/06/14
- * https://github.com/nuintun/beauty-form
- *
- * This is licensed under the MIT License (MIT).
- * For details, see: https://github.com/nuintun/beauty-form/blob/master/LICENSE
+/**
+ * @module util
+ * @license MIT
+ * @version 2016/06/14
  */
 
 import $ from 'jquery';
@@ -15,7 +12,9 @@ export var doc = $(document);
 var toString = Object.prototype.toString;
 
 /**
- * 获取当前焦点的元素
+ * @function activeElement
+ * @description 获取当前焦点的元素
+ * @returns {undefined|HTMLElement}
  */
 export function activeElement() {
   try {
@@ -23,7 +22,7 @@ export function activeElement() {
     var activeElement = document.activeElement;
     var contentDocument = activeElement.contentDocument;
 
-    return contentDocument && contentDocument.activeElement || activeElement;
+    return (contentDocument && contentDocument.activeElement) || activeElement;
   } catch (e) {
     // Do nothing
   }

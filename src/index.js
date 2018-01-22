@@ -1,10 +1,7 @@
-/*!
- * index
- * Date: 2017/08/29
- * https://github.com/nuintun/beauty-form
- *
- * This is licensed under the MIT License (MIT).
- * For details, see: https://github.com/nuintun/beauty-form/blob/master/LICENSE
+/**
+ * @module index
+ * @license MIT
+ * @version 2017/08/29
  */
 
 import './css/choice.css';

@@ -1,10 +1,7 @@
-/*!
- * Choice
- * Date: 2015/06/07
- * https://github.com/nuintun/beautify-form
- *
- * This is licensed under the MIT License (MIT).
- * For details, see: https://github.com/nuintun/beautify-form/blob/master/LICENSE
+/**
+ * @module choice
+ * @license MIT
+ * @version 2015/06/07
  */
 
 import $ from 'jquery';
@@ -14,26 +11,22 @@ import { doc, activeElement } from './util';
 var reference = {};
 
 /**
- * radio
- *
- * @param element
+ * @function radio
+ * @param {HTMLElement} element
  */
 function radio(element) {
-  doc
-    .find('input[type=radio][name=' + element.name + ']')
-    .each(function(index, radio) {
-      var choice = Choice.get(radio);
+  doc.find('input[type=radio][name=' + element.name + ']').each(function(index, radio) {
+    var choice = Choice.get(radio);
 
-      if (choice && element !== radio) {
-        choice.refresh();
-      }
-    });
+    if (choice && element !== radio) {
+      choice.refresh();
+    }
+  });
 }
 
 /**
- * Choice
- *
- * @param element
+ * @class Choice
+ * @param {HTMLElement} element
  * @constructor
  */
 export default function Choice(element) {
@@ -59,10 +52,9 @@ export default function Choice(element) {
 }
 
 /**
- * get
- *
- * @param element
- * @returns {*}
+ * @function get
+ * @param {HTMLElement} element
+ * @returns {Choice}
  */
 Choice.get = function(element) {
   element = $(element);
@@ -85,9 +77,7 @@ Choice.prototype = {
       }
     }
 
-    context.observer
-      .watch('checked', refresh)
-      .watch('disabled', refresh);
+    context.observer.watch('checked', refresh).watch('disabled', refresh);
 
     if (type === 'checkbox') {
       context.observer.watch('indeterminate', refresh);
@@ -138,7 +128,7 @@ Choice.prototype = {
 
     choice
       .toggleClass('ui-beautify-choice-disabled', element.disabled)
-      .toggleClass('ui-beautify-choice-focus', activeElement() === element)
+      .toggleClass('ui-beautify-choice-focus', activeElement() === element);
 
     if (type === 'checkbox') {
       choice
@@ -158,13 +148,9 @@ Choice.prototype = {
     var type = context.type;
     var element = context.element;
 
-    element
-      .unwrap()
-      .removeData('beautify-choice');
+    element.unwrap().removeData('beautify-choice');
 
-    context.observer
-      .unwatch('checked')
-      .unwatch('disabled');
+    context.observer.unwatch('checked').unwatch('disabled');
 
     if (type === 'checkbox') {
       context.observer.unwatch('indeterminate');

@@ -1,10 +1,7 @@
-/*!
- * SelectBox
- * Date: 2015/06/12
- * https://github.com/nuintun/beautify-form
- *
- * This is licensed under the MIT License (MIT).
- * For details, see: https://github.com/nuintun/beautify-form/blob/master/LICENSE
+/**
+ * @module selectbox
+ * @license MIT
+ * @version 2015/06/12
  */
 
 import $ from 'jquery';
@@ -16,17 +13,16 @@ var timer;
 var reference = 0;
 var actived = null;
 
-// viewport size
+// Viewport size
 var VIEWPORT = {
   width: win.width(),
   height: win.height()
 };
 
 /**
- * compile
- *
- * @param context
- * @param template
+ * @function compile
+ * @param {any} context
+ * @param {string} template
  * @returns {string}
  */
 function compile(context, template) {
@@ -53,30 +49,47 @@ export default function SelectBox(element, options) {
     return context;
   }
 
-  options = $.extend({
-    title: function(element, text) {
-      return '<i class="ui-beautify-select-align-middle"></i>'
-        + '<span class="ui-beautify-select-title" title="' + text + '">'
-        + text + '</span><i class="ui-beautify-select-icon"></i>';
+  options = $.extend(
+    {
+      title: function(element, text) {
+        return (
+          '<i class="ui-beautify-select-align-middle"></i>' +
+          '<span class="ui-beautify-select-title" title="' +
+          text +
+          '">' +
+          text +
+          '</span><i class="ui-beautify-select-icon"></i>'
+        );
+      },
+      dropdown: function(element, options) {
+        return '<dl class="ui-beautify-select-dropdown-items">' + options + '</dl>';
+      },
+      optgroup: function(element, label) {
+        return '<dt class="ui-beautify-select-optgroup" title="' + label + '">' + label + '</dt>';
+      },
+      option: function(element, option) {
+        return (
+          '<dd role="option" class="ui-beautify-select-option' +
+          (option.group ? ' ui-beautify-select-optgroup-option' : '') +
+          (option.className ? ' ' + option.className : '') +
+          '" ' +
+          option.indexAttr +
+          '="' +
+          option.index +
+          '" title="' +
+          option.text +
+          '">' +
+          option.text +
+          '</dd>'
+        );
+      },
+      dropdownWidth: null,
+      optionIndexAttr: 'data-option',
+      optionSelectedClass: 'ui-beautify-select-option-selected',
+      optionDisabledClass: 'ui-beautify-select-option-disabled'
     },
-    dropdown: function(element, options) {
-      return '<dl class="ui-beautify-select-dropdown-items">' + options + '</dl>';
-    },
-    optgroup: function(element, label) {
-      return '<dt class="ui-beautify-select-optgroup" title="' + label + '">' + label + '</dt>';
-    },
-    option: function(element, option) {
-      return '<dd role="option" class="ui-beautify-select-option'
-        + (option.group ? ' ui-beautify-select-optgroup-option' : '')
-        + (option.className ? ' ' + option.className : '') + '" '
-        + option.indexAttr + '="' + option.index + '" title="'
-        + option.text + '">' + option.text + '</dd>';
-    },
-    dropdownWidth: null,
-    optionIndexAttr: 'data-option',
-    optionSelectedClass: 'ui-beautify-select-option-selected',
-    optionDisabledClass: 'ui-beautify-select-option-disabled'
-  }, options);
+    options
+  );
 
   $.each(['title', 'dropdown', 'optgroup', 'option'], function(index, prop) {
     if ($.type(options[prop]) !== 'function') {
@@ -90,10 +103,9 @@ export default function SelectBox(element, options) {
 }
 
 /**
- * get
- *
- * @param element
- * @returns {*}
+ * @function get
+ * @param {HTMLElement} element
+ * @returns {SelectBox}
  */
 SelectBox.get = function(element) {
   element = $(element);
@@ -117,17 +129,15 @@ SelectBox.prototype = {
         selectbox.__renderTitlebox();
         selectbox.opened && selectbox.__refreshSelected();
       }
-    };
+    }
 
     function refresh() {
       var selectbox = SelectBox.get(this);
 
       selectbox && selectbox.__refreshSelectbox();
-    };
+    }
 
-    context.observer
-      .watch('disabled', refresh)
-      .watch('selectedIndex', change);
+    context.observer.watch('disabled', refresh).watch('selectedIndex', change);
 
     if (!reference) {
       var selector = 'select';
@@ -245,11 +255,11 @@ SelectBox.prototype = {
     };
 
     clone.css({
-      'position': 'absolute',
-      'visibility': 'hidden',
-      'width': 'auto',
-      'top': '-100%',
-      'left': '-100%'
+      position: 'absolute',
+      visibility: 'hidden',
+      width: 'auto',
+      top: '-100%',
+      left: '-100%'
     });
 
     clone.insertBefore(context.element);
@@ -328,24 +338,14 @@ SelectBox.prototype = {
         index: index++,
         text: element.html(),
         indexAttr: options.optionIndexAttr,
-        className: element[0].disabled ? options.optionDisabledClass : (selected ? options.optionSelectedClass : '')
+        className: element[0].disabled ? options.optionDisabledClass : selected ? options.optionSelectedClass : ''
       };
 
-      dropdown += compile(
-        context,
-        options.option,
-        element,
-        option
-      );
+      dropdown += compile(context, options.option, element, option);
     }
 
     function optgroup(element) {
-      dropdown += compile(
-        context,
-        options.optgroup,
-        element,
-        element.attr('label')
-      );
+      dropdown += compile(context, options.optgroup, element, element.attr('label'));
     }
 
     var items = context.element.children();
@@ -366,12 +366,7 @@ SelectBox.prototype = {
       }
     });
 
-    context.dropdown.html(compile(
-      context,
-      options.dropdown,
-      items,
-      dropdown
-    ));
+    context.dropdown.html(compile(context, options.dropdown, items, dropdown));
 
     return context;
   },
@@ -381,10 +376,7 @@ SelectBox.prototype = {
     var selectbox = context.selectbox;
     var focused = activeElement();
 
-    focused = context.opened
-      || focused === element
-      || focused === selectbox[0]
-      || $.contains(selectbox[0], focused);
+    focused = context.opened || focused === element || focused === selectbox[0] || $.contains(selectbox[0], focused);
 
     selectbox
       .toggleClass('ui-beautify-select-disabled', element.disabled)
@@ -399,9 +391,7 @@ SelectBox.prototype = {
     var selectedClass = options.optionSelectedClass;
     var selectedIndex = context.element[0].selectedIndex;
 
-    dropdown
-      .find('.' + selectedClass)
-      .removeClass(selectedClass);
+    dropdown.find('.' + selectedClass).removeClass(selectedClass);
 
     var selected = dropdown.find('[' + options.optionIndexAttr + '=' + selectedIndex + ']');
 
@@ -424,9 +414,7 @@ SelectBox.prototype = {
     context.titlebox = $('<div class="ui-beautify-select-titlebox"/>');
     context.dropdown = $('<div role="listbox" class="ui-beautify-select-dropdown"/>');
 
-    selectbox
-      .append(context.titlebox)
-      .insertAfter(context.element);
+    selectbox.append(context.titlebox).insertAfter(context.element);
 
     context.selectbox = selectbox;
 
@@ -491,13 +479,9 @@ SelectBox.prototype = {
       context.selectbox.off().remove();
       context.dropdown.remove();
 
-      element
-        .removeData('beautify-select')
-        .removeClass('ui-beautify-select-hidden');
+      element.removeData('beautify-select').removeClass('ui-beautify-select-hidden');
 
-      context.observer
-        .unwatch('disabled')
-        .unwatch('selectedIndex');
+      context.observer.unwatch('disabled').unwatch('selectedIndex');
 
       if (!--reference) {
         doc

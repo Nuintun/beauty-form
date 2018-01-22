@@ -1,41 +1,51 @@
+/**
+ * @module beautify-form
+ * @author nuintun
+ * @license MIT
+ * @version 2017/08/29
+ * @description Beautify the web forms.
+ * @see https://github.com/nuintun/beautify-form
+ */
+
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('jquery')) :
   typeof define === 'function' && define.amd ? define('beautify-form', ['jquery'], factory) :
   (global.BeautifyForm = factory(global.jQuery));
 }(this, (function ($) { 'use strict';
 
-  /*!
-   * Observer
-   * Date: 2017/08/30
-   * https://github.com/nuintun/beauty-form
-   *
-   * This is licensed under the MIT License (MIT).
-   * For details, see: https://github.com/nuintun/beauty-form/blob/master/LICENSE
+  /**
+   * @module observer
+   * @license MIT
+   * @version 2017/08/30
    */
 
   var defineProperty = Object.defineProperty;
   var getPrototypeOf = Object.getPrototypeOf;
   var hasOwnProperty = Object.prototype.hasOwnProperty;
   var getOwnPropertyDescriptor = Object.getOwnPropertyDescriptor;
-  var getNodeDescriptor = getPrototypeOf ? function(node, prop) {
-    return getOwnPropertyDescriptor(getPrototypeOf(node), prop)
-      || getOwnPropertyDescriptor(HTMLElement.prototype, prop)
-      || getOwnPropertyDescriptor(Element.prototype, prop)
-      || getOwnPropertyDescriptor(Node.prototype, prop);
-  } : function(node, prop) {
-    var prototype = Element.prototype;
-    var owner = hasOwnProperty.call(prototype, prop);
+  var getNodeDescriptor = getPrototypeOf
+    ? function(node, prop) {
+        return (
+          getOwnPropertyDescriptor(getPrototypeOf(node), prop) ||
+          getOwnPropertyDescriptor(HTMLElement.prototype, prop) ||
+          getOwnPropertyDescriptor(Element.prototype, prop) ||
+          getOwnPropertyDescriptor(Node.prototype, prop)
+        );
+      }
+    : function(node, prop) {
+        var prototype = Element.prototype;
+        var owner = hasOwnProperty.call(prototype, prop);
 
-    if (!owner) {
-      prototype = node.constructor.prototype;
-      owner = hasOwnProperty.call(prototype, prop);
-    }
+        if (!owner) {
+          prototype = node.constructor.prototype;
+          owner = hasOwnProperty.call(prototype, prop);
+        }
 
-    // IE8 not returned undefined with non own property
-    if (owner) {
-      return getOwnPropertyDescriptor(prototype, prop);
-    }
-  };
+        // IE8 not returned undefined with non own property
+        if (owner) {
+          return getOwnPropertyDescriptor(prototype, prop);
+        }
+      };
 
   function Observer(node) {
     this.node = node;
@@ -85,20 +95,19 @@
     }
   };
 
-  /*!
-   * util
-   * Date: 2016/06/14
-   * https://github.com/nuintun/beauty-form
-   *
-   * This is licensed under the MIT License (MIT).
-   * For details, see: https://github.com/nuintun/beauty-form/blob/master/LICENSE
+  /**
+   * @module util
+   * @license MIT
+   * @version 2016/06/14
    */
 
   var win = $(window);
   var doc = $(document);
 
   /**
-   * 获取当前焦点的元素
+   * @function activeElement
+   * @description 获取当前焦点的元素
+   * @returns {undefined|HTMLElement}
    */
   function activeElement() {
     try {
@@ -106,44 +115,37 @@
       var activeElement = document.activeElement;
       var contentDocument = activeElement.contentDocument;
 
-      return contentDocument && contentDocument.activeElement || activeElement;
+      return (contentDocument && contentDocument.activeElement) || activeElement;
     } catch (e) {
       // Do nothing
     }
   }
 
-  /*!
-   * Choice
-   * Date: 2015/06/07
-   * https://github.com/nuintun/beautify-form
-   *
-   * This is licensed under the MIT License (MIT).
-   * For details, see: https://github.com/nuintun/beautify-form/blob/master/LICENSE
+  /**
+   * @module choice
+   * @license MIT
+   * @version 2015/06/07
    */
 
   var reference = {};
 
   /**
-   * radio
-   *
-   * @param element
+   * @function radio
+   * @param {HTMLElement} element
    */
   function radio(element) {
-    doc
-      .find('input[type=radio][name=' + element.name + ']')
-      .each(function(index, radio) {
-        var choice = Choice.get(radio);
+    doc.find('input[type=radio][name=' + element.name + ']').each(function(index, radio) {
+      var choice = Choice.get(radio);
 
-        if (choice && element !== radio) {
-          choice.refresh();
-        }
-      });
+      if (choice && element !== radio) {
+        choice.refresh();
+      }
+    });
   }
 
   /**
-   * Choice
-   *
-   * @param element
+   * @class Choice
+   * @param {HTMLElement} element
    * @constructor
    */
   function Choice(element) {
@@ -169,10 +171,9 @@
   }
 
   /**
-   * get
-   *
-   * @param element
-   * @returns {*}
+   * @function get
+   * @param {HTMLElement} element
+   * @returns {Choice}
    */
   Choice.get = function(element) {
     element = $(element);
@@ -195,9 +196,7 @@
         }
       }
 
-      context.observer
-        .watch('checked', refresh)
-        .watch('disabled', refresh);
+      context.observer.watch('checked', refresh).watch('disabled', refresh);
 
       if (type === 'checkbox') {
         context.observer.watch('indeterminate', refresh);
@@ -268,13 +267,9 @@
       var type = context.type;
       var element = context.element;
 
-      element
-        .unwrap()
-        .removeData('beautify-choice');
+      element.unwrap().removeData('beautify-choice');
 
-      context.observer
-        .unwatch('checked')
-        .unwatch('disabled');
+      context.observer.unwatch('checked').unwatch('disabled');
 
       if (type === 'checkbox') {
         context.observer.unwatch('indeterminate');
@@ -301,25 +296,19 @@
     }
   };
 
-  /*!
-   * scrollIntoViewIfNeeded
-   * Date: 2016/07/15
-   * https://github.com/nuintun/beauty-form
-   * https://github.com/stipsan/scroll-into-view-if-needed
-   *
-   * This is licensed under the MIT License (MIT).
-   * For details, see: https://github.com/nuintun/beauty-form/blob/master/LICENSE
+  /**
+   * @module scrollintoviewifneeded
+   * @license MIT
+   * @version 2016/07/15
    */
 
   // Native
   var native = document.documentElement.scrollIntoViewIfNeeded;
 
   /**
-   * scrollIntoViewIfNeeded
-   *
+   * @function scrollIntoViewIfNeeded
    * @param {HTMLElement} element
-   * @param {Boolean} centerIfNeeded
-   * @returns {void}
+   * @param {boolean} centerIfNeeded
    */
   function scrollIntoViewIfNeeded(element, centerIfNeeded) {
     if (!element) {
@@ -332,7 +321,7 @@
     }
 
     function withinBounds(value, min, max, extent) {
-      if (false === centerIfNeeded || max <= value + extent && value <= min + extent) {
+      if (false === centerIfNeeded || (max <= value + extent && value <= min + extent)) {
         return Math.min(max, Math.max(min, value));
       } else {
         return (min + max) / 2;
@@ -377,10 +366,7 @@
     }
 
     var parent;
-    var area = makeArea(
-      element.offsetLeft, element.offsetTop,
-      element.offsetWidth, element.offsetHeight
-    );
+    var area = makeArea(element.offsetLeft, element.offsetTop, element.offsetWidth, element.offsetHeight);
 
     while ((parent = element.parentNode) !== document) {
       var clientLeft = parent.offsetLeft + parent.clientLeft;
@@ -389,56 +375,41 @@
       // Make area relative to parent's client area.
       area = area.relativeFromTo(element, parent).translate(-clientLeft, -clientTop);
 
-      var scrollLeft = withinBounds(
-        parent.scrollLeft,
-        area.right - parent.clientWidth, area.left,
-        parent.clientWidth
-      );
+      var scrollLeft = withinBounds(parent.scrollLeft, area.right - parent.clientWidth, area.left, parent.clientWidth);
 
-      var scrollTop = withinBounds(
-        parent.scrollTop,
-        area.bottom - parent.clientHeight, area.top,
-        parent.clientHeight
-      );
+      var scrollTop = withinBounds(parent.scrollTop, area.bottom - parent.clientHeight, area.top, parent.clientHeight);
 
       parent.scrollLeft = scrollLeft;
       parent.scrollTop = scrollTop;
 
       // Determine actual scroll amount by reading back scroll properties.
-      area = area.translate(
-        clientLeft - parent.scrollLeft,
-        clientTop - parent.scrollTop
-      );
+      area = area.translate(clientLeft - parent.scrollLeft, clientTop - parent.scrollTop);
 
       // Rewrite element
       element = parent;
     }
   }
 
-  /*!
-   * SelectBox
-   * Date: 2015/06/12
-   * https://github.com/nuintun/beautify-form
-   *
-   * This is licensed under the MIT License (MIT).
-   * For details, see: https://github.com/nuintun/beautify-form/blob/master/LICENSE
+  /**
+   * @module selectbox
+   * @license MIT
+   * @version 2015/06/12
    */
 
   var timer;
   var reference$1 = 0;
   var actived = null;
 
-  // viewport size
+  // Viewport size
   var VIEWPORT = {
     width: win.width(),
     height: win.height()
   };
 
   /**
-   * compile
-   *
-   * @param context
-   * @param template
+   * @function compile
+   * @param {any} context
+   * @param {string} template
    * @returns {string}
    */
   function compile(context, template) {
@@ -465,30 +436,47 @@
       return context;
     }
 
-    options = $.extend({
-      title: function(element, text) {
-        return '<i class="ui-beautify-select-align-middle"></i>'
-          + '<span class="ui-beautify-select-title" title="' + text + '">'
-          + text + '</span><i class="ui-beautify-select-icon"></i>';
+    options = $.extend(
+      {
+        title: function(element, text) {
+          return (
+            '<i class="ui-beautify-select-align-middle"></i>' +
+            '<span class="ui-beautify-select-title" title="' +
+            text +
+            '">' +
+            text +
+            '</span><i class="ui-beautify-select-icon"></i>'
+          );
+        },
+        dropdown: function(element, options) {
+          return '<dl class="ui-beautify-select-dropdown-items">' + options + '</dl>';
+        },
+        optgroup: function(element, label) {
+          return '<dt class="ui-beautify-select-optgroup" title="' + label + '">' + label + '</dt>';
+        },
+        option: function(element, option) {
+          return (
+            '<dd role="option" class="ui-beautify-select-option' +
+            (option.group ? ' ui-beautify-select-optgroup-option' : '') +
+            (option.className ? ' ' + option.className : '') +
+            '" ' +
+            option.indexAttr +
+            '="' +
+            option.index +
+            '" title="' +
+            option.text +
+            '">' +
+            option.text +
+            '</dd>'
+          );
+        },
+        dropdownWidth: null,
+        optionIndexAttr: 'data-option',
+        optionSelectedClass: 'ui-beautify-select-option-selected',
+        optionDisabledClass: 'ui-beautify-select-option-disabled'
       },
-      dropdown: function(element, options) {
-        return '<dl class="ui-beautify-select-dropdown-items">' + options + '</dl>';
-      },
-      optgroup: function(element, label) {
-        return '<dt class="ui-beautify-select-optgroup" title="' + label + '">' + label + '</dt>';
-      },
-      option: function(element, option) {
-        return '<dd role="option" class="ui-beautify-select-option'
-          + (option.group ? ' ui-beautify-select-optgroup-option' : '')
-          + (option.className ? ' ' + option.className : '') + '" '
-          + option.indexAttr + '="' + option.index + '" title="'
-          + option.text + '">' + option.text + '</dd>';
-      },
-      dropdownWidth: null,
-      optionIndexAttr: 'data-option',
-      optionSelectedClass: 'ui-beautify-select-option-selected',
-      optionDisabledClass: 'ui-beautify-select-option-disabled'
-    }, options);
+      options
+    );
 
     $.each(['title', 'dropdown', 'optgroup', 'option'], function(index, prop) {
       if ($.type(options[prop]) !== 'function') {
@@ -502,10 +490,9 @@
   }
 
   /**
-   * get
-   *
-   * @param element
-   * @returns {*}
+   * @function get
+   * @param {HTMLElement} element
+   * @returns {SelectBox}
    */
   SelectBox.get = function(element) {
     element = $(element);
@@ -537,9 +524,7 @@
         selectbox && selectbox.__refreshSelectbox();
       }
 
-      context.observer
-        .watch('disabled', refresh)
-        .watch('selectedIndex', change);
+      context.observer.watch('disabled', refresh).watch('selectedIndex', change);
 
       if (!reference$1) {
         var selector = 'select';
@@ -657,11 +642,11 @@
       };
 
       clone.css({
-        'position': 'absolute',
-        'visibility': 'hidden',
-        'width': 'auto',
-        'top': '-100%',
-        'left': '-100%'
+        position: 'absolute',
+        visibility: 'hidden',
+        width: 'auto',
+        top: '-100%',
+        left: '-100%'
       });
 
       clone.insertBefore(context.element);
@@ -740,24 +725,14 @@
           index: index++,
           text: element.html(),
           indexAttr: options.optionIndexAttr,
-          className: element[0].disabled ? options.optionDisabledClass : (selected ? options.optionSelectedClass : '')
+          className: element[0].disabled ? options.optionDisabledClass : selected ? options.optionSelectedClass : ''
         };
 
-        dropdown += compile(
-          context,
-          options.option,
-          element,
-          option
-        );
+        dropdown += compile(context, options.option, element, option);
       }
 
       function optgroup(element) {
-        dropdown += compile(
-          context,
-          options.optgroup,
-          element,
-          element.attr('label')
-        );
+        dropdown += compile(context, options.optgroup, element, element.attr('label'));
       }
 
       var items = context.element.children();
@@ -778,12 +753,7 @@
         }
       });
 
-      context.dropdown.html(compile(
-        context,
-        options.dropdown,
-        items,
-        dropdown
-      ));
+      context.dropdown.html(compile(context, options.dropdown, items, dropdown));
 
       return context;
     },
@@ -793,10 +763,7 @@
       var selectbox = context.selectbox;
       var focused = activeElement();
 
-      focused = context.opened
-        || focused === element
-        || focused === selectbox[0]
-        || $.contains(selectbox[0], focused);
+      focused = context.opened || focused === element || focused === selectbox[0] || $.contains(selectbox[0], focused);
 
       selectbox
         .toggleClass('ui-beautify-select-disabled', element.disabled)
@@ -811,9 +778,7 @@
       var selectedClass = options.optionSelectedClass;
       var selectedIndex = context.element[0].selectedIndex;
 
-      dropdown
-        .find('.' + selectedClass)
-        .removeClass(selectedClass);
+      dropdown.find('.' + selectedClass).removeClass(selectedClass);
 
       var selected = dropdown.find('[' + options.optionIndexAttr + '=' + selectedIndex + ']');
 
@@ -836,9 +801,7 @@
       context.titlebox = $('<div class="ui-beautify-select-titlebox"/>');
       context.dropdown = $('<div role="listbox" class="ui-beautify-select-dropdown"/>');
 
-      selectbox
-        .append(context.titlebox)
-        .insertAfter(context.element);
+      selectbox.append(context.titlebox).insertAfter(context.element);
 
       context.selectbox = selectbox;
 
@@ -903,13 +866,9 @@
         context.selectbox.off().remove();
         context.dropdown.remove();
 
-        element
-          .removeData('beautify-select')
-          .removeClass('ui-beautify-select-hidden');
+        element.removeData('beautify-select').removeClass('ui-beautify-select-hidden');
 
-        context.observer
-          .unwatch('disabled')
-          .unwatch('selectedIndex');
+        context.observer.unwatch('disabled').unwatch('selectedIndex');
 
         if (!--reference$1) {
           doc
@@ -927,13 +886,10 @@
     }
   };
 
-  /*!
-   * index
-   * Date: 2017/08/29
-   * https://github.com/nuintun/beauty-form
-   *
-   * This is licensed under the MIT License (MIT).
-   * For details, see: https://github.com/nuintun/beauty-form/blob/master/LICENSE
+  /**
+   * @module index
+   * @license MIT
+   * @version 2017/08/29
    */
 
   function create(Class) {
