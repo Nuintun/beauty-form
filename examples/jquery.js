@@ -8495,7 +8495,7 @@
     },
 
     propFix: {
-      for: 'htmlFor',
+      'for': 'htmlFor',
       'class': 'className'
     }
   });
