@@ -15,17 +15,13 @@
   "bugs": {
     "url": "https://github.com/nuintun/beautify-form/issues"
   },
-  "keywords": [
-    "form",
-    "beauty",
-    "beautify"
-  ],
+  "keywords": ["form", "beauty", "beautify"],
   "private": true,
   "devDependencies": {
-    "rollup": "^0.54.1",
-    "uglify-es": "^3.3.8",
+    "rollup": "^0.56.3",
+    "uglify-es": "^3.3.9",
     "cssnano": "^3.10.0",
-    "autoprefixer": "^7.2.5",
+    "autoprefixer": "^8.0.0",
     "fs-extra": "^5.0.0",
     "rollup-plugin-css": "https://github.com/nuintun/rollup-plugin-css/archive/master.tar.gz"
   }
